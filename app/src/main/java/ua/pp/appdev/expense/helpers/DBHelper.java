@@ -2,9 +2,13 @@ package ua.pp.appdev.expense.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import ua.pp.appdev.expense.R;
 
 public class DBHelper extends SQLiteOpenHelper{
 
@@ -12,12 +16,15 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public static final String DB_NAME = "expensesDB";
 
-    public final String CATEGORIES_TABLE = "categories";
-    public final String CURRENCIES_TABLE = "currencies";
-    public final String EXPENSES_TABLE = "expenses";
+    public static final String CATEGORIES_TABLE = "categories";
+    public static final String CURRENCIES_TABLE = "currencies";
+    public static final String EXPENSES_TABLE = "expenses";
+
+    private Context context;
 
     public DBHelper(Context context){
         super(context, DB_NAME, null, 1);
+        this.context = context;
     }
 
     @Override
@@ -59,32 +66,30 @@ public class DBHelper extends SQLiteOpenHelper{
 
     }
 
-    // TODO: read data from config
-    public void fillData(SQLiteDatabase db){
+    public void fillData(SQLiteDatabase db) {
 
         Log.d(LOG_TAG, "--- fill database ---");
 
         ContentValues cv = new ContentValues();
 
-        // Fill categories
-        cv.put("name", "Food");
-        cv.put("color", 10079232);
-        db.insert(CATEGORIES_TABLE, null, cv);
+        Resources res = context.getResources();
 
-        cv.put("name", "Transport");
-        cv.put("color", 16759603);
-        db.insert(CATEGORIES_TABLE, null, cv);
+        // Get categories init data
+        TypedArray categoryNames = res.obtainTypedArray(R.array.category_names);
+        TypedArray categoryColors = res.obtainTypedArray(R.array.category_colors);
 
-        cv.put("name", "Housing");
-        cv.put("color", 3388901);
-        db.insert(CATEGORIES_TABLE, null, cv);
+        // Check categories xml, if it is good, add init data to db
+        if(categoryNames.length() != categoryColors.length()){
+            Log.wtf(LOG_TAG, "Invalid categories xml file");
+        } else {
 
-        cv.put("name", "Health");
-        cv.put("color", 16729156);
-        db.insert(CATEGORIES_TABLE, null, cv);
+            Log.d(LOG_TAG, "--- fill categories table ---");
 
-        cv.put("name", "Leisure");
-        cv.put("color", 11167436);
-        db.insert(CATEGORIES_TABLE, null, cv);
+            for(int i = 0, len = categoryNames.length(); i < len; i++ ){
+                cv.put("name", categoryNames.getString(i));
+                cv.put("color", categoryColors.getColor(i,0));
+                db.insert(CATEGORIES_TABLE, null, cv);
+            }
+        }
     }
 }
