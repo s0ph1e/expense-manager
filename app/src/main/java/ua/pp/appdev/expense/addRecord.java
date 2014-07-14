@@ -78,11 +78,8 @@ public class addRecord extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Category categories[] = new Category[]{
-                new Category(1, "test1", -65536, false),
-                new Category(2, "test1", -65536, false),
-                new Category(3, "test1", -65536, false)
-        };
+        Category categories[] = Category.getAll(getActivity());
+
         ListView categoryList = (ListView)getActivity().findViewById(R.id.categoriesList);
         categoryList.setAdapter(new CategoryAdapter(getActivity(), R.layout.listview_category_row, categories));
     }
