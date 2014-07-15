@@ -1,10 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".StartActivity" >
-    <item android:id="@+id/action_add_expense"
-        android:icon="@drawable/ic_action_new"
-        android:title="@string/action_add_expense"
-        android:showAsAction="withText|ifRoom" />
+    tools:context="ua.pp.appdev.expense.AddExpenseActivity" >
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
