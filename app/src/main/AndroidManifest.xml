@@ -24,6 +24,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ua.pp.appdev.expense.StartActivity" />
         </activity>
+        <activity
+            android:name=".AddCategoryActivity"
+            android:label="@string/title_activity_add_category" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,17 +1,15 @@
 package ua.pp.appdev.expense;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.CategoryAdapter;
 
 public class AddExpenseActivity extends Activity {
@@ -19,20 +17,24 @@ public class AddExpenseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_expense);
+
+        getActionBar().setTitle(R.string.add_expense);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ListView categoryList = (ListView)this.findViewById(R.id.categoriesList);
 
         // Create button for new category and put it to the end of listview
         final Button btnAddNew = new Button(this);
-        /*btnAddNew.setOnClickListener(new View.OnClickListener() {
+        btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(view.getContext(), AddCategoryActivity.class);
+                startActivity(i);
             }
-        });*/
-        btnAddNew.setText(R.string.add_new_category);
+        });
+        btnAddNew.setText(R.string.add_category);
 
         // Note: When first introduced, this method could only be called before setting
         // the adapter with setAdapter(ListAdapter).
@@ -48,7 +50,7 @@ public class AddExpenseActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_expense, menu);
+        getMenuInflater().inflate(R.menu.add_category, menu);
         return true;
     }
 
@@ -59,8 +61,7 @@ public class AddExpenseActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -3,7 +3,7 @@
     tools:context=".StartActivity" >
     <item android:id="@+id/action_add_expense"
         android:icon="@drawable/ic_action_new"
-        android:title="@string/action_add_expense"
+        android:title="@string/add_expense"
         android:showAsAction="withText|ifRoom" />
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
