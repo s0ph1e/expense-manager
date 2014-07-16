@@ -1,22 +1,24 @@
 package ua.pp.appdev.expense;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import ua.pp.appdev.expense.helpers.ColorAdapter;
 
 public class AddCategoryActivity extends EditActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_category);
+
+        Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
+        spinner.setAdapter(new ColorAdapter(this, R.layout.spinner_color_row, getResources().getStringArray(R.array.default_colors)));
     }
 
     @Override
