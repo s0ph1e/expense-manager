@@ -23,8 +23,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     private Context context;
     int resource;
     private Category[] categories;
-    private RadioButton mSelectedRB;
-    private int mSelectedPosition = -1;
+    private int selected = -1;
 
     public CategoryAdapter(Context context, int resource, Category[] categories) {
         super(context, resource, categories);
@@ -55,28 +54,16 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         holder.radio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (position != mSelectedPosition && mSelectedRB != null) {
-                    mSelectedRB.setChecked(false);
-                }
-
-                mSelectedPosition = position;
-                mSelectedRB = (RadioButton) view;
+                selected = (Integer)view.getTag();
+                notifyDataSetChanged();
             }
         });
-
-        if(mSelectedPosition != position){
-            holder.radio.setChecked(false);
-        }else{
-            holder.radio.setChecked(true);
-            if(mSelectedRB != null && holder.radio!= mSelectedRB){
-                mSelectedRB = holder.radio;
-            }
-        }
 
         Category category = categories[position];
         holder.color.setBackgroundColor(category.color);
         holder.name.setText(category.name);
-        holder.radio.setChecked(category.checked);
+        holder.radio.setTag(position);
+        holder.radio.setChecked((selected == -1) ? category.checked : position == selected);
 
         return row;
     }
