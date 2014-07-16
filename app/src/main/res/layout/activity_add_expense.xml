@@ -46,7 +46,7 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:id="@+id/categoriesList"
         android:layout_below="@+id/view"
         android:layout_alignParentLeft="true"

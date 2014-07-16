@@ -9,17 +9,24 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
-public class AddCategoryActivity extends Activity {
+public class AddCategoryActivity extends EditActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getActionBar().setTitle(R.string.add_category);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         setContentView(R.layout.activity_add_category);
+    }
+
+    @Override
+    protected void onSave(View v) {
+        finish();
+    }
+
+    @Override
+    protected void onCancel(View v) {
+        finish();
     }
 
 
@@ -36,9 +43,7 @@ public class AddCategoryActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        }
+
         return super.onOptionsItemSelected(item);
     }
 }

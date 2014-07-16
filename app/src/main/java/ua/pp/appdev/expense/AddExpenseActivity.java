@@ -12,16 +12,13 @@ import android.widget.ListView;
 
 import ua.pp.appdev.expense.helpers.CategoryAdapter;
 
-public class AddExpenseActivity extends Activity {
+public class AddExpenseActivity extends EditActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_add_expense);
-
-        getActionBar().setTitle(R.string.add_expense);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ListView categoryList = (ListView)this.findViewById(R.id.categoriesList);
 
@@ -44,6 +41,16 @@ public class AddExpenseActivity extends Activity {
         // Get array of categories and set adapter
         Category categories[] = Category.getAll(this);
         categoryList.setAdapter(new CategoryAdapter(this, R.layout.listview_category_row, categories));
+    }
+
+    @Override
+    protected void onSave(View v) {
+        finish();
+    }
+
+    @Override
+    protected void onCancel(View v) {
+        finish();
     }
 
 
