@@ -3,15 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
-
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="46dp"
-        android:id="@+id/categoryColor"
-        android:background="#ff17ff1d"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="5dp" />
+    android:weightSum="1"
+    android:baselineAligned="true">
 
     <RadioButton
         android:layout_width="wrap_content"
@@ -22,10 +15,26 @@
         android:layout_margin="5dp" />
 
     <TextView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtCategoryColor"
+        android:textColor="#ffffffff"
+        android:background="#ccc"
+        android:textSize="35dp"
+        android:textAlignment="center"
+        android:singleLine="true"
+        android:layout_margin="4dp"
+        android:text="W"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:height="35px" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/categoryName"
+        android:id="@+id/txtCategoryName"
         android:layout_gravity="center_vertical"
         android:layout_margin="5dp" />
 

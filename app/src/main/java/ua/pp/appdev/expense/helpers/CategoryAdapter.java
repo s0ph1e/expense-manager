@@ -2,7 +2,6 @@ package ua.pp.appdev.expense.helpers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +43,8 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             row = inflater.inflate(this.resource, parent, false);
 
             holder = new CategoryHolder();
-            holder.name = (TextView)row.findViewById(R.id.categoryName);
-            holder.color = (ImageView)row.findViewById(R.id.categoryColor);
+            holder.name = (TextView)row.findViewById(R.id.txtCategoryName);
+            holder.color = (TextView)row.findViewById(R.id.txtCategoryColor);
             holder.radio = (RadioButton)row.findViewById(R.id.categoryRadio);
 
             row.setTag(holder);
@@ -63,6 +62,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
         Category category = categories.get(position);
         holder.color.setBackgroundColor(category.color);
+        holder.color.setText(String.valueOf(category.name.charAt(0)).toUpperCase());
         holder.name.setText(category.name);
         holder.radio.setTag(position);
         holder.radio.setChecked((selected == -1) ? category.checked : position == selected);
@@ -77,7 +77,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     }
 
     static class CategoryHolder {
-        ImageView color;
+        TextView color;
         RadioButton radio;
         TextView name;
     }

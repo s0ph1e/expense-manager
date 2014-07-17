@@ -58,6 +58,7 @@ public class Category implements Serializable {
 
             } while (c.moveToNext());
         }
+        db.close();
 
         return catList;
     }
@@ -72,6 +73,8 @@ public class Category implements Serializable {
         cv.put("name", name);
         cv.put("color", color);
         long rowID = db.insert(DBHelper.CATEGORIES_TABLE, null, cv);
+
+        db.close();
 
         return new Category(rowID, name, color);
     }

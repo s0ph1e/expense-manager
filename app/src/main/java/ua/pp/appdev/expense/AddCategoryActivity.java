@@ -1,5 +1,7 @@
 package ua.pp.appdev.expense;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +31,20 @@ public class AddCategoryActivity extends EditActivity {
         // Get name
         EditText editText = (EditText) findViewById(R.id.etxtCategoryName);
         String name = editText.getText().toString();
+
+        if(name.isEmpty()){
+            new AlertDialog.Builder(this)
+                .setTitle("Add name")
+                .setMessage("Category name can't be empty.")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+            return;
+        }
 
         // Get color
         Spinner spinner = (Spinner)findViewById(R.id.spinnerColors);
