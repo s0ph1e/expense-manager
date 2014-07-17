@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="default_colors">
-
+    <string-array name="default_colors">
         <item>#eb6566</item>
         <item>#f4794d</item>
         <item>#fbd546</item>
@@ -15,5 +14,5 @@
         <item>#792360</item>
         <item>#a8b1b0</item>
         <item>#d0b393</item>
-    </array>
+    </string-array>
 </resources>

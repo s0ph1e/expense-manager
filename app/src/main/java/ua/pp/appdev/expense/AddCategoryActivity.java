@@ -1,10 +1,11 @@
 package ua.pp.appdev.expense;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import ua.pp.appdev.expense.helpers.ColorAdapter;
@@ -18,11 +19,22 @@ public class AddCategoryActivity extends EditActivity {
         setContentView(R.layout.activity_add_category);
 
         Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
-        spinner.setAdapter(new ColorAdapter(this, R.layout.spinner_color_row, getResources().getStringArray(R.array.default_colors)));
+        spinner.setAdapter(new ColorAdapter(this, R.layout.spinner_color_row));
     }
 
     @Override
     protected void onSave(View v) {
+
+        // Get name
+        EditText editText = (EditText) findViewById(R.id.etxtCategoryName);
+        String name = editText.getText().toString();
+
+        // Get color
+        Spinner spinner = (Spinner)findViewById(R.id.spinnerColors);
+        int color = Color.parseColor(spinner.getSelectedItem().toString());
+
+        Category addedCategory = Category.add(this, name, color);
+
         finish();
     }
 
