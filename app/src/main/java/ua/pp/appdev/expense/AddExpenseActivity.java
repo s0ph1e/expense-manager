@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -15,8 +15,7 @@ import java.util.List;
 import ua.pp.appdev.expense.helpers.CategoryAdapter;
 
 public class AddExpenseActivity extends EditActivity {
-
-    private ArrayAdapter categoryListAdapter;
+    private CategoryAdapter categoryListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,7 @@ public class AddExpenseActivity extends EditActivity {
 
         setContentView(R.layout.activity_add_expense);
 
-        ListView categoryList = (ListView)this.findViewById(R.id.categoriesList);
+        final ListView categoryList = (ListView)this.findViewById(R.id.categoriesList);
 
         // Create button for new category and put it to the end of listview
         final Button btnAddNew = new Button(this);
@@ -46,6 +45,16 @@ public class AddExpenseActivity extends EditActivity {
         List<Category> categories = Category.getAll(this);
         categoryListAdapter = new CategoryAdapter(this, R.layout.listview_category_row, categories);
         categoryList.setAdapter(categoryListAdapter);
+
+        categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3)
+            {
+            categoryListAdapter.setSelected(position);
+            }
+        });
     }
 
     @Override
@@ -60,12 +69,13 @@ public class AddExpenseActivity extends EditActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {return;}
+        if (data == null || resultCode != RESULT_OK) {return;}
         // Get added category
         Category newCategory = (Category) data.getSerializableExtra("new");
 
         // Add it to ArrayAdapter and set selected
         categoryListAdapter.add(newCategory);
+        categoryListAdapter.setSelected(categoryListAdapter.getCount() - 1);
     }
 
 

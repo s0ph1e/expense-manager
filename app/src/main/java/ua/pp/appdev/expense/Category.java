@@ -66,7 +66,7 @@ public class Category implements Serializable {
     public static Category add(Context context, String name, int color){
 
         DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
 

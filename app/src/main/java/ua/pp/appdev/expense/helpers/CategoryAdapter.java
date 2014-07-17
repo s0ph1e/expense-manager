@@ -52,17 +52,11 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             holder = (CategoryHolder)row.getTag();
         }
 
-        holder.radio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selected = (Integer)view.getTag();
-                notifyDataSetChanged();
-            }
-        });
-
         Category category = categories.get(position);
+        String firstLetter = String.valueOf(category.name.charAt(0)).toUpperCase();
+
         holder.color.setBackgroundColor(category.color);
-        holder.color.setText(String.valueOf(category.name.charAt(0)).toUpperCase());
+        holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
         holder.name.setText(category.name);
         holder.radio.setTag(position);
         holder.radio.setChecked((selected == -1) ? category.checked : position == selected);
@@ -70,10 +64,9 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         return row;
     }
 
-    @Override
-    public void add(Category category){
-        super.add(category);
-        selected = getCount() - 1;
+    public void setSelected(int position){
+        selected = (position < getCount()) ? position : selected;
+        notifyDataSetChanged();
     }
 
     static class CategoryHolder {
