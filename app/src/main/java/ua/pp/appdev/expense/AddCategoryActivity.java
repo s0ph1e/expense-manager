@@ -1,5 +1,6 @@
 package ua.pp.appdev.expense;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,7 +34,12 @@ public class AddCategoryActivity extends EditActivity {
         Spinner spinner = (Spinner)findViewById(R.id.spinnerColors);
         int color = Color.parseColor(spinner.getSelectedItem().toString());
 
-        Category addedCategory = Category.add(this, name, color);
+        Category category = Category.add(this, name, color);
+
+        // Send added category data back
+        Intent intent = new Intent();
+        intent.putExtra("new", category);
+        setResult(RESULT_OK, intent);
 
         finish();
     }

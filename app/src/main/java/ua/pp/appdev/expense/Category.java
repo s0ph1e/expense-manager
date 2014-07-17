@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import ua.pp.appdev.expense.helpers.DBHelper;
  *    Ilya Antipenko <ilya@antipenko.pp.ua>
  *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
-public class Category {
+public class Category implements Serializable {
     public long id;
     public String name;
     public int color;
@@ -33,7 +34,7 @@ public class Category {
         this(id, name, color, false);
     }
 
-    public static Category[] getAll(Context context) {
+    public static List<Category> getAll(Context context) {
 
         List<Category> catList = new ArrayList<Category>();
 
@@ -58,8 +59,7 @@ public class Category {
             } while (c.moveToNext());
         }
 
-        Category[] catArray = catList.toArray(new Category[catList.size()]);
-        return catArray;
+        return catList;
     }
 
     public static Category add(Context context, String name, int color){
@@ -73,6 +73,6 @@ public class Category {
         cv.put("color", color);
         long rowID = db.insert(DBHelper.CATEGORIES_TABLE, null, cv);
 
-        return new Category(rowID, name, color, true);
+        return new Category(rowID, name, color);
     }
 }

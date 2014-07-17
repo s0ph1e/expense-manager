@@ -78,7 +78,7 @@ public class addRecord extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Category categories[] = Category.getAll(getActivity());
+        List<Category> categories = Category.getAll(getActivity());
 
         ListView categoryList = (ListView)getActivity().findViewById(R.id.categoriesList);
         categoryList.setAdapter(new CategoryAdapter(getActivity(), R.layout.listview_category_row, categories));

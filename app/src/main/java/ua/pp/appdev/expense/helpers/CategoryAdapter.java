@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ua.pp.appdev.expense.Category;
 import ua.pp.appdev.expense.R;
 
@@ -22,10 +24,10 @@ import ua.pp.appdev.expense.R;
 public class CategoryAdapter extends ArrayAdapter<Category> {
     private Context context;
     int resource;
-    private Category[] categories;
+    private List<Category> categories;
     private int selected = -1;
 
-    public CategoryAdapter(Context context, int resource, Category[] categories) {
+    public CategoryAdapter(Context context, int resource, List<Category> categories) {
         super(context, resource, categories);
         this.context = context;
         this.resource = resource;
@@ -59,13 +61,19 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             }
         });
 
-        Category category = categories[position];
+        Category category = categories.get(position);
         holder.color.setBackgroundColor(category.color);
         holder.name.setText(category.name);
         holder.radio.setTag(position);
         holder.radio.setChecked((selected == -1) ? category.checked : position == selected);
 
         return row;
+    }
+
+    @Override
+    public void add(Category category){
+        super.add(category);
+        selected = getCount() - 1;
     }
 
     static class CategoryHolder {

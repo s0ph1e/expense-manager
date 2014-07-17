@@ -1,18 +1,22 @@
 package ua.pp.appdev.expense;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.util.List;
 
 import ua.pp.appdev.expense.helpers.CategoryAdapter;
 
 public class AddExpenseActivity extends EditActivity {
+
+    private ArrayAdapter categoryListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +32,7 @@ public class AddExpenseActivity extends EditActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), AddCategoryActivity.class);
-                startActivity(i);
+                startActivityForResult(i, 0);
             }
         });
         btnAddNew.setText(R.string.add_category);
@@ -39,8 +43,9 @@ public class AddExpenseActivity extends EditActivity {
         categoryList.addFooterView(btnAddNew);
 
         // Get array of categories and set adapter
-        Category categories[] = Category.getAll(this);
-        categoryList.setAdapter(new CategoryAdapter(this, R.layout.listview_category_row, categories));
+        List<Category> categories = Category.getAll(this);
+        categoryListAdapter = new CategoryAdapter(this, R.layout.listview_category_row, categories);
+        categoryList.setAdapter(categoryListAdapter);
     }
 
     @Override
@@ -51,6 +56,16 @@ public class AddExpenseActivity extends EditActivity {
     @Override
     protected void onCancel(View v) {
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+        // Get added category
+        Category newCategory = (Category) data.getSerializableExtra("new");
+
+        // Add it to ArrayAdapter and set selected
+        categoryListAdapter.add(newCategory);
     }
 
 
