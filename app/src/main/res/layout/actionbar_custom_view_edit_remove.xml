@@ -22,6 +22,6 @@
     android:showDividers="middle"
     android:dividerPadding="12dp">
 
-    <include layout="@layout/include_cancel_button" />
-    <include layout="@layout/include_save_button" />
+    <include layout="@layout/include_edit_button" />
+    <include layout="@layout/include_remove_button" />
 </LinearLayout>

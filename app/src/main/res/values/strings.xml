@@ -16,5 +16,7 @@
     <string name="title_activity_add_category">AddCategoryActivity</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
 
 </resources>

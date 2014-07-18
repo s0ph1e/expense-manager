@@ -1,14 +1,22 @@
 package ua.pp.appdev.expense;
 
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -24,6 +32,54 @@ public class AddExpenseActivity extends EditActivity {
         setContentView(R.layout.activity_add_expense);
 
         final ListView categoryList = (ListView)this.findViewById(R.id.categoriesList);
+
+        categoryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        categoryList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+               // View row = categoryList.getChildAt(i);
+                //row.setBackgroundColor((b) ? getResources().getColor(android.R.color.holo_blue_light)
+                 //       : getResources().getColor(android.R.color.transparent));
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                // Respond to clicks on the actions in the CAB
+                switch (item.getItemId()) {
+                    case R.id.actionbar_edit:
+                        mode.finish(); // Action picked, so close the CAB
+                        return true;
+                    case R.id.actionbar_remove:
+                        mode.finish(); // Action picked, so close the CAB
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                // Inflate the menu for the CAB
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.context, menu);
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // Here you can make any necessary updates to the activity when
+                // the CAB is removed. By default, selected items are deselected/unchecked.
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // Here you can perform updates to the CAB due to
+                // an invalidate() request
+                return false;
+            }
+        });
 
         // Create button for new category and put it to the end of listview
         final Button btnAddNew = new Button(this);
@@ -49,12 +105,11 @@ public class AddExpenseActivity extends EditActivity {
         categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position,
-                                    long arg3)
-            {
-            categoryListAdapter.setSelected(position);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                categoryListAdapter.setSelected(i);
             }
         });
+
     }
 
     @Override
