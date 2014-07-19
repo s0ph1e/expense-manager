@@ -23,6 +23,8 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
     // ID of color in spinner
     int previousColorSelectedPos = -1;
 
+    private Category category;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

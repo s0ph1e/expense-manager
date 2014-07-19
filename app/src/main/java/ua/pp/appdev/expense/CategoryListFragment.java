@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.DialogPreference;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -37,6 +38,12 @@ import ua.pp.appdev.expense.helpers.CategoryAdapter;
  *
  */
 public class CategoryListFragment extends Fragment {
+
+    public String LOG_TAG = "CAT_LIST";
+
+    private final int CATEGORY_ADD = 0;
+    private final int CATEGORY_EDIT = 1;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -96,7 +103,8 @@ public class CategoryListFragment extends Fragment {
                 // Respond to clicks on the actions in the CAB
                 switch (item.getItemId()) {
                     case R.id.actionbar_edit:
-                        mode.finish(); // Action picked, so close the CAB
+                        editSelected();
+                        mode.finish();
                         return true;
                     case R.id.actionbar_remove:
                         new AlertDialog.Builder(getActivity())
@@ -137,8 +145,8 @@ public class CategoryListFragment extends Fragment {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 final int checked = categoryList.getCheckedItemCount();
                 MenuItem editBtn = menu.findItem(R.id.actionbar_edit);
-                editBtn.setVisible(checked <= 1)
-                    .setEnabled(checked <= 1);
+                boolean singleItemChecked = (checked == 1);
+                editBtn.setVisible(singleItemChecked).setEnabled(singleItemChecked);
                 return true;
             }
 
@@ -157,7 +165,17 @@ public class CategoryListFragment extends Fragment {
             }
 
             public void editSelected(){
-
+                SparseBooleanArray checked = categoryList.getCheckedItemPositions();
+                int checkedCount = checked.size();
+                if(checkedCount != 1){
+                    Log.wtf(LOG_TAG, "Got multiple items, but only one can be edited");
+                } else {
+                    int key = checked.keyAt(0);
+                    Category category = (Category) categoryList.getAdapter().getItem(key);
+                    Intent i = new Intent(getActivity(), AddCategoryActivity.class);
+                    i.putExtra("category", category);
+                    startActivityForResult(i, CATEGORY_EDIT);
+                }
             }
         });
 
@@ -167,7 +185,7 @@ public class CategoryListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), AddCategoryActivity.class);
-                startActivityForResult(i, 0);
+                startActivityForResult(i, CATEGORY_ADD);
             }
         });
         btnAddNew.setText(R.string.add_category);
@@ -212,12 +230,18 @@ public class CategoryListFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {return;}
-        // Get added category
-        Category newCategory = (Category) data.getSerializableExtra("new");
+        if (data == null || resultCode != Activity.RESULT_OK) {return;}
 
-        categoryListAdapter.add(newCategory);
-        categoryListAdapter.setSelected(categoryListAdapter.getCount() - 1);
+        switch (requestCode){
+            case CATEGORY_ADD:
+                Category newCategory = (Category) data.getSerializableExtra("new");
+                categoryListAdapter.add(newCategory);
+                categoryListAdapter.setSelected(categoryListAdapter.getCount() - 1);
+                break;
+            case CATEGORY_EDIT:
+                break;
+
+        }
     }
 
     /**
