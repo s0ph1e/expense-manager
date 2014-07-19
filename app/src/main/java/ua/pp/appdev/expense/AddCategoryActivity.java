@@ -107,7 +107,7 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
                         dialog.cancel();
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                //.setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
             return;
         }
