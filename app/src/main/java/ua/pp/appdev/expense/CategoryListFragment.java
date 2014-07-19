@@ -1,10 +1,14 @@
 package ua.pp.appdev.expense;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.DialogPreference;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 
 import java.util.List;
@@ -87,14 +92,27 @@ public class CategoryListFragment extends Fragment {
             }
 
             @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                 // Respond to clicks on the actions in the CAB
                 switch (item.getItemId()) {
                     case R.id.actionbar_edit:
                         mode.finish(); // Action picked, so close the CAB
                         return true;
                     case R.id.actionbar_remove:
-                        mode.finish(); // Action picked, so close the CAB
+                        new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.remove_category)
+                            .setMessage(R.string.remove_category_message)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    removeSelected();
+                                    mode.finish();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .show();
                         return true;
                     default:
                         return false;
@@ -118,8 +136,28 @@ public class CategoryListFragment extends Fragment {
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 final int checked = categoryList.getCheckedItemCount();
-                menu.findItem(R.id.actionbar_edit).setVisible(checked <= 1);
+                MenuItem editBtn = menu.findItem(R.id.actionbar_edit);
+                editBtn.setVisible(checked <= 1)
+                    .setEnabled(checked <= 1);
                 return true;
+            }
+
+            public void removeSelected(){
+                SparseBooleanArray checked = categoryList.getCheckedItemPositions();
+                int len = categoryList.getCount();
+                // Needed DESC order, otherwise unchecked items may be deleted instead of checked
+                for (int i = len - 1; i >= 0; i--) {
+                    if (checked.get(i)) {
+                        CategoryAdapter adapter = (CategoryAdapter)((HeaderViewListAdapter)categoryList.getAdapter()).getWrappedAdapter();
+                        Category cat = adapter.getItem(i);
+                        cat.remove(getActivity());
+                        adapter.remove(cat);
+                    }
+                }
+            }
+
+            public void editSelected(){
+
             }
         });
 

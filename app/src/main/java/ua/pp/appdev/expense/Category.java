@@ -78,4 +78,13 @@ public class Category implements Serializable {
 
         return new Category(rowID, name, color);
     }
+
+    public void remove(Context context){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete(DBHelper.CATEGORIES_TABLE, "id = ?", new String[] { String.valueOf(id) });
+
+        db.close();
+    }
 }

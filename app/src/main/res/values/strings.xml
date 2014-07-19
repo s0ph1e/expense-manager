@@ -19,6 +19,8 @@
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
+    <string name="remove_category">Remove category</string>
+    <string name="remove_category_message">Are you sure you want to remove selected categories?</string>
     <string name="category_other_color">Other color</string>
     <string name="choose_color">Choose color</string>
 
