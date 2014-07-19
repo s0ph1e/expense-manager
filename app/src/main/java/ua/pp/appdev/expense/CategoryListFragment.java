@@ -83,6 +83,7 @@ public class CategoryListFragment extends Fragment {
 
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                actionMode.invalidate();
             }
 
             @Override
@@ -116,9 +117,9 @@ public class CategoryListFragment extends Fragment {
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // Here you can perform updates to the CAB due to
-                // an invalidate() request
-                return false;
+                final int checked = categoryList.getCheckedItemCount();
+                menu.findItem(R.id.actionbar_edit).setVisible(checked <= 1);
+                return true;
             }
         });
 
