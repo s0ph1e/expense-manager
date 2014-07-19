@@ -85,6 +85,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
 
         // Отключаем отображение изначального цвета
         picker.setShowOldCenterColor(false);
+        picker.setTouchAnywhereOnColorWheelEnabled(true);
         return dialog;
     }
     
