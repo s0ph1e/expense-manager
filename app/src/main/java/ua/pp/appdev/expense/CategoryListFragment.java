@@ -171,7 +171,7 @@ public class CategoryListFragment extends Fragment {
                     Log.wtf(LOG_TAG, "Got multiple items, but only one can be edited");
                 } else {
                     int key = checked.keyAt(0);
-                    Category category = (Category) categoryList.getAdapter().getItem(key);
+                    Category category = categoryListAdapter.getItem(key);
                     Intent i = new Intent(getActivity(), AddCategoryActivity.class);
                     i.putExtra("category", category);
                     startActivityForResult(i, CATEGORY_EDIT);
@@ -232,13 +232,21 @@ public class CategoryListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null || resultCode != Activity.RESULT_OK) {return;}
 
+        Category newCat = (Category) data.getSerializableExtra("category");
+
         switch (requestCode){
             case CATEGORY_ADD:
-                Category newCategory = (Category) data.getSerializableExtra("new");
-                categoryListAdapter.add(newCategory);
+                categoryListAdapter.add(newCat);
                 categoryListAdapter.setSelected(categoryListAdapter.getCount() - 1);
                 break;
             case CATEGORY_EDIT:
+                int position = categoryListAdapter.getPosition(newCat);
+                if(position >= 0){
+                    List<Category> categories = categoryListAdapter.getCategories();
+                    categories.remove(position);
+                    categories.add(position, newCat);
+                    categoryListAdapter.notifyDataSetChanged();
+                }
                 break;
 
         }

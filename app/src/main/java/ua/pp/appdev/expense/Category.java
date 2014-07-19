@@ -18,10 +18,10 @@ import ua.pp.appdev.expense.helpers.DBHelper;
  *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
 public class Category implements Serializable {
-    public long id;
-    public String name;
-    public int color;
-    public boolean checked;
+    public long id = 0;
+    public String name = "";
+    public int color = 0;
+    public boolean checked = false;
 
     public Category(long id, String name, int color, boolean checked) {
         this.id = id;
@@ -33,6 +33,8 @@ public class Category implements Serializable {
     public Category(long id, String name, int color) {
         this(id, name, color, false);
     }
+
+    public Category(){}
 
     public static List<Category> getAll(Context context) {
 
@@ -63,7 +65,7 @@ public class Category implements Serializable {
         return catList;
     }
 
-    public static Category add(Context context, String name, int color){
+    public void save(Context context){
 
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -72,11 +74,14 @@ public class Category implements Serializable {
 
         cv.put("name", name);
         cv.put("color", color);
-        long rowID = db.insert(DBHelper.CATEGORIES_TABLE, null, cv);
+
+        if(id == 0){    // new category
+            id = db.insert(DBHelper.CATEGORIES_TABLE, null, cv);
+        } else {        // existing category
+            db.update(DBHelper.CATEGORIES_TABLE, cv, "id = ?", new String[] {String.valueOf(id)});
+        }
 
         db.close();
-
-        return new Category(rowID, name, color);
     }
 
     public void remove(Context context){

@@ -80,6 +80,18 @@ public class ColorAdapter extends ArrayAdapter<String> {
         return getView(position, convertView, parent);
     }
 
+    public List<String> getColors(){
+        return colors;
+    }
+
+    public int getPosition(String color){
+        for(int i = 0; i < colors.size(); i++){
+            if(colors.get(i).toLowerCase().equals(color.toLowerCase()))
+                return i;
+        }
+        return -1;
+    }
+
     static class ColorHolder{
         TextView color;
     }

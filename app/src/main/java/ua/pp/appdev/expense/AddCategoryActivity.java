@@ -16,12 +16,18 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ua.pp.appdev.expense.helpers.ColorAdapter;
+import ua.pp.appdev.expense.helpers.Helpers;
 
 public class AddCategoryActivity extends EditActivity implements ColorPickerDialogFragment.OnColorSelectedListener {
 
     // ID of color in spinner
     int previousColorSelectedPos = -1;
+
+    private ColorAdapter colorAdapter;
 
     private Category category;
 
@@ -33,7 +39,7 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
 
         final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
 
-        ColorAdapter colorAdapter = new ColorAdapter(this, R.layout.spinner_color_row);
+        colorAdapter = new ColorAdapter(this, R.layout.spinner_color_row);
         colorAdapter.add(getString(R.string.category_other_color));
         spinner.setAdapter(colorAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -64,6 +70,25 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
 
             }
         });
+
+        Intent callingIntent = getIntent();
+        category = (Category) callingIntent.getSerializableExtra("category");
+
+        if(category != null){
+            EditText editText = (EditText) findViewById(R.id.etxtCategoryName);
+            editText.setText(category.name);
+
+            String categoryColor = Helpers.colorToString(category.color);
+            int colorIndex = colorAdapter.getPosition(categoryColor);
+
+            if(colorIndex < 0) {
+                colorAdapter.getColors().add(0, categoryColor);
+            } else {
+                spinner.setSelection(colorIndex);
+            }
+        } else {
+            category = new Category();
+        }
     }
 
     @Override
@@ -91,11 +116,13 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
         Spinner spinner = (Spinner)findViewById(R.id.spinnerColors);
         int color = Color.parseColor(spinner.getSelectedItem().toString());
 
-        Category category = Category.add(this, name, color);
+        category.name = name;
+        category.color = color;
+        category.save(this);
 
-        // Send added category data back
+        // Send saved category back
         Intent intent = new Intent();
-        intent.putExtra("new", category);
+        intent.putExtra("category", category);
         setResult(RESULT_OK, intent);
 
         finish();
@@ -132,9 +159,8 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
     public void onColorSelected(int color) {
         final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
 
-        ColorAdapter colorAdapter = new ColorAdapter(this, R.layout.spinner_color_row);
-        colorAdapter.add(String.format("#%06X", (0xFFFFFF & color)));
-        colorAdapter.add(getString(R.string.category_other_color));
+        List<String> colors = colorAdapter.getColors();
+        colors.add(colors.size() - 1, Helpers.colorToString(color));
         spinner.setAdapter(colorAdapter);
 
         // Выберем предпослений элемент

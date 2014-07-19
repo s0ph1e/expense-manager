@@ -69,6 +69,18 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         notifyDataSetChanged();
     }
 
+    public int getPosition(Category category){
+        for(int i = 0; i < categories.size(); i++){
+            if(categories.get(i).id == category.id)
+                return i;
+        }
+        return -1;
+    }
+
+    public List<Category> getCategories(){
+        return categories;
+    }
+
     static class CategoryHolder {
         TextView color;
         RadioButton radio;
