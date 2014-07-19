@@ -161,7 +161,7 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
 
         List<String> colors = colorAdapter.getColors();
         colors.add(colors.size() - 1, Helpers.colorToString(color));
-        spinner.setAdapter(colorAdapter);
+        colorAdapter.notifyDataSetChanged();
 
         // Выберем предпослений элемент
         // Это новый цвет
