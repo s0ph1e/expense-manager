@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 
 public class StartActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, addRecord.OnFragmentInteractionListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -110,11 +110,6 @@ public class StartActivity extends Activity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        // Do something...
     }
 
     /**
