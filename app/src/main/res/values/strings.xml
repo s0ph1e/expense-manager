@@ -14,9 +14,12 @@
     <string name="title_activity_add_expense">AddExpenseActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_add_category">AddCategoryActivity</string>
+    <string name="done">Done</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
+    <string name="category_other_color">Other color</string>
+    <string name="choose_color">Choose color</string>
 
 </resources>

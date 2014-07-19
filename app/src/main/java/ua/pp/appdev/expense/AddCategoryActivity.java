@@ -1,19 +1,27 @@
 package ua.pp.appdev.expense;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import ua.pp.appdev.expense.helpers.ColorAdapter;
 
-public class AddCategoryActivity extends EditActivity {
+public class AddCategoryActivity extends EditActivity implements ColorPickerDialogFragment.OnColorSelectedListener {
+
+    // ID of color in spinner
+    int previousColorSelectedPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +29,39 @@ public class AddCategoryActivity extends EditActivity {
 
         setContentView(R.layout.activity_add_category);
 
-        Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
-        spinner.setAdapter(new ColorAdapter(this, R.layout.spinner_color_row));
+        final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
+
+        ColorAdapter colorAdapter = new ColorAdapter(this, R.layout.spinner_color_row);
+        colorAdapter.add(getString(R.string.category_other_color));
+        spinner.setAdapter(colorAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (((String)adapterView.getItemAtPosition(i)).equals(getString(R.string.category_other_color))) {
+                    spinner.setSelection(previousColorSelectedPos);
+                    // DialogFragment.show() will take care of adding the fragment
+                    // in a transaction.  We also want to remove any currently showing
+                    // dialog, so make our own transaction and take care of that here.
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                    if (prev != null) {
+                        ft.remove(prev);
+                    }
+                    ft.addToBackStack(null);
+
+                    // Create and show the dialog.
+                    DialogFragment newFragment = new ColorPickerDialogFragment();
+                    newFragment.show(ft, "dialog");
+                } else {
+                    previousColorSelectedPos = i;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -81,5 +120,23 @@ public class AddCategoryActivity extends EditActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Метод вызывается после выбора пользователем цвета
+     * @param color Выбранный пользователем цвети
+     */
+    @Override
+    public void onColorSelected(int color) {
+        final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
+
+        ColorAdapter colorAdapter = new ColorAdapter(this, R.layout.spinner_color_row);
+        colorAdapter.add(String.format("#%06X", (0xFFFFFF & color)));
+        colorAdapter.add(getString(R.string.category_other_color));
+        spinner.setAdapter(colorAdapter);
+
+        // Выберем предпослений элемент
+        // Это новый цвет
+        spinner.setSelection(spinner.getCount() - 2);
     }
 }
