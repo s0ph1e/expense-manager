@@ -54,7 +54,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + "create_timestamp timestamp default current_timestamp, "
             + "expense_timestamp timestamp default current_timestamp, "
             + "category_id integer not null, "
-            + "sum integer not null, "
+            + "sum double not null, "
             + "currency_id integer not null, "
             + "description varchar(128));"
         );

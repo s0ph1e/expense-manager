@@ -1,14 +1,12 @@
 package ua.pp.appdev.expense;
 
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -21,7 +19,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_add_expense);
+        setContentView(R.layout.activity_save_expense);
 
         EditText etSum = (EditText)findViewById(R.id.etxtSum);
         // Добавляем фильтр на количество цифр после запятой

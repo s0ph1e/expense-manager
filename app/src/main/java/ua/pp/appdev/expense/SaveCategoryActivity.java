@@ -34,7 +34,7 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_add_category);
+        setContentView(R.layout.activity_save_category);
 
         final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
 
