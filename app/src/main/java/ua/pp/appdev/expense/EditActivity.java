@@ -3,9 +3,13 @@ package ua.pp.appdev.expense;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 public abstract class EditActivity extends Activity {
 
@@ -46,6 +50,21 @@ public abstract class EditActivity extends Activity {
                         ViewGroup.LayoutParams.MATCH_PARENT));
         // END_INCLUDE (inflate_set_custom_view)
     }
+
+    protected TextView.OnEditorActionListener lostFocusAfterDone = new TextView.OnEditorActionListener() {
+
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if(actionId== EditorInfo.IME_ACTION_DONE){
+                //Clear focus here from edittext
+                //Log.d("test app", "v.clearFocus only works when there are other controls that can get focus(?)");
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
+                v.clearFocus();
+            }
+            return true;
+        }
+    };
 
     protected abstract void onSave(View v);
     protected abstract void onCancel(View v);

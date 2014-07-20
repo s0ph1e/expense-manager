@@ -19,6 +19,7 @@
         <activity
             android:name=".SaveExpenseActivity"
             android:label="@string/title_activity_add_expense"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:parentActivityName=".StartActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -26,7 +27,8 @@
         </activity>
         <activity
             android:name=".SaveCategoryActivity"
-            android:label="@string/title_activity_add_category" >
+            android:label="@string/title_activity_add_category"
+            android:windowSoftInputMode="stateAlwaysVisible">
         </activity>
     </application>
 

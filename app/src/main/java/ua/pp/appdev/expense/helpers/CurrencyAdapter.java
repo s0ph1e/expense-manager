@@ -54,7 +54,7 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View row = getView(position, convertView, parent);
-        row.findViewById(R.id.txtCurrencyRow).setPadding(5, 5, 5, 5);
+        row.findViewById(R.id.txtCurrencyRow).setPadding(15, 15, 15, 15);
         return row;
     }
 }

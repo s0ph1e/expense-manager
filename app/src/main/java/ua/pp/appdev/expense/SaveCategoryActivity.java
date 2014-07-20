@@ -36,6 +36,9 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
 
         setContentView(R.layout.activity_save_category);
 
+        EditText categoryName = (EditText)findViewById(R.id.etxtCategoryName);
+        categoryName.setOnEditorActionListener(lostFocusAfterDone);
+
         final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
 
         colorAdapter = new ColorAdapter(this, R.layout.spinner_color_row);
