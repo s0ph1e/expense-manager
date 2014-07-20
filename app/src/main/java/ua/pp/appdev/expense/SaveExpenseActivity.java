@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import ua.pp.appdev.expense.helpers.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
 
 public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener{
@@ -27,7 +28,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         etSum.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(2)});
 
         Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>((Activity)this, android.R.layout.simple_spinner_dropdown_item, new String[]{"test", "1232134234"});
+        CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
         spinnerCurrency.setAdapter(adapter);
 
         CategoryListFragment categoryListFragment = new CategoryListFragment();
