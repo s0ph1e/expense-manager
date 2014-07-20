@@ -43,6 +43,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("create table " + CURRENCIES_TABLE + "( "
             + "id integer primary key autoincrement, "
             + "iso_code varchar(3) not null, "
+            + "short_name varchar(8) not null, "
             + "full_name varchar(32) not null, "
             + "rates text not null);"
         );
@@ -66,12 +67,17 @@ public class DBHelper extends SQLiteOpenHelper{
 
     }
 
-    public void fillData(SQLiteDatabase db) {
+    private void fillData(SQLiteDatabase db) {
 
         Log.d(LOG_TAG, "--- fill database ---");
+        fillCategoriesTable(db);
+        fillCurrenciesTable(db);
+
+    }
+
+    private void fillCategoriesTable(SQLiteDatabase db){
 
         ContentValues cv = new ContentValues();
-
         Resources res = context.getResources();
 
         // Get categories init data
@@ -89,6 +95,38 @@ public class DBHelper extends SQLiteOpenHelper{
                 cv.put("name", categoryNames.getString(i));
                 cv.put("color", categoryColors.getColor(i,0));
                 db.insert(CATEGORIES_TABLE, null, cv);
+            }
+        }
+    }
+
+    private void fillCurrenciesTable(SQLiteDatabase db){
+
+        ContentValues cv = new ContentValues();
+        Resources res = context.getResources();
+
+        // Get currencies init data
+        TypedArray currencyISOCodes = res.obtainTypedArray(R.array.currency_codes);
+        TypedArray currencyNames = res.obtainTypedArray(R.array.currency_names);
+        TypedArray currencyFullNames = res.obtainTypedArray(R.array.currency_full_names);
+        TypedArray currencyRates = res.obtainTypedArray(R.array.currency_rates);
+
+        int currenciesCount = currencyISOCodes.length();
+
+        // Check categories xml, if it is good, add init data to db
+        if(currenciesCount != currencyNames.length()
+                || currenciesCount != currencyFullNames.length()
+                || currenciesCount != currencyRates.length()){
+            Log.wtf(LOG_TAG, "Invalid currencies xml file");
+        } else {
+
+            Log.d(LOG_TAG, "--- fill currencies table ---");
+
+            for(int i = 0; i < currenciesCount; i++ ){
+                cv.put("iso_code", currencyISOCodes.getString(i));
+                cv.put("short_name", currencyNames.getString(i));
+                cv.put("full_name", currencyFullNames.getString(i));
+                cv.put("rates", currencyRates.getString(i));
+                db.insert(CURRENCIES_TABLE, null, cv);
             }
         }
     }
