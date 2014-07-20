@@ -2,12 +2,10 @@ package ua.pp.appdev.expense;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.preference.DialogPreference;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -116,7 +114,7 @@ public class CategoryListFragment extends Fragment {
                                     mode.finish();
                                 }
                             })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
                             })
@@ -172,7 +170,7 @@ public class CategoryListFragment extends Fragment {
                 } else {
                     int key = checked.keyAt(0);
                     Category category = categoryListAdapter.getItem(key);
-                    Intent i = new Intent(getActivity(), AddCategoryActivity.class);
+                    Intent i = new Intent(getActivity(), SaveCategoryActivity.class);
                     i.putExtra("category", category);
                     startActivityForResult(i, CATEGORY_EDIT);
                 }
@@ -184,7 +182,7 @@ public class CategoryListFragment extends Fragment {
         btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(view.getContext(), AddCategoryActivity.class);
+                Intent i = new Intent(view.getContext(), SaveCategoryActivity.class);
                 startActivityForResult(i, CATEGORY_ADD);
             }
         });

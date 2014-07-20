@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -67,7 +67,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 //.setIcon(R.drawable.alert_dialog_icon)
                 .setView(dialogView)
-                .setTitle(getString(R.string.choose_color))
+                .setTitle(R.string.choose_color)
                 .setPositiveButton(R.string.done,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -85,6 +85,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
 
         // Отключаем отображение изначального цвета
         picker.setShowOldCenterColor(false);
+        // Разрешаем менять цвет при нажатии в любом месте пикера
         picker.setTouchAnywhereOnColorWheelEnabled(true);
         return dialog;
     }

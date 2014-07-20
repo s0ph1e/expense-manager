@@ -2,13 +2,12 @@ package ua.pp.appdev.expense;
 
 
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class AddExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener{
+public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

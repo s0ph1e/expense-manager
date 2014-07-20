@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +15,14 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.helpers.ColorAdapter;
 import ua.pp.appdev.expense.helpers.Helpers;
 
-public class AddCategoryActivity extends EditActivity implements ColorPickerDialogFragment.OnColorSelectedListener {
+public class SaveCategoryActivity extends EditActivity implements ColorPickerDialogFragment.OnColorSelectedListener {
 
-    // ID of color in spinner
+    // Позиция последнего выбранного цвета
     int previousColorSelectedPos = -1;
 
     private ColorAdapter colorAdapter;
@@ -100,9 +98,9 @@ public class AddCategoryActivity extends EditActivity implements ColorPickerDial
 
         if(name.isEmpty()){
             new AlertDialog.Builder(this)
-                .setTitle("Add name")
-                .setMessage("Category name can't be empty.")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.add_name)
+                .setMessage(R.string.category_name_cant_empty)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
