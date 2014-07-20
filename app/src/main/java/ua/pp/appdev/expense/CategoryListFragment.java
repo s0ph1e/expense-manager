@@ -87,6 +87,9 @@ public class CategoryListFragment extends Fragment {
 
         final ListView categoryList = new ListView(getActivity());
 
+        // Set scrollbar always shown
+        categoryList.setScrollbarFadingEnabled(false);
+
         // Create contextual action mode (edit-remove categories)
         categoryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         categoryList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
