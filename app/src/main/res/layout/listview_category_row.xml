@@ -18,26 +18,22 @@
         android:layout_margin="5dp" />
 
     <TextView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/txtCategoryColor"
         android:textColor="#ffffffff"
         android:background="#ccc"
-        android:textSize="35dp"
-        android:textAlignment="center"
+        android:textSize="30sp"
         android:singleLine="true"
-        android:layout_margin="4dp"
-        android:text="W"
+        android:layout_margin="3dp"
         android:gravity="center"
         android:layout_gravity="center"
-        android:height="35px"
         android:clickable="false" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
         android:id="@+id/txtCategoryName"
         android:layout_gravity="center_vertical"
         android:layout_margin="5dp"

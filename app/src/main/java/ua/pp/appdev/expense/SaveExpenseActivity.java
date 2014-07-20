@@ -31,7 +31,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         CategoryListFragment categoryListFragment = new CategoryListFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment);
+        fragmentTransaction.replace(R.id.categoryListContainer, categoryListFragment);
         fragmentTransaction.commit();
     }
 

@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -13,13 +14,16 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.HeaderViewListAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -181,7 +185,8 @@ public class CategoryListFragment extends Fragment {
         });
 
         // Create button for new category and put it to the end of listview
-        final Button btnAddNew = new Button(getActivity());
+        //final Button btnAddNew = new Button(getActivity());
+        final View btnAddNew = inflater.inflate(R.layout.transparent_button, null);
         btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,7 +194,8 @@ public class CategoryListFragment extends Fragment {
                 startActivityForResult(i, CATEGORY_ADD);
             }
         });
-        btnAddNew.setText(R.string.add_category);
+        TextView txtAddNew = (TextView) btnAddNew.findViewById(R.id.txtTransparentButton);
+        txtAddNew.setText(R.string.add_category);
 
         // Note: When first introduced, this method could only be called before setting
         // the adapter with setAdapter(ListAdapter).

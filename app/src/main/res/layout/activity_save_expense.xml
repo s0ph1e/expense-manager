@@ -1,7 +1,7 @@
 <RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:padding="10dp">
 
     <EditText
@@ -16,39 +16,38 @@
         android:layout_alignParentEnd="true"
         android:layout_toLeftOf="@+id/spinnerCurrency"
         android:layout_marginRight="90dp"
-        android:layout_toRightOf="@+id/textExpensed"
-        android:layout_marginLeft="10dp"
         android:gravity="right"
-        android:textSize="25dp"
-        android:maxLength="20" />
+        android:imeOptions="actionDone"
+        android:maxLength="20"
+        android:layout_toRightOf="@+id/textCategory" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Sum"
         android:id="@+id/textExpensed"
         android:layout_alignBottom="@+id/etxtSum"
-        android:layout_alignLeft="@+id/view" />
+        android:layout_alignLeft="@+id/categoryContainerTopLine" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Category"
         android:id="@+id/textCategory"
         android:layout_below="@+id/etxtSum"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"
-        android:layout_alignLeft="@+id/view" />
+        android:layout_alignLeft="@+id/categoryContainerTopLine" />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="3dp"
+        android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:layout_alignParentStart="true"
-        android:id="@+id/view"
+        android:id="@+id/categoryContainerTopLine"
         android:paddingBottom="10dp"
         android:layout_below="@+id/textCategory"
         android:layout_alignParentLeft="true" />
@@ -56,10 +55,23 @@
     <FrameLayout
         android:id="@+id/categoryListContainer"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:paddingBottom="10dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/textCategory"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/categoryContainerBottomLine"
+        android:minHeight="260dp">
+    </FrameLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_alignParentStart="true"
+        android:id="@+id/categoryContainerBottomLine"
+        android:paddingBottom="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/btnPickDate" />
 
     <Spinner
         android:layout_width="80dp"
@@ -67,7 +79,33 @@
         android:id="@+id/spinnerCurrency"
         android:focusableInTouchMode="false"
         android:layout_alignBottom="@+id/etxtSum"
-        android:layout_alignRight="@+id/view"
-        android:layout_alignEnd="@+id/view" />
+        android:layout_alignRight="@+id/categoryContainerTopLine"
+        android:layout_alignEnd="@+id/categoryContainerTopLine" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Date"
+        android:id="@+id/txtDate"
+        android:layout_toStartOf="@+id/btnPickDate"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/btnPickDate" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPickDate"
+        android:layout_toEndOf="@+id/txtDate"
+        style="@style/SpinnerButtonStyle"
+        android:text="Today"
+        android:gravity="bottom|center_horizontal"
+        android:editable="false"
+        android:singleLine="true"
+        android:layout_toRightOf="@+id/txtDate"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/etxtSum" />
 
 </RelativeLayout>
