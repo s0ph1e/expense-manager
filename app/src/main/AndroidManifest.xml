@@ -35,6 +35,10 @@
             android:label="@string/title_activity_add_category"
             android:windowSoftInputMode="stateAlwaysVisible">
         </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

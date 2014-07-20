@@ -77,6 +77,10 @@ public class StartActivity extends FragmentActivity
                     newFragment = new HistoryFragment();
                 }
                 break;
+            case 2:
+                Intent settings = new Intent(this, SettingsActivity.class);
+                startActivity(settings);
+                break;
         }
 
         /*
