@@ -7,12 +7,15 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:inputType="none"
-        android:layout_alignTop="@+id/txtCategoryName"
-        android:layout_toRightOf="@+id/txtCategoryName"
-        android:layout_alignRight="@+id/view"
-        android:layout_alignEnd="@+id/view" />
+        android:id="@+id/etxtSum"
+        android:singleLine="true"
+        android:layout_toEndOf="@+id/textCategory"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textCategory"
+        android:inputType="number|numberDecimal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="101dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +23,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Expensed:"
         android:id="@+id/textExpensed"
-        android:layout_alignParentTop="true"
+        android:layout_alignBaseline="@+id/etxtSum"
+        android:layout_alignBottom="@+id/etxtSum"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -28,28 +32,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Categories"
-        android:id="@+id/textCategories"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/txtCategoryName"
-        android:layout_alignLeft="@+id/txtCategoryName"
-        android:layout_alignStart="@+id/txtCategoryName" />
+        android:text="Category"
+        android:id="@+id/textCategory"
+        android:layout_below="@+id/etxtSum"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp" />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="3dp"
         android:background="@android:color/darker_gray"
-        android:layout_below="@+id/textCategories"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/view"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/textCategory"
+        android:layout_alignParentLeft="true" />
 
     <FrameLayout
         android:id="@+id/categoryListContainer"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@+id/view"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/textCategory"
+        android:layout_alignParentLeft="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerCurrency"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/etxtSum"
+        android:focusableInTouchMode="false"
+        android:layout_alignTop="@+id/view"
+        android:layout_alignRight="@+id/view"
+        android:layout_alignParentEnd="false"
+        android:layout_alignLeft="@+id/etxtSum"
+        android:layout_alignStart="@+id/etxtSum"
+        android:layout_marginLeft="118dp" />
 
 </RelativeLayout>
