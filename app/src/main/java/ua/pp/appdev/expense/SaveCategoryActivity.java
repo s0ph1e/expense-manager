@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.List;
+import java.util.Random;
 
 import ua.pp.appdev.expense.helpers.ColorAdapter;
 import ua.pp.appdev.expense.helpers.Helpers;
@@ -86,6 +87,10 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
             }
         } else {
             category = new Category();
+            // Выбираем случайный цвет из списка
+            Random random = new Random();
+            int position = random.nextInt(spinner.getCount() - 1);
+            spinner.setSelection(position);
         }
     }
 
