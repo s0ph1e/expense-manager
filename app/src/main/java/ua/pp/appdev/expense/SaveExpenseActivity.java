@@ -1,13 +1,17 @@
 package ua.pp.appdev.expense;
 
 
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import ua.pp.appdev.expense.helpers.CurrencyAdapter;
@@ -26,17 +30,48 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         etSum.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(2)});
         etSum.setOnEditorActionListener(lostFocusAfterDone);
 
+        // Remove focus after actionDone from editText for Note
         EditText etNote = (EditText) findViewById(R.id.etxtNote);
         etNote.setOnEditorActionListener(lostFocusAfterDone);
 
+        // Add currency spinner
         Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
         CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
         spinnerCurrency.setAdapter(adapter);
 
+        // Add category list
         CategoryListFragment categoryListFragment = new CategoryListFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.categoryListContainer, categoryListFragment);
+        //((FrameLayout)findViewById(R.id.categoryListContainer)).removeAllViews();
+        //fragmentTransaction.remove(categoryListFragment);
+        Fragment prev = getFragmentManager().findFragmentById(R.id.categoryListContainer);
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment);
         fragmentTransaction.commit();
+
+        // Add datipicker dialog on btnPickDate click
+        Button btnPickDate = (Button) findViewById(R.id.btnPickDate);
+        int mYear, mMonth, mDay;
+        btnPickDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // DialogFragment.show() will take care of adding the fragment
+                // in a transaction.  We also want to remove any currently showing
+                // dialog, so make our own transaction and take care of that here.
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("datePicker");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
+                newFragment.show(ft, "datePicker");
+            }
+        });
     }
 
     @Override
