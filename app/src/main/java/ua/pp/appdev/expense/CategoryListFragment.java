@@ -13,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -86,6 +88,18 @@ public class CategoryListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         final ListView categoryList = new ListView(getActivity());
+        // NOT WORK =(
+        //categoryList.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
+
+        categoryList.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
         // Set scrollbar always shown
         categoryList.setScrollbarFadingEnabled(false);
@@ -109,19 +123,19 @@ public class CategoryListFragment extends Fragment {
                         return true;
                     case R.id.actionbar_remove:
                         new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.remove_category)
-                            .setMessage(R.string.remove_category_message)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    removeSelected();
-                                    mode.finish();
-                                }
-                            })
-                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .show();
+                                .setTitle(R.string.remove_category)
+                                .setMessage(R.string.remove_category_message)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        removeSelected();
+                                        mode.finish();
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .show();
                         return true;
                     default:
                         return false;
@@ -151,13 +165,13 @@ public class CategoryListFragment extends Fragment {
                 return true;
             }
 
-            public void removeSelected(){
+            public void removeSelected() {
                 SparseBooleanArray checked = categoryList.getCheckedItemPositions();
                 int len = categoryList.getCount();
                 // Needed DESC order, otherwise unchecked items may be deleted instead of checked
                 for (int i = len - 1; i >= 0; i--) {
                     if (checked.get(i)) {
-                        CategoryAdapter adapter = (CategoryAdapter)((HeaderViewListAdapter)categoryList.getAdapter()).getWrappedAdapter();
+                        CategoryAdapter adapter = (CategoryAdapter) ((HeaderViewListAdapter) categoryList.getAdapter()).getWrappedAdapter();
                         Category cat = adapter.getItem(i);
                         cat.remove(getActivity());
                         adapter.remove(cat);
@@ -165,10 +179,10 @@ public class CategoryListFragment extends Fragment {
                 }
             }
 
-            public void editSelected(){
+            public void editSelected() {
                 SparseBooleanArray checked = categoryList.getCheckedItemPositions();
                 int checkedCount = checked.size();
-                if(checkedCount != 1){
+                if (checkedCount != 1) {
                     Log.wtf(LOG_TAG, "Got multiple items, but only one can be edited");
                 } else {
                     int key = checked.keyAt(0);

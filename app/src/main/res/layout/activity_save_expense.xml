@@ -1,3 +1,8 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -27,18 +32,38 @@
         android:layout_alignParentStart="true"
         android:hint="@string/hint_expensed_sum"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Spinner
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:text="@string/label_category"
-        android:id="@+id/textCategory"
-        android:layout_below="@+id/etxtSum"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:layout_alignLeft="@+id/categoryContainerTopLine"
-        android:textAllCaps="true"
-        android:textStyle="bold" />
+        android:id="@+id/spinnerCurrency"
+        android:focusableInTouchMode="false"
+        android:layout_alignBottom="@+id/etxtSum"
+        android:layout_alignParentRight="true" />
+
+    <!-- Разобраться, почему при открытой клавиатуре
+     внутренний список меньше внешнего -->
+    <!-- Разобраться, почему не работает прокрутка по кнопке New category -->
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:paddingTop="50dp"
+        android:paddingBottom="85dp"
+        android:layout_alignParentEnd="true"
+        android:minHeight="300dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_category"
+            android:id="@+id/textCategory"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_alignLeft="@+id/categoryContainerTopLine"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
@@ -48,17 +73,31 @@
         android:id="@+id/categoryContainerTopLine"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/textCategory"
+        android:layout_below="@id/textCategory"
         android:layout_alignParentLeft="true" />
 
-    <FrameLayout
+        <FrameLayout
+            android:orientation="vertical"
+            android:id="@+id/categoryListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/categoryContainerTopLine"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true">
+        </FrameLayout>
+
+    <!--<LinearLayout
+        android:orientation="vertical"
         android:id="@+id/categoryListContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/categoryContainerTopLine"
         android:layout_alignParentLeft="true"
         android:layout_above="@+id/categoryContainerBottomLine">
-    </FrameLayout>
+    </LinearLayout>-->
 
     <View
         android:layout_width="match_parent"
@@ -69,16 +108,8 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:layout_alignParentLeft="true"
-        android:layout_above="@+id/bottomLayout" />
-
-    <Spinner
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerCurrency"
-        android:focusableInTouchMode="false"
-        android:layout_alignBottom="@+id/etxtSum"
-        android:layout_alignRight="@+id/categoryContainerTopLine"
-        android:layout_alignEnd="@+id/categoryContainerTopLine" />
+        android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -89,6 +120,10 @@
         android:layout_alignParentStart="true"
         android:id="@+id/bottomLayout">
 
+        <!-- Magic for preventing focus on EditText-->
+        <LinearLayout
+            android:focusable="true" android:focusableInTouchMode="true"
+            android:layout_width="0px" android:layout_height="0px"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -110,3 +145,4 @@
     </LinearLayout>
 
 </RelativeLayout>
+</ScrollView>

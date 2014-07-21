@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +23,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.i("SAVE_EXP", "onCreate");
         setContentView(R.layout.activity_save_expense);
 
         EditText etSum = (EditText)findViewById(R.id.etxtSum);
