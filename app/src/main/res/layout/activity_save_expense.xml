@@ -1,6 +1,6 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp">
 
@@ -25,12 +25,12 @@
         android:maxLength="20"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="0.00"/>
+        android:hint="@string/hint_expensed_sum"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category"
+        android:text="@string/label_category"
         android:id="@+id/textCategory"
         android:layout_below="@+id/etxtSum"
         android:layout_alignParentLeft="true"
@@ -41,7 +41,7 @@
         android:textStyle="bold" />
 
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:layout_alignParentStart="true"
@@ -57,12 +57,11 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/categoryContainerTopLine"
         android:layout_alignParentLeft="true"
-        android:layout_above="@+id/categoryContainerBottomLine"
-        android:minHeight="260dp">
+        android:layout_above="@+id/categoryContainerBottomLine">
     </FrameLayout>
 
     <View
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:layout_alignParentStart="true"
@@ -70,7 +69,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:layout_alignParentLeft="true"
-        android:layout_above="@+id/btnPickDate" />
+        android:layout_above="@+id/bottomLayout" />
 
     <Spinner
         android:layout_width="80dp"
@@ -81,18 +80,33 @@
         android:layout_alignRight="@+id/categoryContainerTopLine"
         android:layout_alignEnd="@+id/categoryContainerTopLine" />
 
-    <Button
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnPickDate"
-        android:layout_toEndOf="@+id/textCategory"
-        style="@style/SpinnerButtonStyle"
-        android:text="Today"
-        android:gravity="bottom|center_horizontal"
-        android:editable="false"
-        android:singleLine="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:id="@+id/bottomLayout">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnPickDate"
+            style="@style/SpinnerButtonStyle"
+            android:text="@string/today"
+            android:gravity="bottom|center_horizontal"
+            android:editable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etxtNote"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:hint="@string/expense_note_hint"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
 
 </RelativeLayout>

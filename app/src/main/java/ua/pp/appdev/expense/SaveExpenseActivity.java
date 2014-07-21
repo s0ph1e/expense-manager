@@ -22,9 +22,12 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         setContentView(R.layout.activity_save_expense);
 
         EditText etSum = (EditText)findViewById(R.id.etxtSum);
-        // Добавляем фильтр на количество цифр после запятой
+        // Добавляем фильтр на количество цифр после запятой & remove focus after done
         etSum.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(2)});
         etSum.setOnEditorActionListener(lostFocusAfterDone);
+
+        EditText etNote = (EditText) findViewById(R.id.etxtNote);
+        etNote.setOnEditorActionListener(lostFocusAfterDone);
 
         Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
         CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
