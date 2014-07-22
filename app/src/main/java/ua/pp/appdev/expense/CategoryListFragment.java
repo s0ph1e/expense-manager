@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +25,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ua.pp.appdev.expense.helpers.CategoryAdapter;
+import ua.pp.appdev.expense.helpers.UnchangeableSizeListView;
 
 
 /**
@@ -87,10 +87,9 @@ public class CategoryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final ListView categoryList = new ListView(getActivity());
-        // NOT WORK =(
-        //categoryList.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-
+        final ListView categoryList = new UnchangeableSizeListView(getActivity());
+        categoryList.setId(R.id.category_list);
+        /*
         categoryList.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
@@ -100,6 +99,7 @@ public class CategoryListFragment extends Fragment {
                 return false;
             }
         });
+        */
 
         // Set scrollbar always shown
         categoryList.setScrollbarFadingEnabled(false);
@@ -204,8 +204,16 @@ public class CategoryListFragment extends Fragment {
                 startActivityForResult(i, CATEGORY_ADD);
             }
         });
-        TextView txtAddNew = (TextView) btnAddNew.findViewById(R.id.txtTransparentButton);
-        txtAddNew.setText(R.string.add_category);
+        btnAddNew.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+        ((TextView)btnAddNew.findViewById(R.id.txtTransparentButton)).setText(R.string.add_category);
 
         // Note: When first introduced, this method could only be called before setting
         // the adapter with setAdapter(ListAdapter).

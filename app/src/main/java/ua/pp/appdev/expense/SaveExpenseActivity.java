@@ -10,13 +10,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import ua.pp.appdev.expense.helpers.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
+import ua.pp.appdev.expense.helpers.UnchangeableSizeListView;
 
 public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener{
 
