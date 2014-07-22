@@ -9,48 +9,52 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
 
-    <!-- Magic for preventing focus on EditText-->
+    <!-- Top layout -->
     <LinearLayout
-        android:focusable="true" android:focusableInTouchMode="true"
-        android:layout_width="0px" android:layout_height="0px"/>
-
-    <EditText
-        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etxtSum"
-        android:singleLine="true"
-        android:layout_alignParentTop="true"
-        android:inputType="number|numberDecimal"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toLeftOf="@+id/spinnerCurrency"
-        android:layout_marginRight="90dp"
-        android:gravity="right"
-        android:imeOptions="actionDone"
-        android:maxLength="20"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="@string/hint_expensed_sum"/>
+        android:weightSum="4">
 
-    <Spinner
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerCurrency"
-        android:focusableInTouchMode="false"
-        android:layout_alignBottom="@+id/etxtSum"
-        android:layout_alignParentRight="true" />
+        <!-- Magic for preventing focus on EditText-->
+        <LinearLayout
+            android:focusable="true" android:focusableInTouchMode="true"
+            android:layout_width="0px" android:layout_height="0px"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etxtSum"
+            android:singleLine="true"
+            android:inputType="number|numberDecimal"
+            android:gravity="right"
+            android:imeOptions="actionDone"
+            android:maxLength="20"
+            android:hint="@string/hint_expensed_sum"
+            android:layout_gravity="bottom"
+            android:layout_weight="3" />
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerCurrency"
+            android:focusableInTouchMode="false"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
 
     <!-- Разобраться, почему при открытой клавиатуре
      внутренний список меньше внешнего -->
     <!-- Разобраться, почему не работает прокрутка по кнопке New category -->
     <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:paddingTop="50dp"
         android:paddingBottom="85dp"
         android:layout_alignParentEnd="true"
-        android:minHeight="300dp"
-        >
+        android:minHeight="300dp">
 
         <TextView
             android:layout_width="wrap_content"
