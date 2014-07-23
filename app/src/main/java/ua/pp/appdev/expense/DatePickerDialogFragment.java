@@ -25,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 
 public class DatePickerDialogFragment extends DialogFragment implements View.OnClickListener{
@@ -35,20 +36,13 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the current date as the default date in the picker
-        /*final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
 
-        // Create a new instance of DatePickerDialog and return it
-        DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
-        dialog.getDatePicker().setCalendarViewShown(false);
-        return dialog;*/
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                 .setTitle("Set date and time")
@@ -65,9 +59,15 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
 
         view = getActivity().getLayoutInflater().inflate(R.layout.date_time_picker_layout, null);
 
+        // Set current date
         datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        datePicker.updateDate(year, month, day);
+
+        // Set preferred time format & current time
         timePicker = (TimePicker) view.findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
+        timePicker.setIs24HourView(android.text.format.DateFormat.is24HourFormat(getActivity()));
+        timePicker.setCurrentHour(hour);
+        timePicker.setCurrentMinute(minute);
 
         view.findViewById(R.id.btnSetTime).setOnClickListener(this);
 
