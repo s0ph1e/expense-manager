@@ -27,9 +27,9 @@ public class UnchangeableSizeListView extends ListView implements View.OnTouchLi
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         int minHeight = minRowsCount * getRowHeight();
-        Log.e("", "getLayoutParams().height " + getLayoutParams().height );
-        Log.e("", "getHeight() " + getHeight());
-        Log.e("", "minHeight " + minHeight);
+        //Log.e("", "getLayoutParams().height " + getLayoutParams().height );
+        //Log.e("", "getHeight() " + getHeight());
+        //Log.e("", "minHeight " + minHeight);
         if(getHeight() < minHeight){
             Log.e("", getHeight() + " < " + minHeight);
             getLayoutParams().height = minHeight;
@@ -38,8 +38,6 @@ public class UnchangeableSizeListView extends ListView implements View.OnTouchLi
             getLayoutParams().height = getHeight();
             requestLayout();
         }
-
-        //getLayoutParams().height = 381;
     }
 
     public int getRowHeight(){
@@ -75,18 +73,12 @@ public class UnchangeableSizeListView extends ListView implements View.OnTouchLi
 
         }
         return  totalHeight;
-
-       /* ViewGroup.LayoutParams params = getLayoutParams();
-        params.height = totalHeight
-                + (getDividerHeight() * (mAdapter.getCount() - 1));
-        setLayoutParams(params);
-        requestLayout();*/
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        Log.e("", "getHeight()=" + getHeight());
-        Log.e("", "((LinearLayout)this.getParent()).getHeight()=" + ((LinearLayout)this.getParent()).getHeight());
+        //Log.e("", "getHeight()=" + getHeight());
+        //Log.e("", "((LinearLayout)this.getParent()).getHeight()=" + ((LinearLayout)this.getParent()).getHeight());
         if (getTotalHeight() > ((LinearLayout)this.getParent()).getHeight()/* && (getLastVisiblePosition())< getCount() - 1*/) {
             view.getParent().requestDisallowInterceptTouchEvent(true);
         } else {
