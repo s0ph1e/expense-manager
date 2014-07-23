@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/date_time_picker_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/layoutDatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:startYear="1970"
+            android:calendarViewShown="false"
+            android:spinnersShown="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/datePicker">
+        </DatePicker>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set time"
+            android:id="@+id/btnSetTime"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="false"
+            android:layout_below="@+id/datePicker"
+            android:layout_alignLeft="@+id/datePicker"
+            android:layout_alignStart="@+id/datePicker"
+            android:layout_alignRight="@+id/datePicker"
+            android:layout_alignEnd="@+id/datePicker"
+            android:layout_margin="10dp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/layoutTimePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnersShown="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/timePicker">
+        </TimePicker>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set date"
+            android:id="@+id/btnSetDate"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="false"
+            android:layout_below="@+id/timePicker"
+            android:layout_alignLeft="@+id/timePicker"
+            android:layout_alignStart="@+id/timePicker"
+            android:layout_alignRight="@+id/timePicker"
+            android:layout_alignEnd="@+id/timePicker"
+            android:layout_margin="10dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
