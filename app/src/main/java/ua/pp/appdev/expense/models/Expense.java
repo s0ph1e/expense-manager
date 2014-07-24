@@ -12,7 +12,7 @@ public class Expense implements Serializable{
     public Category category;
     public BigDecimal sum;
     public Currency currency;
-    public String description;
+    public String note;
 
     public Expense(){
         id = 0;
@@ -21,6 +21,6 @@ public class Expense implements Serializable{
         category = null;
         sum = new BigDecimal(0);
         currency = null;
-        description = "";
+        note = "";
     }
 }

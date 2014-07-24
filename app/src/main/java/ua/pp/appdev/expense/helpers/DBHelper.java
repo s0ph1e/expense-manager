@@ -56,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + "category_id integer not null, "
             + "sum double not null, "
             + "currency_id integer not null, "
-            + "description varchar(128));"
+            + "note varchar(128));"
         );
 
         fillData(db);

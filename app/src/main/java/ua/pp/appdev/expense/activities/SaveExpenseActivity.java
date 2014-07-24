@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
@@ -106,6 +107,8 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
                 newFragment.show(ft, "datePicker");
             }
         });
+
+        updateView();
     }
 
     @Override
@@ -139,10 +142,29 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
     @Override
     public void onDateTimeSelected(int year, int month, int day, int hour, int minute) {
-
         expense.expenseDate.set(year, month, day, hour, minute);
+        updateView();
+    }
 
+    public void updateView(){
+
+        // Set expense
+        EditText etxtSum = (EditText) findViewById(R.id.etxtSum);
+        if(expense.sum.compareTo(BigDecimal.ZERO) > 0) {
+            etxtSum.setText(String.valueOf(expense.sum));
+        }
+
+        // TODO: Set currency
+        // TODO: Set category
+
+        // Set datetime
         Button btnDateTime = (Button)findViewById(R.id.btnPickDate);
         btnDateTime.setText(Helpers.datetimeToString(this, expense.expenseDate));
+
+        // Set note
+        EditText etxtNote = (EditText) findViewById(R.id.etxtNote);
+        if(!expense.note.isEmpty()){
+            etxtNote.setText(expense.note);
+        }
     }
 }
