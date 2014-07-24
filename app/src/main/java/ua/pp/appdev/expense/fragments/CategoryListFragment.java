@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,8 +24,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.activities.SaveCategoryActivity;
 import ua.pp.appdev.expense.helpers.CategoryAdapter;
 import ua.pp.appdev.expense.helpers.UnchangeableSizeListView;
+import ua.pp.appdev.expense.models.Category;
 
 
 /**

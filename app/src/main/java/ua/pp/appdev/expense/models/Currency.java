@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.models;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -1,7 +1,6 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.activities;
 
 
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -11,23 +10,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 
+import ua.pp.appdev.expense.fragments.CategoryListFragment;
+import ua.pp.appdev.expense.fragments.DatePickerDialogFragment;
+import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
-import ua.pp.appdev.expense.helpers.UnchangeableSizeListView;
+import ua.pp.appdev.expense.models.Expense;
 
-import static android.text.format.DateFormat.*;
-
-public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener, DatePickerDialogFragment.OnDateTimeSelectedListener{
+public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
 
     private Expense expense;
 

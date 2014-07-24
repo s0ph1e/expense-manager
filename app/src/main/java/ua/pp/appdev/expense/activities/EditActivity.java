@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
+import ua.pp.appdev.expense.R;
 
 public abstract class EditActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.models;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -9,18 +9,18 @@ public class Expense implements Serializable{
     public long id;
     public Calendar createDate;
     public Calendar expenseDate;
-    public long categoryId;
+    public Category category;
     public BigDecimal sum;
-    public long currencyId;
+    public Currency currency;
     public String description;
 
     public Expense(){
         id = 0;
         createDate = GregorianCalendar.getInstance();
         expenseDate = GregorianCalendar.getInstance();
-        categoryId = 0;
+        category = null;
         sum = new BigDecimal(0);
-        currencyId = 0;
+        currency = null;
         description = "";
     }
 }

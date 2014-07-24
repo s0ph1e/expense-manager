@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ua.pp.appdev.expense.ColorPickerDialogFragment">
+    tools:context="ua.pp.appdev.expense.fragments.ColorPickerDialogFragment">
 
     <com.larswerkman.holocolorpicker.ColorPicker
         android:id="@+id/picker"

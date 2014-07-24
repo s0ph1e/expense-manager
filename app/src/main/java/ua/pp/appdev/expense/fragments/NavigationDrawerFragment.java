@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.fragments;
 
 
 import android.app.ActionBar;
@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import ua.pp.appdev.expense.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

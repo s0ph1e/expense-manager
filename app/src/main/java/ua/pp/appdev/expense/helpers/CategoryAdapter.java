@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ua.pp.appdev.expense.Category;
+import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.R;
 
 /**

@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -12,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ua.pp.appdev.expense.fragments.NavigationDrawerFragment;
+import ua.pp.appdev.expense.R;
 
 
 public class StartActivity extends Activity

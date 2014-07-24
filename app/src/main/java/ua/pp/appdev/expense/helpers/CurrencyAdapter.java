@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ua.pp.appdev.expense.Currency;
+import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.R;
 
 public class CurrencyAdapter extends ArrayAdapter<Currency> {

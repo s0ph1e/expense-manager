@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.activities;
 
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -18,8 +18,11 @@ import android.widget.Spinner;
 import java.util.List;
 import java.util.Random;
 
+import ua.pp.appdev.expense.fragments.ColorPickerDialogFragment;
+import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.ColorAdapter;
 import ua.pp.appdev.expense.helpers.Helpers;
+import ua.pp.appdev.expense.models.Category;
 
 public class SaveCategoryActivity extends EditActivity implements ColorPickerDialogFragment.OnColorSelectedListener {
 

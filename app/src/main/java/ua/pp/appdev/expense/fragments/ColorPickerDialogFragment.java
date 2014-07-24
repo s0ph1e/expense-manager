@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense;
+package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,11 +12,13 @@ import android.view.View;
 
 import com.larswerkman.holocolorpicker.ColorPicker;
 
+import ua.pp.appdev.expense.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ua.pp.appdev.expense.ColorPickerDialogFragment.OnColorSelectedListener} interface
+ * {@link ColorPickerDialogFragment.OnColorSelectedListener} interface
  * to handle interaction events.
  * Use the {@link ColorPickerDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
