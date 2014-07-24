@@ -24,7 +24,7 @@
             android:paddingRight="20dp"
             android:drawableStart="@drawable/ic_action_go_to_today"
             android:drawablePadding="8dp"
-            android:gravity="center_vertical|right"
+            android:gravity="center_vertical"
             android:text="date" />
 
         <TextView style="@style/TransparentButtonStyle"
