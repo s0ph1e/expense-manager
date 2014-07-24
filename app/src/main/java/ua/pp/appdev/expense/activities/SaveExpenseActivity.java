@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
@@ -21,6 +22,7 @@ import ua.pp.appdev.expense.fragments.DatePickerDialogFragment;
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
+import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.models.Expense;
 
 public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
@@ -140,7 +142,8 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     public void onDateTimeSelected(int year, int month, int day, int hour, int minute) {
 
         expense.expenseDate.set(year, month, day, hour, minute);
+
         Button btnDateTime = (Button)findViewById(R.id.btnPickDate);
-        btnDateTime.setText(expense.expenseDate.toString());
+        btnDateTime.setText(Helpers.CalendarToString(this, expense.expenseDate));
     }
 }
