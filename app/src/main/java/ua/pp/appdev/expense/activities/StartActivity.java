@@ -13,8 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ua.pp.appdev.expense.fragments.NavigationDrawerFragment;
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.fragments.NavigationDrawerFragment;
 
 
 public class StartActivity extends Activity

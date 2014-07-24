@@ -17,9 +17,9 @@ import android.widget.Spinner;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
+import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
 import ua.pp.appdev.expense.fragments.DatePickerDialogFragment;
-import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
 import ua.pp.appdev.expense.helpers.Helpers;

@@ -8,13 +8,11 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import ua.pp.appdev.expense.R;
@@ -34,7 +32,6 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         calendar = new GregorianCalendar(
                 getArguments().getInt("year"),
                 getArguments().getInt("month"),
@@ -47,17 +44,28 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
                 .setTitle("Set date and time")
                 .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        onTimeChanged(timePicker, timePicker.getCurrentHour(), timePicker.getCurrentMinute());
                         mListener.onDateTimeSelected(
-                                /*datePicker.getYear(),
-                                datePicker.getMonth(),
-                                datePicker.getDayOfMonth(),
-                                timePicker.getCurrentHour(),
-                                timePicker.getCurrentMinute()*/
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH),
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE)
+
+                        );
+                    }
+                })
+                .setNeutralButton("Set now", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        calendar = new GregorianCalendar();
+                        mListener.onDateTimeSelected(
                                 calendar.get(Calendar.YEAR),
                                 calendar.get(Calendar.MONTH),
                                 calendar.get(Calendar.DAY_OF_MONTH),
                                 calendar.get(Calendar.HOUR_OF_DAY),
                                 calendar.get(Calendar.MINUTE)
+
                         );
                     }
                 })
@@ -105,6 +113,7 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
     public void onClick(View view) {
         View dateView = this.view.findViewById(R.id.layoutDatePicker);
         View timeView = this.view.findViewById(R.id.layoutTimePicker);
+        onTimeChanged(timePicker, timePicker.getCurrentHour(), timePicker.getCurrentMinute());
         switch(view.getId()){
             case  R.id.btnSelectedTime:
                 if(dateView.getVisibility() == View.VISIBLE)
