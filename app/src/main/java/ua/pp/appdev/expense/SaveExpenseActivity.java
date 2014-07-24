@@ -4,6 +4,7 @@ package ua.pp.appdev.expense;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -17,16 +18,34 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 import ua.pp.appdev.expense.helpers.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
 import ua.pp.appdev.expense.helpers.UnchangeableSizeListView;
 
-public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener{
+import static android.text.format.DateFormat.*;
+
+public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener, DatePickerDialogFragment.OnDateTimeSelectedListener{
+
+    private Expense expense;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("SAVE_EXP", "onCreate");
+
+        // Get expense
+        Intent callingIntent = getIntent();
+        expense = (Expense) callingIntent.getSerializableExtra("expense");
+
+        // If creating action - make new expense
+        if(expense == null){
+            expense = new Expense();
+            //expense.expenseDate.set(2000, Calendar.APRIL, 2);
+        }
+
         setContentView(R.layout.activity_save_expense);
 
         EditText etSum = (EditText)findViewById(R.id.etxtSum);
@@ -46,8 +65,6 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         // Add category list
         CategoryListFragment categoryListFragment = new CategoryListFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        //((FrameLayout)findViewById(R.id.categoryListContainer)).removeAllViews();
-        //fragmentTransaction.remove(categoryListFragment);
         Fragment prev = getFragmentManager().findFragmentById(R.id.categoryListContainer);
         if (prev != null) {
             fragmentTransaction.remove(prev);
@@ -57,10 +74,25 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         // Add datipicker dialog on btnPickDate click
         Button btnPickDate = (Button) findViewById(R.id.btnPickDate);
-        int mYear, mMonth, mDay;
         btnPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Get date & time for dialog
+                int year = expense.expenseDate.get(Calendar.YEAR);
+                int month = expense.expenseDate.get(Calendar.MONTH);
+                int day = expense.expenseDate.get(Calendar.DAY_OF_MONTH);
+                int hour = expense.expenseDate.get(Calendar.HOUR_OF_DAY);
+                int minute = expense.expenseDate.get(Calendar.MINUTE);
+
+                // Create bundle
+                Bundle bundle = new Bundle();
+                bundle.putInt("year", year);
+                bundle.putInt("month", month);
+                bundle.putInt("day", day);
+                bundle.putInt("hour", hour);
+                bundle.putInt("minute", minute);
+
                 // DialogFragment.show() will take care of adding the fragment
                 // in a transaction.  We also want to remove any currently showing
                 // dialog, so make our own transaction and take care of that here.
@@ -73,6 +105,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
                 // Create and show the dialog.
                 DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
+                newFragment.setArguments(bundle);
                 newFragment.show(ft, "datePicker");
             }
         });
@@ -105,5 +138,13 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDateTimeSelected(int year, int month, int day, int hour, int minute) {
+
+        expense.expenseDate.set(year, month, day, hour, minute);
+        Button btnDateTime = (Button)findViewById(R.id.btnPickDate);
+        btnDateTime.setText(expense.expenseDate.toString());
     }
 }

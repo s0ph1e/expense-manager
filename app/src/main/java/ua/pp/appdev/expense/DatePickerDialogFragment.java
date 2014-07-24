@@ -4,6 +4,7 @@ package ua.pp.appdev.expense;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -31,24 +32,32 @@ import java.util.Calendar;
 public class DatePickerDialogFragment extends DialogFragment implements View.OnClickListener{
 
     private View view;
+
+    private OnDateTimeSelectedListener mListener;
+
     private DatePicker datePicker;
     private TimePicker timePicker;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
+        int year = getArguments().getInt("year");
+        int month = getArguments().getInt("month");
+        int day = getArguments().getInt("day");
+        int hour = getArguments().getInt("hour");
+        int minute = getArguments().getInt("minute");
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                 .setTitle("Set date and time")
                 .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-
+                        mListener.onDateTimeSelected(
+                                datePicker.getYear(),
+                                datePicker.getMonth(),
+                                datePicker.getDayOfMonth(),
+                                timePicker.getCurrentHour(),
+                                timePicker.getCurrentMinute()
+                        );
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -119,5 +128,26 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
             }
         });
         visToInvis.start();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnDateTimeSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnDateTimeSelectedListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnDateTimeSelectedListener {
+        public void onDateTimeSelected(int year, int month, int day, int hour, int minute);
     }
 }
