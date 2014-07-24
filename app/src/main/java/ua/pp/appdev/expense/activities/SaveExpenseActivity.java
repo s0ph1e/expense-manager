@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
@@ -144,6 +143,6 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         expense.expenseDate.set(year, month, day, hour, minute);
 
         Button btnDateTime = (Button)findViewById(R.id.btnPickDate);
-        btnDateTime.setText(Helpers.CalendarToString(this, expense.expenseDate));
+        btnDateTime.setText(Helpers.datetimeToString(this, expense.expenseDate));
     }
 }

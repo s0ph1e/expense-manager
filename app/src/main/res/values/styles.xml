@@ -6,6 +6,12 @@
         <item name="android:textSize">18sp</item>-->
     </style>
     <style name="SpinnerButtonStyle" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="TransparentButtonStyle" parent="android:Widget.Holo.Light">
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 </resources>
