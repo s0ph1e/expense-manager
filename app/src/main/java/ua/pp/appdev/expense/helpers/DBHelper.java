@@ -9,16 +9,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.models.Category;
+import ua.pp.appdev.expense.models.Currency;
+import ua.pp.appdev.expense.models.Expense;
 
 public class DBHelper extends SQLiteOpenHelper{
 
     final String LOG_TAG = "DBLogs";
 
     public static final String DB_NAME = "expensesDB";
-
-    public static final String CATEGORIES_TABLE = "categories";
-    public static final String CURRENCIES_TABLE = "currencies";
-    public static final String EXPENSES_TABLE = "expenses";
 
     private Context context;
 
@@ -33,30 +32,30 @@ public class DBHelper extends SQLiteOpenHelper{
         Log.d(LOG_TAG, "--- onCreate database ---");
 
         // Create categories table
-        db.execSQL("create table " + CATEGORIES_TABLE + "( "
-            + "id integer primary key autoincrement, "
-            + "name varchar(32) not null, "
-            + "color integer not null);"
+        db.execSQL("create table " + Category.TABLE + "( "
+            + Category.ID_COLUMN + " integer primary key autoincrement, "
+            + Category.NAME_COLUMN + " varchar(32) not null, "
+            + Category.COLOR_COLUMN + " integer not null);"
         );
 
         // Create currencies table
-        db.execSQL("create table " + CURRENCIES_TABLE + "( "
-            + "id integer primary key autoincrement, "
-            + "iso_code varchar(3) not null, "
-            + "short_name varchar(8) not null, "
-            + "full_name varchar(32) not null, "
-            + "rates text not null);"
+        db.execSQL("create table " + Currency.TABLE + "( "
+            + Currency.ID_COLUMN + " integer primary key autoincrement, "
+            + Currency.ISO_CODE_COLUMN + " varchar(3) not null, "
+            + Currency.SHORT_NAME_COLUMN + " varchar(8) not null, "
+            + Currency.FULL_NAME_COLUMN + " varchar(32) not null, "
+            + Currency.RATES_COLUMN + " text not null);"
         );
 
         // Create expenses table
-        db.execSQL("create table " + EXPENSES_TABLE + "( "
-            + "id integer primary key autoincrement, "
-            + "create_timestamp timestamp default current_timestamp, "
-            + "expense_timestamp timestamp default current_timestamp, "
-            + "category_id integer not null, "
-            + "sum double not null, "
-            + "currency_id integer not null, "
-            + "note varchar(128));"
+        db.execSQL("create table " + Expense.TABLE + "( "
+            + Expense.ID_COLUMN + " integer primary key autoincrement, "
+            + Expense.CREATE_DATE_COLUMN + " timestamp default current_timestamp, "
+            + Expense.EXPENSE_DATE_COLUMN + " timestamp default current_timestamp, "
+            + Expense.CATEGORY_COLUMN + " integer not null, "
+            + Expense.SUM_COLUMN + " double not null, "
+            + Expense.CURRENCY_COLUMN + " integer not null, "
+            + Expense.NOTE_COLUMN + " varchar(128));"
         );
 
         fillData(db);
@@ -92,9 +91,9 @@ public class DBHelper extends SQLiteOpenHelper{
             Log.d(LOG_TAG, "--- fill categories table ---");
 
             for(int i = 0, len = categoryNames.length(); i < len; i++ ){
-                cv.put("name", categoryNames.getString(i));
-                cv.put("color", categoryColors.getColor(i,0));
-                db.insert(CATEGORIES_TABLE, null, cv);
+                cv.put(Category.NAME_COLUMN, categoryNames.getString(i));
+                cv.put(Category.COLOR_COLUMN, categoryColors.getColor(i,0));
+                db.insert(Category.TABLE, null, cv);
             }
         }
     }
@@ -122,11 +121,11 @@ public class DBHelper extends SQLiteOpenHelper{
             Log.d(LOG_TAG, "--- fill currencies table ---");
 
             for(int i = 0; i < currenciesCount; i++ ){
-                cv.put("iso_code", currencyISOCodes.getString(i));
-                cv.put("short_name", currencyNames.getString(i));
-                cv.put("full_name", currencyFullNames.getString(i));
-                cv.put("rates", currencyRates.getString(i));
-                db.insert(CURRENCIES_TABLE, null, cv);
+                cv.put(Currency.ISO_CODE_COLUMN, currencyISOCodes.getString(i));
+                cv.put(Currency.SHORT_NAME_COLUMN, currencyNames.getString(i));
+                cv.put(Currency.FULL_NAME_COLUMN, currencyFullNames.getString(i));
+                cv.put(Currency.RATES_COLUMN, currencyRates.getString(i));
+                db.insert(Currency.TABLE, null, cv);
             }
         }
     }

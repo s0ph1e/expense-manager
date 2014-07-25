@@ -17,6 +17,12 @@ import ua.pp.appdev.expense.helpers.DBHelper;
  *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
 public class Category implements Serializable {
+
+    public static final String TABLE = "categories";
+    public static final String ID_COLUMN = "id";
+    public static final String NAME_COLUMN = "name";
+    public static final String COLOR_COLUMN = "color";
+
     public long id = 0;
     public String name = "";
     public int color = 0;
@@ -42,14 +48,14 @@ public class Category implements Serializable {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor c = db.query(DBHelper.CATEGORIES_TABLE, null, null, null, null, null, null);
+        Cursor c = db.query(TABLE, null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
 
             // Get column indexes
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-            int colorColIndex = c.getColumnIndex("color");
+            int idColIndex = c.getColumnIndex(ID_COLUMN);
+            int nameColIndex = c.getColumnIndex(NAME_COLUMN);
+            int colorColIndex = c.getColumnIndex(COLOR_COLUMN);
 
             do {
                 catList.add(new Category(
@@ -71,13 +77,13 @@ public class Category implements Serializable {
 
         ContentValues cv = new ContentValues();
 
-        cv.put("name", name);
-        cv.put("color", color);
+        cv.put(NAME_COLUMN, name);
+        cv.put(COLOR_COLUMN, color);
 
         if(id == 0){    // new category
-            id = db.insert(DBHelper.CATEGORIES_TABLE, null, cv);
+            id = db.insert(TABLE, null, cv);
         } else {        // existing category
-            db.update(DBHelper.CATEGORIES_TABLE, cv, "id = ?", new String[] {String.valueOf(id)});
+            db.update(TABLE, cv, ID_COLUMN + " = ?", new String[] {String.valueOf(id)});
         }
 
         db.close();
@@ -87,7 +93,7 @@ public class Category implements Serializable {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        db.delete(DBHelper.CATEGORIES_TABLE, "id = ?", new String[] { String.valueOf(id) });
+        db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
 
         db.close();
     }

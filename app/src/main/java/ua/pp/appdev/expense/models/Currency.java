@@ -13,6 +13,14 @@ import java.util.List;
 import ua.pp.appdev.expense.helpers.DBHelper;
 
 public class Currency {
+
+    public static final String TABLE = "currencies";
+    public static final String ID_COLUMN = "id";
+    public static final String ISO_CODE_COLUMN = "iso_code";
+    public static final String SHORT_NAME_COLUMN = "short_name";
+    public static final String FULL_NAME_COLUMN = "full_name";
+    public static final String RATES_COLUMN = "rates";
+
     public long id;
     public String isoCode;
     public String name;
@@ -34,16 +42,16 @@ public class Currency {
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor c = db.query(DBHelper.CURRENCIES_TABLE, null, null, null, null, null, null);
+        Cursor c = db.query(TABLE, null, null, null, null, null, null);
 
         if (c.moveToFirst()) {
 
             // Get column indexes
-            int idColIndex = c.getColumnIndex("id");
-            int isoCodeIndex = c.getColumnIndex("iso_code");
-            int nameColIndex = c.getColumnIndex("short_name");
-            int fullNameColIndex = c.getColumnIndex("full_name");
-            int ratesColIndex = c.getColumnIndex("rates");
+            int idColIndex = c.getColumnIndex(ID_COLUMN);
+            int isoCodeIndex = c.getColumnIndex(ISO_CODE_COLUMN);
+            int nameColIndex = c.getColumnIndex(SHORT_NAME_COLUMN);
+            int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
+            int ratesColIndex = c.getColumnIndex(RATES_COLUMN);
 
             long id;
             String isoCode, name, fullName;
