@@ -1,8 +1,10 @@
 package ua.pp.appdev.expense.activities;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -10,12 +12,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
@@ -23,6 +27,7 @@ import ua.pp.appdev.expense.fragments.DatePickerDialogFragment;
 import ua.pp.appdev.expense.helpers.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
 import ua.pp.appdev.expense.helpers.Helpers;
+import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Expense;
 
 public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
@@ -57,8 +62,18 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         // Add currency spinner
         Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
-        CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
+        final CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
         spinnerCurrency.setAdapter(adapter);
+        spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                expense.currency = adapter.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
 
         // Add category list
         CategoryListFragment categoryListFragment = new CategoryListFragment();
@@ -113,6 +128,40 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
     @Override
     protected void onSave(View v) {
+
+        String errorMessage = "";
+
+        String sum = ((EditText) findViewById(R.id.etxtSum)).getText().toString();
+
+        if(sum.isEmpty()){
+            errorMessage += "Expense sum can't be zero.\n";
+        } else {
+            expense.sum = new BigDecimal(sum);
+        }
+
+        if(expense.currency == null){
+            errorMessage += "Currency is not set.\n";
+        }
+
+        if(expense.category == null){
+            errorMessage += "Category is not set.\n";
+        }
+
+        if(!errorMessage.isEmpty()){
+            new AlertDialog.Builder(this)
+                    .setTitle("Saving expense error!")
+                    .setMessage(errorMessage)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+            return;
+        }
+        expense.note = ((EditText) findViewById(R.id.etxtNote)).getText().toString();
+        expense.save(this);
+        List<Expense> list = Expense.getAll(this);
         finish();
     }
 
@@ -166,5 +215,10 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         if(!expense.note.isEmpty()){
             etxtNote.setText(expense.note);
         }
+    }
+
+    @Override
+    public void onCategorySelected(Category category) {
+        expense.category = category;
     }
 }

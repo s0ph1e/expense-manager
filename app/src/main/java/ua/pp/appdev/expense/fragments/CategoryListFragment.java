@@ -233,6 +233,7 @@ public class CategoryListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 categoryListAdapter.setSelected(i);
+                mListener.onCategorySelected(categoryListAdapter.getItem(i));
             }
         });
 
@@ -291,7 +292,7 @@ public class CategoryListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-
+        public void onCategorySelected(Category category);
     }
 
 }
