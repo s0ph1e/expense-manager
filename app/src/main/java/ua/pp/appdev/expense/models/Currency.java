@@ -76,4 +76,43 @@ public class Currency {
 
         return currenciesList;
     }
+
+    public static Currency getById(Context context, long id){
+        Currency currency = null;
+
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor c = db.query(TABLE, null, ID_COLUMN + " = ?", new String[] {String.valueOf(id)}, null, null, null);
+
+        if (c.moveToFirst()) {
+
+            // Get column indexes
+            int idColIndex = c.getColumnIndex(ID_COLUMN);
+            int isoCodeIndex = c.getColumnIndex(ISO_CODE_COLUMN);
+            int nameColIndex = c.getColumnIndex(SHORT_NAME_COLUMN);
+            int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
+            int ratesColIndex = c.getColumnIndex(RATES_COLUMN);
+
+
+            String isoCode, name, fullName;
+            JSONObject rates;
+
+            isoCode = c.getString(isoCodeIndex);
+            name = c.getString(nameColIndex);
+            fullName = c.getString(fullNameColIndex);
+            try {
+                rates = new JSONObject(c.getString(ratesColIndex));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                rates = null;
+            }
+
+            currency = new Currency(id, isoCode, name, fullName, rates);
+
+        }
+        db.close();
+
+        return currency;
+    }
 }

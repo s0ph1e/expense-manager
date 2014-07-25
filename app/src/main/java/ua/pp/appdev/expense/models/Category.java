@@ -97,4 +97,32 @@ public class Category implements Serializable {
 
         db.close();
     }
+
+    public static Category getById(Context context, long id){
+
+        Category cat = null;
+
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor c = db.query(TABLE, null, ID_COLUMN + " = ?", new String[] {String.valueOf(id)}, null, null, null);
+
+        if (c.moveToFirst()) {
+
+            // Get column indexes
+            int idColIndex = c.getColumnIndex(ID_COLUMN);
+            int nameColIndex = c.getColumnIndex(NAME_COLUMN);
+            int colorColIndex = c.getColumnIndex(COLOR_COLUMN);
+
+            cat =  new Category(
+                    c.getLong(idColIndex),
+                    c.getString(nameColIndex),
+                    c.getInt(colorColIndex)
+            );
+
+        }
+        db.close();
+
+        return cat;
+    }
 }
