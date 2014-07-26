@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -21,12 +22,13 @@ import ua.pp.appdev.expense.helpers.ViewFlipper;
 
 public class DatePickerDialogFragment extends DialogFragment implements View.OnClickListener, DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener{
 
+    private final String LOG_TAG = "DatePickerDialogFragment";
+    private final String PICKER_BUNDLE_STATE = "picker_bundle_state";
     private View view;
 
     private OnDateTimeSelectedListener mListener;
 
     private Calendar calendar;
-
     private DatePicker datePicker;
     private TimePicker timePicker;
 
@@ -93,6 +95,17 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
         timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
         timePicker.setOnTimeChangedListener(this);
 
+        // Restore saved state (if exist)
+        Log.i(LOG_TAG, "onCreateDialog");
+        if (savedInstanceState != null) {
+            View dateView = this.view.findViewById(R.id.layoutDatePicker);
+            View timeView = this.view.findViewById(R.id.layoutTimePicker);
+            if (savedInstanceState.getInt(PICKER_BUNDLE_STATE) == 1) {
+                dateView.setVisibility(View.GONE);
+                timeView.setVisibility(View.VISIBLE);
+            }
+        }
+
         // Set buttons date text & listener
         TextView btnDate = (TextView)view.findViewById(R.id.btnSelectedDate);
         btnDate.setText(Helpers.dateToString(getActivity(), calendar));
@@ -102,7 +115,6 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
         TextView btnTime = (TextView)view.findViewById(R.id.btnSelectedTime);
         btnTime.setText(Helpers.timeToString(getActivity(), calendar));
         btnTime.setOnClickListener(this);
-
 
         adb.setView(view);
 
@@ -123,6 +135,19 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
                 if(timeView.getVisibility() == View.VISIBLE)
                     ViewFlipper.flip(dateView, timeView);
                 break;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(LOG_TAG, "onSaveInstanceState");
+        View dateView = this.view.findViewById(R.id.layoutDatePicker);
+
+        if (dateView.getVisibility() == View.VISIBLE) {
+            outState.putInt(PICKER_BUNDLE_STATE, 0);
+        } else {
+            outState.putInt(PICKER_BUNDLE_STATE, 1);
         }
     }
 
