@@ -154,7 +154,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         String sum = etSum.getText().toString();
 
         if(sum.isEmpty()){
-            errorMessage += "Expense sum can't be zero.\n";
+            errorMessage += "Expense sum can't be zero.\r\n";
         } else {
             expense.sum = new BigDecimal(sum);
         }
@@ -165,6 +165,11 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         if(expense.category == null){
             errorMessage += "Category is not set.\r\n";
+        }
+
+        // Cut last 2 chars ("\r\n")
+        if (errorMessage.length() > 2) {
+            errorMessage = errorMessage.substring(0, errorMessage.length()-2);
         }
 
         if(!errorMessage.isEmpty()){
