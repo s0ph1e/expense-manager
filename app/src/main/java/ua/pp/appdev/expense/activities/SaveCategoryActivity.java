@@ -30,8 +30,11 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
     int previousColorSelectedPos = -1;
 
     private ColorAdapter colorAdapter;
-
     private Category category;
+
+    // Views
+    EditText categoryName;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +42,10 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
 
         setContentView(R.layout.activity_save_category);
 
-        EditText categoryName = (EditText)findViewById(R.id.etxtCategoryName);
+        categoryName = (EditText)findViewById(R.id.etxtCategoryName);
         categoryName.setOnEditorActionListener(lostFocusAfterDone);
 
-        final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
+        spinner = (Spinner) this.findViewById(R.id.spinnerColors);
 
         colorAdapter = new ColorAdapter(this, R.layout.spinner_color_row);
         colorAdapter.add(getString(R.string.category_other_color));
@@ -80,8 +83,7 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
         category = (Category) callingIntent.getSerializableExtra("category");
 
         if(category != null){
-            EditText editText = (EditText) findViewById(R.id.etxtCategoryName);
-            editText.setText(category.name);
+            categoryName.setText(category.name);
 
             String categoryColor = Helpers.colorToString(category.color);
             int colorIndex = colorAdapter.getPosition(categoryColor);
@@ -104,8 +106,7 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
     protected void onSave(View v) {
 
         // Get name
-        EditText editText = (EditText) findViewById(R.id.etxtCategoryName);
-        String name = editText.getText().toString();
+        String name = categoryName.getText().toString();
 
         if(name.isEmpty()){
             new AlertDialog.Builder(this)
@@ -122,7 +123,6 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
         }
 
         // Get color
-        Spinner spinner = (Spinner)findViewById(R.id.spinnerColors);
         int color = Color.parseColor(spinner.getSelectedItem().toString());
 
         category.name = name;
@@ -166,8 +166,6 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
      */
     @Override
     public void onColorSelected(int color) {
-        final Spinner spinner = (Spinner) this.findViewById(R.id.spinnerColors);
-
         List<String> colors = colorAdapter.getColors();
         colors.add(colors.size() - 1, Helpers.colorToString(color));
         colorAdapter.notifyDataSetChanged();
