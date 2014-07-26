@@ -125,4 +125,19 @@ public class Category implements Serializable {
 
         return cat;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        // Check class of object
+        if (o instanceof Category) {
+            Category other = (Category) o;
+            if (other.id == this.id
+                    && other.color == this.color
+                    && other.name.equals(this.name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

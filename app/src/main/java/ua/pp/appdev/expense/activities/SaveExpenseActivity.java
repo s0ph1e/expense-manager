@@ -3,11 +3,15 @@ package ua.pp.appdev.expense.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.InputFilter;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,12 +36,20 @@ import ua.pp.appdev.expense.models.Expense;
 
 public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
 
+    private final String LOG_TAG = "SaveExpenseActivity";
     private Expense expense;
+    private CategoryListFragment categoryListFragment;
+
+    // Views
+    private EditText etSum;
+    private EditText etNote;
+    private Spinner spinnerCurrency;
+    private Button btnPickDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("SAVE_EXP", "onCreate");
+        Log.i(LOG_TAG, "onCreate");
 
         // Get expense
         Intent callingIntent = getIntent();
@@ -46,22 +58,28 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         // If creating action - make new expense
         if(expense == null){
             expense = new Expense();
+            // TODO: TMP code
+            /*
+            List<Expense> expenses = Expense.getAll(this);
+            if (expenses.size() > 0)
+                expense = expenses.get(0);
+            */
             //expense.expenseDate.set(2000, Calendar.APRIL, 2);
         }
 
         setContentView(R.layout.activity_save_expense);
 
-        EditText etSum = (EditText)findViewById(R.id.etxtSum);
+        etSum = (EditText)findViewById(R.id.etxtSum);
         // Добавляем фильтр на количество цифр после запятой & remove focus after done
         etSum.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(2)});
         etSum.setOnEditorActionListener(lostFocusAfterDone);
 
         // Remove focus after actionDone from editText for Note
-        EditText etNote = (EditText) findViewById(R.id.etxtNote);
+        etNote = (EditText) findViewById(R.id.etxtNote);
         etNote.setOnEditorActionListener(lostFocusAfterDone);
 
         // Add currency spinner
-        Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
+        spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
         final CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
         spinnerCurrency.setAdapter(adapter);
         spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -76,17 +94,16 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         });
 
         // Add category list
-        CategoryListFragment categoryListFragment = new CategoryListFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentById(R.id.categoryListContainer);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
+        if (categoryListFragment != null) {
+            fragmentTransaction.remove(categoryListFragment);
         }
+        categoryListFragment = new CategoryListFragment();
         fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment);
         fragmentTransaction.commit();
 
-        // Add datipicker dialog on btnPickDate click
-        Button btnPickDate = (Button) findViewById(R.id.btnPickDate);
+        // Add datepicker dialog on btnPickDate click
+        btnPickDate = (Button) findViewById(R.id.btnPickDate);
         btnPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,7 +139,11 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
                 newFragment.show(ft, "datePicker");
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         updateView();
     }
 
@@ -130,8 +151,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     protected void onSave(View v) {
 
         String errorMessage = "";
-
-        String sum = ((EditText) findViewById(R.id.etxtSum)).getText().toString();
+        String sum = etSum.getText().toString();
 
         if(sum.isEmpty()){
             errorMessage += "Expense sum can't be zero.\n";
@@ -140,11 +160,11 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         }
 
         if(expense.currency == null){
-            errorMessage += "Currency is not set.\n";
+            errorMessage += "Currency is not set.\r\n";
         }
 
         if(expense.category == null){
-            errorMessage += "Category is not set.\n";
+            errorMessage += "Category is not set.\r\n";
         }
 
         if(!errorMessage.isEmpty()){
@@ -159,7 +179,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
                     .show();
             return;
         }
-        expense.note = ((EditText) findViewById(R.id.etxtNote)).getText().toString();
+        expense.note = etNote.getText().toString();
         expense.save(this);
         List<Expense> list = Expense.getAll(this);
         finish();
@@ -198,22 +218,30 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     public void updateView(){
 
         // Set expense
-        EditText etxtSum = (EditText) findViewById(R.id.etxtSum);
         if(expense.sum.compareTo(BigDecimal.ZERO) > 0) {
-            etxtSum.setText(String.valueOf(expense.sum));
+            etSum.setText(String.valueOf(expense.sum));
         }
 
-        // TODO: Set currency
-        // TODO: Set category
+        // Set currency
+        if (expense.currency != null) {
+            final CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
+            int currencyPos = adapter.getPosition(expense.currency);
+            if (currencyPos > 0) {
+                spinnerCurrency.setSelection(currencyPos);
+            }
+        }
+
+        // Set category
+        if (expense.category != null) {
+            categoryListFragment.setCategory(expense.category);
+        }
 
         // Set datetime
-        Button btnDateTime = (Button)findViewById(R.id.btnPickDate);
-        btnDateTime.setText(Helpers.datetimeToString(this, expense.expenseDate));
+        btnPickDate.setText(Helpers.datetimeToString(this, expense.expenseDate));
 
         // Set note
-        EditText etxtNote = (EditText) findViewById(R.id.etxtNote);
         if(!expense.note.isEmpty()){
-            etxtNote.setText(expense.note);
+            etNote.setText(expense.note);
         }
     }
 

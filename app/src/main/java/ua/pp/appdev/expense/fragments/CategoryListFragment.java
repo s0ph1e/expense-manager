@@ -281,6 +281,15 @@ public class CategoryListFragment extends Fragment {
         }
     }
 
+    public boolean setCategory(Category category) {
+        int categoryPos = categoryListAdapter.getPosition(category);
+        if (categoryPos > 0) {
+            categoryListAdapter.setSelected(categoryPos);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

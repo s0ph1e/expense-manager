@@ -57,4 +57,12 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
         row.findViewById(R.id.txtCurrencyRow).setPadding(15, 15, 15, 15);
         return row;
     }
+
+    public int getPosition(Currency currency) {
+        for(int i = 0; i < currencies.size(); i++){
+            if(currencies.get(i).equals(currency))
+                return i;
+        }
+        return -1;
+    }
 }

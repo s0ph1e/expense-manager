@@ -115,4 +115,18 @@ public class Currency {
 
         return currency;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        // Check class of object
+        if (o instanceof Currency) {
+            Currency other = (Currency) o;
+            if (other.id == this.id
+                    && other.isoCode.equals(this.isoCode)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
