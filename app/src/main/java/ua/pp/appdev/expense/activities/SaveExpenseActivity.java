@@ -186,7 +186,6 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         }
         expense.note = etNote.getText().toString();
         expense.save(this);
-        List<Expense> list = Expense.getAll(this);
         finish();
     }
 
