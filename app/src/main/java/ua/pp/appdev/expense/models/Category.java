@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ua.pp.appdev.expense.activities.SaveCategoryActivity;
 import ua.pp.appdev.expense.helpers.DBHelper;
 
 /**
@@ -16,7 +17,7 @@ import ua.pp.appdev.expense.helpers.DBHelper;
  *    Ilya Antipenko <ilya@antipenko.pp.ua>
  *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
-public class Category implements Serializable {
+public class Category implements EditableItem {
 
     public static final String TABLE = "categories";
     public static final String ID_COLUMN = "id";
@@ -96,6 +97,11 @@ public class Category implements Serializable {
         db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
 
         db.close();
+    }
+
+    @Override
+    public Class getActivityClass() {
+        return SaveCategoryActivity.class;
     }
 
     public static Category getById(Context context, long id){

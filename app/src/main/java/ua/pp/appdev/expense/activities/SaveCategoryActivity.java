@@ -20,7 +20,7 @@ import java.util.Random;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.ColorPickerDialogFragment;
-import ua.pp.appdev.expense.helpers.ColorAdapter;
+import ua.pp.appdev.expense.adapters.ColorAdapter;
 import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.models.Category;
 
@@ -80,7 +80,7 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
         });
 
         Intent callingIntent = getIntent();
-        category = (Category) callingIntent.getSerializableExtra("category");
+        category = (Category) callingIntent.getSerializableExtra("item");
 
         if(category != null){
             categoryName.setText(category.name);
@@ -131,7 +131,7 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
 
         // Send saved category back
         Intent intent = new Intent();
-        intent.putExtra("category", category);
+        intent.putExtra("item", category);
         setResult(RESULT_OK, intent);
 
         finish();

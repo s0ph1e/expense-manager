@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense.helpers;
+package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.helpers.DrawerItem;
 
 public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
 

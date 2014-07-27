@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense.helpers;
+package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,13 +13,14 @@ import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Category;
+import ua.pp.appdev.expense.models.EditableItem;
 
 /**
  * Created by:
  *    Ilya Antipenko <ilya@antipenko.pp.ua>
  *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
-public class CategoryAdapter extends ArrayAdapter<Category> {
+public class CategoryAdapter extends ArrayAdapter<Category> implements EditableItemAdapter{
     private Context context;
     int resource;
     private List<Category> categories;
@@ -78,6 +79,11 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
     public List<Category> getCategories(){
         return categories;
+    }
+
+    @Override
+    public void remove(EditableItem item) {
+        super.remove((Category) item);
     }
 
     static class CategoryHolder {

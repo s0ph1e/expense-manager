@@ -23,7 +23,7 @@ import java.util.Calendar;
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
 import ua.pp.appdev.expense.fragments.DatePickerDialogFragment;
-import ua.pp.appdev.expense.helpers.CurrencyAdapter;
+import ua.pp.appdev.expense.adapters.CurrencyAdapter;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
 import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.models.Category;
@@ -250,5 +250,14 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     @Override
     public void onCategorySelected(Category category) {
         expense.category = category;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment categoriesFragment = getFragmentManager().findFragmentById(R.id.categoryListContainer);
+        if(categoriesFragment != null){
+            categoriesFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

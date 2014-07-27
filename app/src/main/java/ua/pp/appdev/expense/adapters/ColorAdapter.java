@@ -1,4 +1,4 @@
-package ua.pp.appdev.expense.helpers;
+package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;

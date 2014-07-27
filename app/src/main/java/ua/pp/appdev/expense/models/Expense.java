@@ -12,9 +12,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ua.pp.appdev.expense.activities.SaveExpenseActivity;
 import ua.pp.appdev.expense.helpers.DBHelper;
 
-public class Expense implements Serializable{
+public class Expense implements EditableItem{
 
     public static final String TABLE = "expenses";
     public static final String ID_COLUMN = "id";
@@ -130,5 +131,10 @@ public class Expense implements Serializable{
         db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
 
         db.close();
+    }
+
+    @Override
+    public Class getActivityClass() {
+        return SaveExpenseActivity.class;
     }
 }

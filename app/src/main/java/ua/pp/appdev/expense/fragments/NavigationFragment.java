@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
-import ua.pp.appdev.expense.helpers.DrawerAdapter;
+import ua.pp.appdev.expense.adapters.DrawerAdapter;
 import ua.pp.appdev.expense.helpers.DrawerItem;
 
 

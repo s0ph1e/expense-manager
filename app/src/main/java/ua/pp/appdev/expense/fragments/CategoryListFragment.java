@@ -1,24 +1,14 @@
 package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,26 +16,14 @@ import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.activities.SaveCategoryActivity;
-import ua.pp.appdev.expense.helpers.CategoryAdapter;
-import ua.pp.appdev.expense.helpers.UnchangeableSizeListView;
+import ua.pp.appdev.expense.adapters.CategoryAdapter;
+import ua.pp.appdev.expense.helpers.EditableItemListView;
 import ua.pp.appdev.expense.models.Category;
 
+import static ua.pp.appdev.expense.helpers.EditableItemListView.*;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CategoryListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CategoryListFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class CategoryListFragment extends Fragment {
 
-    public String LOG_TAG = "CategoryListFragment";
-
-    private final int CATEGORY_ADD = 0;
-    private final int CATEGORY_EDIT = 1;
     private OnFragmentInteractionListener mListener;
 
     private CategoryAdapter categoryListAdapter;
@@ -58,101 +36,8 @@ public class CategoryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final ListView categoryList = new UnchangeableSizeListView(getActivity());
+        final ListView categoryList = new EditableItemListView(getActivity());
         categoryList.setId(R.id.category_list);
-
-        // Set scrollbar always shown
-        categoryList.setScrollbarFadingEnabled(false);
-
-        // Create contextual action mode (edit-remove categories)
-        categoryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        categoryList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-
-            @Override
-            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                actionMode.invalidate();
-            }
-
-            @Override
-            public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
-                // Respond to clicks on the actions in the CAB
-                switch (item.getItemId()) {
-                    case R.id.actionbar_edit:
-                        editSelected();
-                        mode.finish();
-                        return true;
-                    case R.id.actionbar_remove:
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle(R.string.remove_category)
-                                .setMessage(R.string.remove_category_message)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        removeSelected();
-                                        mode.finish();
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
-                                .show();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                // Inflate the menu for the CAB
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.context, menu);
-                return true;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                // Here you can make any necessary updates to the activity when
-                // the CAB is removed. By default, selected items are deselected/unchecked.
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                final int checked = categoryList.getCheckedItemCount();
-                MenuItem editBtn = menu.findItem(R.id.actionbar_edit);
-                boolean singleItemChecked = (checked == 1);
-                editBtn.setVisible(singleItemChecked).setEnabled(singleItemChecked);
-                return true;
-            }
-
-            public void removeSelected() {
-                SparseBooleanArray checked = categoryList.getCheckedItemPositions();
-                int len = categoryList.getCount();
-                // Needed DESC order, otherwise unchecked items may be deleted instead of checked
-                for (int i = len - 1; i >= 0; i--) {
-                    if (checked.get(i)) {
-                        CategoryAdapter adapter = (CategoryAdapter) ((HeaderViewListAdapter) categoryList.getAdapter()).getWrappedAdapter();
-                        Category cat = adapter.getItem(i);
-                        cat.remove(getActivity());
-                        adapter.remove(cat);
-                    }
-                }
-            }
-
-            public void editSelected() {
-                SparseBooleanArray checked = categoryList.getCheckedItemPositions();
-                int checkedCount = checked.size();
-                if (checkedCount != 1) {
-                    Log.wtf(LOG_TAG, "Got multiple items, but only one can be edited");
-                } else {
-                    int key = checked.keyAt(0);
-                    Category category = categoryListAdapter.getItem(key);
-                    Intent i = new Intent(getActivity(), SaveCategoryActivity.class);
-                    i.putExtra("category", category);
-                    startActivityForResult(i, CATEGORY_EDIT);
-                }
-            }
-        });
 
         // Create button for new category and put it to the end of listview
         //final Button btnAddNew = new Button(getActivity());
@@ -161,7 +46,7 @@ public class CategoryListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), SaveCategoryActivity.class);
-                startActivityForResult(i, CATEGORY_ADD);
+                startActivityForResult(i, ADD);
             }
         });
         btnAddNew.setOnTouchListener(new View.OnTouchListener() {
@@ -218,14 +103,14 @@ public class CategoryListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null || resultCode != Activity.RESULT_OK) {return;}
 
-        Category newCat = (Category) data.getSerializableExtra("category");
+        Category newCat = (Category) data.getSerializableExtra("item");
 
         switch (requestCode){
-            case CATEGORY_ADD:
+            case ADD:
                 categoryListAdapter.add(newCat);
                 categoryListAdapter.setSelected(categoryListAdapter.getCount() - 1);
                 break;
-            case CATEGORY_EDIT:
+            case EDIT:
                 int position = categoryListAdapter.getPosition(newCat);
                 if(position >= 0){
                     List<Category> categories = categoryListAdapter.getCategories();
@@ -234,7 +119,6 @@ public class CategoryListFragment extends Fragment {
                     categoryListAdapter.notifyDataSetChanged();
                 }
                 break;
-
         }
     }
 
