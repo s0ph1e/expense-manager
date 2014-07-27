@@ -152,7 +152,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
             errorMessage += "Expense sum can't be empty.\r\n";
         } else {
             expense.sum = new BigDecimal(sum);
-            if(expense.sum.compareTo(BigDecimal.ZERO) > 0){
+            if(expense.sum.compareTo(BigDecimal.ZERO) <= 0){
                 errorMessage += "Expense sum can't negative.\r\n";
             }
         }

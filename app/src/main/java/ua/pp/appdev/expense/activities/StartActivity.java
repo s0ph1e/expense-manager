@@ -1,13 +1,23 @@
 package ua.pp.appdev.expense.activities;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
 
 
@@ -51,10 +61,20 @@ public class StartActivity extends Activity
 
     @Override
     public void onNavigationItemSelected(int position) {
-//        FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-//                .commit();
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment = null;
+
+        switch (position){
+            case 0:
+                fragment = new ExpenseListFragment();
+                break;
+        }
+
+        if(fragment != null) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+        }
     }
 
 }

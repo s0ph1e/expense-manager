@@ -62,9 +62,9 @@ public class NavigationFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
 
-/*        if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
-        }*/
+        if (mListener != null) {
+            mListener.onNavigationItemSelected(position);
+        }
     }
 
     @Override
@@ -90,10 +90,6 @@ public class NavigationFragment extends Fragment {
         });
 
         mDrawerListView.setAdapter(drawerAdapter);
-
-        // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
-        restoreActionBar();
 
         // Inflate the layout for this fragment
         return mDrawerListView;
@@ -209,6 +205,10 @@ public class NavigationFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+
+        // Select either the default item (0) or the last selected item.
+        selectItem(mCurrentSelectedPosition);
+        restoreActionBar();
     }
 
     public boolean isDrawerOpen() {
