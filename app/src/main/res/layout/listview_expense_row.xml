@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:baselineAligned="true"
+    android:layout_margin="10dp"
+    android:descendantFocusability="blocksDescendants"
+    android:background="@drawable/list_selector">
+
+    <TextView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtExpenseCategory"
+        android:textColor="#ffffffff"
+        android:background="#ccc"
+        android:textSize="30sp"
+        android:singleLine="true"
+        android:layout_margin="3dp"
+        android:gravity="top"
+        android:layout_gravity="center"
+        android:clickable="false" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtExpenseDate"
+            android:clickable="false"
+            android:text="date"
+            android:layout_gravity="top"
+            android:singleLine="true"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="description gg hello world test hhh bla bla bla bla bla bla bla description 1234nkd nkfdjfk njdkfnndk ndkf ndfkj dnfkj djkf "
+            android:id="@+id/txtExpenseNote" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtExpenseSumOriginal"
+            android:clickable="false"
+            android:text="$1000"
+            android:singleLine="true"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_gravity="right" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$1000"
+            android:id="@+id/txtExpenseSumBase"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="right" />
+    </LinearLayout>
+
+</LinearLayout>

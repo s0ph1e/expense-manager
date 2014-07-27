@@ -41,7 +41,7 @@ public class ExpenseListFragment extends Fragment {
 
         // Get array of categories and set adapter
         List<Expense> expenses = Expense.getAll(getActivity());
-        expenseAdapter = new ExpenseAdapter(getActivity(), R.layout.listview_category_row, expenses);
+        expenseAdapter = new ExpenseAdapter(getActivity(), R.layout.listview_expense_row, expenses);
         expenseList.setAdapter(expenseAdapter);
 
 /*        categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener()

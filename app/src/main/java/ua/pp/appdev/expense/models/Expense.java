@@ -14,6 +14,7 @@ import java.util.List;
 
 import ua.pp.appdev.expense.activities.SaveExpenseActivity;
 import ua.pp.appdev.expense.helpers.DBHelper;
+import ua.pp.appdev.expense.helpers.Helpers;
 
 public class Expense implements EditableItem{
 
@@ -136,5 +137,9 @@ public class Expense implements EditableItem{
     @Override
     public Class getActivityClass() {
         return SaveExpenseActivity.class;
+    }
+
+    public String getSumString(){
+        return Helpers.sumToString(sum, currency);
     }
 }

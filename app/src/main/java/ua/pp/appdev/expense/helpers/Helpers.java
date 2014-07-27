@@ -2,8 +2,11 @@ package ua.pp.appdev.expense.helpers;
 
 import android.content.Context;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Calendar;
+
+import ua.pp.appdev.expense.models.Currency;
 
 public class Helpers {
 
@@ -23,5 +26,9 @@ public class Helpers {
     public static String timeToString(Context context, Calendar calendar){
         DateFormat tf = android.text.format.DateFormat.getTimeFormat(context);
         return tf.format(calendar.getTime());
+    }
+
+    public static String sumToString(BigDecimal sum, Currency currency){
+        return String.valueOf(sum) + " " + currency.name;
     }
 }

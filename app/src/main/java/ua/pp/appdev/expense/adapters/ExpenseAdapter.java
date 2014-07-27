@@ -1,10 +1,17 @@
 package ua.pp.appdev.expense.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.List;
 
+import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.models.EditableItem;
 import ua.pp.appdev.expense.models.Expense;
 
@@ -23,7 +30,50 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
     }
 
     @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        ExpenseHolder holder = null;
+
+        if (row == null) {
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            row = inflater.inflate(this.resource, parent, false);
+
+            holder = new ExpenseHolder();
+            holder.category = (TextView)row.findViewById(R.id.txtExpenseCategory);
+            holder.date = (TextView) row.findViewById(R.id.txtExpenseDate);
+            holder.note = (TextView) row.findViewById(R.id.txtExpenseNote);
+            holder.sumInOriginalCurrency = (TextView) row.findViewById(R.id.txtExpenseSumOriginal);
+            holder.sumInBaseCurrency = (TextView) row.findViewById(R.id.txtExpenseSumBase);
+
+            row.setTag(holder);
+        } else {
+            holder = (ExpenseHolder) row.getTag();
+        }
+
+        Expense expense = expenses.get(position);
+        String firstLetter = String.valueOf(expense.category.name.charAt(0)).toUpperCase();
+
+        holder.category.setBackgroundColor(expense.category.color);
+        holder.category.setText(firstLetter.isEmpty() ? "" : firstLetter);
+        holder.date.setText(Helpers.datetimeToString(context, expense.expenseDate));
+        holder.sumInOriginalCurrency.setText(expense.getSumString());
+        holder.sumInBaseCurrency.setText(expense.getSumString());
+
+        return row;
+    }
+
+    @Override
     public void remove(EditableItem item) {
         super.remove((Expense) item);
+    }
+
+    static class ExpenseHolder{
+
+        TextView category;
+        TextView date;
+        TextView note;
+        TextView sumInOriginalCurrency;
+        TextView sumInBaseCurrency;
+
     }
 }
