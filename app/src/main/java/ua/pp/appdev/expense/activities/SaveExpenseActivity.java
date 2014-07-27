@@ -3,15 +3,11 @@ package ua.pp.appdev.expense.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.InputFilter;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +19,6 @@ import android.widget.Spinner;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
@@ -154,9 +149,12 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         String sum = etSum.getText().toString();
 
         if(sum.isEmpty()){
-            errorMessage += "Expense sum can't be zero.\r\n";
+            errorMessage += "Expense sum can't be empty.\r\n";
         } else {
             expense.sum = new BigDecimal(sum);
+            if(expense.sum.compareTo(BigDecimal.ZERO) > 0){
+                errorMessage += "Expense sum can't negative.\r\n";
+            }
         }
 
         if(expense.currency == null){

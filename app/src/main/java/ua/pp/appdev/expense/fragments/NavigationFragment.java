@@ -2,24 +2,17 @@ package ua.pp.appdev.expense.fragments;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.preference.PreferenceManager;
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -80,9 +73,9 @@ public class NavigationFragment extends Fragment {
 
         dataList = new ArrayList<DrawerItem>();
 
-        dataList.add(new DrawerItem("Overview", R.drawable.ic_action_alarms));
-        dataList.add(new DrawerItem("History", R.drawable.ic_action_alarms));
-        dataList.add(new DrawerItem("Settings", R.drawable.ic_action_alarms));
+        dataList.add(new DrawerItem("Overview", R.drawable.ic_action_data_usage));
+        dataList.add(new DrawerItem("History", R.drawable.ic_action_storage));
+        dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
 
         drawerAdapter = new DrawerAdapter(getActivity(), R.layout.drawer_row, dataList);
 

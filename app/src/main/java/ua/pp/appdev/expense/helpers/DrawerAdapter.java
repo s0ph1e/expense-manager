@@ -9,9 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ua.pp.appdev.expense.R;
-
 import java.util.List;
+
+import ua.pp.appdev.expense.R;
 
 public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
 
