@@ -29,6 +29,8 @@ public class CategoryListFragment extends Fragment {
 
     private CategoryAdapter categoryListAdapter;
 
+    private ListView categoryList;
+
     public CategoryListFragment() {
         // Required empty public constructor
     }
@@ -37,7 +39,7 @@ public class CategoryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final ListView categoryList = new EditableItemListView(getActivity());
+        categoryList = new EditableItemListView(getActivity());
         categoryList.setId(R.id.category_list);
 
         // Create button for new category and put it to the end of listview
@@ -126,8 +128,10 @@ public class CategoryListFragment extends Fragment {
 
     public boolean setCategory(Category category) {
         int categoryPos = categoryListAdapter.getPosition(category);
-        if (categoryPos > 0) {
+        if (categoryPos >= 0) {
             categoryListAdapter.setSelected(categoryPos);
+            // This is required for scrolling to selected category is if is outside of the container
+            categoryList.setSelection(categoryPos);
             return true;
         }
         return false;
