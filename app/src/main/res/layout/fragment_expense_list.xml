@@ -3,6 +3,5 @@
     android:id="@+id/expenseList"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:minHeight="200dp"
     android:name="ua.pp.appdev.expense.fragments.ExpenseListFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"/>
