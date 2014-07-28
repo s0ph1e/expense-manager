@@ -3,6 +3,7 @@ package ua.pp.appdev.expense.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +14,9 @@ import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
 import ua.pp.appdev.expense.models.Expense;
+
+import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
+import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 
 public class StartActivity extends Activity
@@ -47,7 +51,7 @@ public class StartActivity extends Activity
         switch(id){
             case R.id.action_add_expense:
                 Intent i = new Intent(this, SaveExpenseActivity.class);
-                startActivity(i);
+                startActivityForResult(i, ADD);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -74,5 +78,21 @@ public class StartActivity extends Activity
     @Override
     public void onExpenseItemSelected(Expense e) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
+        if(fragment != null){
+            /* Here we have to reload expenses fragment
+                because great changes may happen in save-expense-activity
+                for example - changing or removing categories which causes changing expenses list
+             */
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(fragment);
+            ft.attach(fragment);
+            ft.commit();
+        }
     }
 }

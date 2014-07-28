@@ -72,6 +72,18 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
         super.remove((Expense) item);
     }
 
+    public int getPosition(Expense expense){
+        for(int i = 0; i < expenses.size(); i++){
+            if(expenses.get(i).id == expense.id)
+                return i;
+        }
+        return -1;
+    }
+
+    public List<Expense> getExpenses(){
+        return expenses;
+    }
+
     static class ExpenseHolder{
 
         TextView category;

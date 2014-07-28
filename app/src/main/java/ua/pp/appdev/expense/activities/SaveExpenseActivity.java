@@ -177,6 +177,12 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         }
         expense.note = etNote.getText().toString();
         expense.save(this);
+
+        // Send saved expense back
+        Intent intent = new Intent();
+        intent.putExtra("item", expense);
+        setResult(RESULT_OK, intent);
+
         finish();
     }
 
