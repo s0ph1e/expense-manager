@@ -29,6 +29,6 @@ public class Helpers {
     }
 
     public static String sumToString(BigDecimal sum, Currency currency){
-        return String.valueOf(sum) + " " + currency.name;
+        return sum.setScale(2, BigDecimal.ROUND_UP) + " " + currency.name;
     }
 }
