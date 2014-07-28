@@ -5,12 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.activities.SaveCategoryActivity;
 import ua.pp.appdev.expense.helpers.DBHelper;
+import ua.pp.appdev.expense.helpers.Helpers;
 
 /**
  * Created by:
@@ -145,5 +145,10 @@ public class Category implements EditableItem {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "{id: " + id + ", name: " + name + ", color: " + Helpers.colorToString(color) + "}";
     }
 }

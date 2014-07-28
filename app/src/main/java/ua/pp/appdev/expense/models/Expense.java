@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,8 +76,7 @@ public class Expense implements EditableItem{
 
             // Variables for creating expense
             long id;
-            Calendar createDate = GregorianCalendar.getInstance(),
-                expenseDate = GregorianCalendar.getInstance();
+
             BigDecimal sum;
             Category category;
             Currency currency;
@@ -86,6 +84,8 @@ public class Expense implements EditableItem{
 
             do {
                 id = c.getLong(idColIndex);
+                Calendar createDate = GregorianCalendar.getInstance(),
+                        expenseDate = GregorianCalendar.getInstance();
                 createDate.setTimeInMillis(c.getLong(createDateColIndex));
                 expenseDate.setTimeInMillis(c.getLong(expenseDateColIndex));
                 sum =  new BigDecimal(c.getString(sumColIndex));
@@ -141,5 +141,14 @@ public class Expense implements EditableItem{
 
     public String getSumString(){
         return Helpers.sumToString(sum, currency);
+    }
+
+    public String toString(Context context) {
+        String str = "{id: " + id
+                + ", date: " + Helpers.datetimeToString(context, expenseDate)
+                + ", category: " + category
+                + ", sum: " + Helpers.sumToString(sum, currency)
+                + ", note: " + note + "}";
+        return str;
     }
 }
