@@ -7,12 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.helpers.DBHelper;
 
-public class Currency {
+public class Currency implements Serializable {
 
     public static final String TABLE = "currencies";
     public static final String ID_COLUMN = "id";
@@ -25,9 +26,9 @@ public class Currency {
     public String isoCode;
     public String name;
     public String fullName;
-    public JSONObject rates;
+    public String rates; // TODO: consider storing rates
 
-    private Currency(long id, String isoCode, String name, String fullName, JSONObject rates) {
+    private Currency(long id, String isoCode, String name, String fullName, String rates) {
         this.id = id;
         this.isoCode = isoCode;
         this.name = name;
@@ -54,20 +55,14 @@ public class Currency {
             int ratesColIndex = c.getColumnIndex(RATES_COLUMN);
 
             long id;
-            String isoCode, name, fullName;
-            JSONObject rates;
+            String isoCode, name, fullName, rates;
 
             do {
                 id = c.getLong(idColIndex);
                 isoCode = c.getString(isoCodeIndex);
                 name = c.getString(nameColIndex);
                 fullName = c.getString(fullNameColIndex);
-                try {
-                    rates = new JSONObject(c.getString(ratesColIndex));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    rates = null;
-                }
+                rates = c.getString(ratesColIndex);
 
                 currenciesList.add(new Currency(id, isoCode, name, fullName, rates));
             } while (c.moveToNext());
@@ -94,22 +89,14 @@ public class Currency {
             int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
             int ratesColIndex = c.getColumnIndex(RATES_COLUMN);
 
-
-            String isoCode, name, fullName;
-            JSONObject rates;
+            String isoCode, name, fullName, rates;
 
             isoCode = c.getString(isoCodeIndex);
             name = c.getString(nameColIndex);
             fullName = c.getString(fullNameColIndex);
-            try {
-                rates = new JSONObject(c.getString(ratesColIndex));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                rates = null;
-            }
+            rates = c.getString(ratesColIndex);
 
             currency = new Currency(id, isoCode, name, fullName, rates);
-
         }
         db.close();
 

@@ -48,18 +48,11 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         // Get expense
         Intent callingIntent = getIntent();
-        expense = (Expense) callingIntent.getSerializableExtra("expense");
+        expense = (Expense) callingIntent.getSerializableExtra("item");
 
         // If creating action - make new expense
         if(expense == null){
             expense = new Expense();
-            // TODO: TMP code
-            /*
-            List<Expense> expenses = Expense.getAll(this);
-            if (expenses.size() > 0)
-                expense = expenses.get(0);
-            */
-            //expense.expenseDate.set(2000, Calendar.APRIL, 2);
         }
 
         setContentView(R.layout.activity_save_expense);

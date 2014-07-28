@@ -90,10 +90,13 @@ public class Category implements EditableItem {
         db.close();
     }
 
+    // TODO: suggest to move expenses to other category
     public void remove(Context context){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+        // Remove expenses in category
+        db.delete(Expense.TABLE, Expense.CATEGORY_COLUMN + " = ?", new String[] { String.valueOf(id) });
+        // Remove category
         db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
 
         db.close();

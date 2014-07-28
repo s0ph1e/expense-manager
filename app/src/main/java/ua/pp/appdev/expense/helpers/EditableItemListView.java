@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.HeaderViewListAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -35,6 +34,8 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
     public static final int EDIT = 1;
 
     private int minRowsCount = 2;
+
+    protected EditableItemAdapter adapter;
 
     public EditableItemListView(final Context context) {
         super(context);
@@ -62,8 +63,8 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
                         return true;
                     case R.id.actionbar_remove:
                         new AlertDialog.Builder(context)
-                                .setTitle(R.string.remove_category)
-                                .setMessage(R.string.remove_category_message)
+                                .setTitle(R.string.remove_item)
+                                .setMessage(R.string.remove_item_message)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         removeSelected();
@@ -110,7 +111,7 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
                 // Needed DESC order, otherwise unchecked items may be deleted instead of checked
                 for (int i = len - 1; i >= 0; i--) {
                     if (checked.get(i)) {
-                        EditableItemAdapter adapter = (EditableItemAdapter) ((HeaderViewListAdapter) getAdapter()).getWrappedAdapter();
+                        EditableItemAdapter adapter = getListViewAdapter();
                         EditableItem item = adapter.getItem(i);
                         item.remove(context);
                         adapter.remove(item);
@@ -125,7 +126,7 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
                     Log.wtf(LOG_TAG, "Got multiple items, but only one can be edited");
                 } else {
                     int key = checked.keyAt(0);
-                    EditableItemAdapter adapter = (EditableItemAdapter) ((HeaderViewListAdapter) getAdapter()).getWrappedAdapter();
+                    EditableItemAdapter adapter = getListViewAdapter();
                     EditableItem item = adapter.getItem(key);
                     Intent i = new Intent(context, item.getActivityClass());
                     i.putExtra("item", item);
@@ -133,16 +134,12 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
                 }
             }
         });
-
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         int minHeight = minRowsCount * getRowHeight();
-        //Log.e("", "getLayoutParams().height " + getLayoutParams().height );
-        //Log.e("", "getHeight() " + getHeight());
-        //Log.e("", "minHeight " + minHeight);
         if(getHeight() < minHeight){
             Log.e("", getHeight() + " < " + minHeight);
             getLayoutParams().height = minHeight;
@@ -160,7 +157,6 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
             View mView = mAdapter.getView(0, null, this);
             mView.measure(
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
             return mView.getMeasuredHeight();
         } else
@@ -168,22 +164,16 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
     }
 
     public int getTotalHeight() {
-
         ListAdapter mAdapter = getAdapter();
-
         int totalHeight = 0;
 
         for (int i = 0; i < mAdapter.getCount(); i++) {
             View mView = mAdapter.getView(i, null, this);
-
             mView.measure(
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-
             totalHeight += mView.getMeasuredHeight();
             Log.w("HEIGHT" + i, String.valueOf(totalHeight));
-
         }
         return  totalHeight;
     }
@@ -199,5 +189,20 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
         }
 
         return false;
+    }
+
+    /**
+     * handle both listview adapters (simple listview - example: expenses list)
+     * and headerview list adapters (if listview has header or footer - example: categories list)
+     * @return EditableItemAdapter
+     */
+    public EditableItemAdapter getListViewAdapter(){
+        ListAdapter adapter;
+        if(getAdapter() instanceof EditableItemAdapter){
+            adapter = getAdapter();
+        } else {
+            adapter = ((HeaderViewListAdapter) getAdapter()).getWrappedAdapter();
+        }
+        return (EditableItemAdapter) adapter;
     }
 }
