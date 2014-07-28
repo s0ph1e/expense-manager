@@ -1,12 +1,13 @@
 package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class ExpenseListFragment extends Fragment {
 
     private ExpenseAdapter expenseAdapter;
 
-    private OnFragmentInteractionListener mListener;
+    private OnExpenseItemSelectedListener mListener;
 
     public ExpenseListFragment() {
         // Required empty public constructor
@@ -44,14 +45,13 @@ public class ExpenseListFragment extends Fragment {
         expenseAdapter = new ExpenseAdapter(getActivity(), R.layout.listview_expense_row, expenses);
         expenseList.setAdapter(expenseAdapter);
 
-/*        categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        expenseList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                categoryListAdapter.setSelected(i);
-                mListener.onCategorySelected(categoryListAdapter.getItem(i));
+                mListener.onExpenseItemSelected(expenseAdapter.getItem(i));
             }
-        });*/
+        });
 
         return expenseList;
     }
@@ -59,12 +59,12 @@ public class ExpenseListFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+            mListener = (OnExpenseItemSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnExpenseItemSelectedListener");
+        }
     }
 
     @Override
@@ -73,9 +73,8 @@ public class ExpenseListFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    public interface OnExpenseItemSelectedListener {
+        public void onExpenseItemSelected(Expense e);
     }
 
 }

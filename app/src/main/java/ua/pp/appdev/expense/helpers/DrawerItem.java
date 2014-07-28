@@ -1,7 +1,5 @@
 package ua.pp.appdev.expense.helpers;
 
-import android.app.Fragment;
-
 public class DrawerItem {
 
     String ItemName;

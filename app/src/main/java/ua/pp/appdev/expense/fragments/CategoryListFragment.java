@@ -20,7 +20,8 @@ import ua.pp.appdev.expense.adapters.CategoryAdapter;
 import ua.pp.appdev.expense.helpers.EditableItemListView;
 import ua.pp.appdev.expense.models.Category;
 
-import static ua.pp.appdev.expense.helpers.EditableItemListView.*;
+import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
+import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class CategoryListFragment extends Fragment {
 
@@ -109,6 +110,7 @@ public class CategoryListFragment extends Fragment {
             case ADD:
                 categoryListAdapter.add(newCat);
                 categoryListAdapter.setSelected(categoryListAdapter.getCount() - 1);
+                mListener.onCategorySelected(newCat);
                 break;
             case EDIT:
                 int position = categoryListAdapter.getPosition(newCat);

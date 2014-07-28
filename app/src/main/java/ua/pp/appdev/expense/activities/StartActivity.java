@@ -3,26 +3,20 @@ package ua.pp.appdev.expense.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
+import ua.pp.appdev.expense.models.Expense;
 
 
 public class StartActivity extends Activity
-        implements NavigationFragment.OnNavigationItemSelectedListener {
+        implements NavigationFragment.OnNavigationItemSelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
 
     private  NavigationFragment navigationFragment;
 
@@ -77,4 +71,8 @@ public class StartActivity extends Activity
         }
     }
 
+    @Override
+    public void onExpenseItemSelected(Expense e) {
+
+    }
 }

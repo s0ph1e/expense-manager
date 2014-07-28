@@ -58,7 +58,11 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
         holder.date.setText(Helpers.datetimeToString(context, expense.expenseDate));
         holder.sumInOriginalCurrency.setText(expense.getSumString());
         holder.sumInBaseCurrency.setText(expense.getSumString());
-        holder.note.setText(expense.note);
+        if (expense.note.isEmpty() ) {
+            holder.note.setVisibility(View.GONE);
+        } else {
+            holder.note.setText(expense.note);
+        }
 
         return row;
     }

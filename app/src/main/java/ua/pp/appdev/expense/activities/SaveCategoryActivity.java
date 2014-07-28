@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Random;
 
 import ua.pp.appdev.expense.R;
-import ua.pp.appdev.expense.fragments.ColorPickerDialogFragment;
 import ua.pp.appdev.expense.adapters.ColorAdapter;
+import ua.pp.appdev.expense.fragments.ColorPickerDialogFragment;
 import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.models.Category;
 

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -191,7 +192,7 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
     public boolean onTouch(View view, MotionEvent motionEvent) {
         //Log.e("", "getHeight()=" + getHeight());
         //Log.e("", "((LinearLayout)this.getParent()).getHeight()=" + ((LinearLayout)this.getParent()).getHeight());
-        if (getTotalHeight() > ((LinearLayout)this.getParent()).getHeight()/* && (getLastVisiblePosition())< getCount() - 1*/) {
+        if (getTotalHeight() > ((FrameLayout)this.getParent()).getHeight()/* && (getLastVisiblePosition())< getCount() - 1*/) {
             view.getParent().requestDisallowInterceptTouchEvent(true);
         } else {
             view.getParent().requestDisallowInterceptTouchEvent(false);
