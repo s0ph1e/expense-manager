@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,7 +24,7 @@ import ua.pp.appdev.expense.models.Category;
 import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
 import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
-public class CategoryListFragment extends Fragment {
+public class CategoryListFragment extends Fragment implements View.OnTouchListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -40,6 +41,7 @@ public class CategoryListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         categoryList = new EditableItemListView(getActivity());
+        categoryList.setOnTouchListener(this);
         categoryList.setId(R.id.category_list);
 
         // Create button for new category and put it to the end of listview
@@ -134,6 +136,17 @@ public class CategoryListFragment extends Fragment {
             categoryList.setSelection(categoryPos);
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (((EditableItemListView)categoryList).getTotalHeight() > ((FrameLayout)categoryList.getParent()).getHeight()/* && (getLastVisiblePosition())< getCount() - 1*/) {
+            view.getParent().requestDisallowInterceptTouchEvent(true);
+        } else {
+            view.getParent().requestDisallowInterceptTouchEvent(false);
+        }
+
         return false;
     }
 

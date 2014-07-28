@@ -16,7 +16,6 @@ import ua.pp.appdev.expense.fragments.NavigationFragment;
 import ua.pp.appdev.expense.models.Expense;
 
 import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
-import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 
 public class StartActivity extends Activity

@@ -26,7 +26,7 @@ import ua.pp.appdev.expense.models.EditableItem;
 /**
  * Magic for preventing listviews' resize when keyboard appears
  */
-public class EditableItemListView extends ListView implements View.OnTouchListener{
+public class EditableItemListView extends ListView {
 
     private static final String LOG_TAG = "ItemListView";
 
@@ -39,7 +39,6 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
 
     public EditableItemListView(final Context context) {
         super(context);
-        setOnTouchListener(this);
 
         // Set scrollbar always shown
         setScrollbarFadingEnabled(false);
@@ -176,19 +175,6 @@ public class EditableItemListView extends ListView implements View.OnTouchListen
             Log.w("HEIGHT" + i, String.valueOf(totalHeight));
         }
         return  totalHeight;
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        //Log.e("", "getHeight()=" + getHeight());
-        //Log.e("", "((LinearLayout)this.getParent()).getHeight()=" + ((LinearLayout)this.getParent()).getHeight());
-        if (getTotalHeight() > ((FrameLayout)this.getParent()).getHeight()/* && (getLastVisiblePosition())< getCount() - 1*/) {
-            view.getParent().requestDisallowInterceptTouchEvent(true);
-        } else {
-            view.getParent().requestDisallowInterceptTouchEvent(false);
-        }
-
-        return false;
     }
 
     /**
