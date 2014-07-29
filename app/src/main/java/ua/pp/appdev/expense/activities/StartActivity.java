@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import ua.pp.appdev.expense.R;
@@ -36,15 +35,6 @@ public class StartActivity extends Activity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!navigationFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.start, menu);
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id){
@@ -62,7 +52,7 @@ public class StartActivity extends Activity
         Fragment fragment = null;
 
         switch (position){
-            case 0:
+            case 1:
                 fragment = new ExpenseListFragment();
                 break;
         }

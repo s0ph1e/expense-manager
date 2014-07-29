@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,7 +19,6 @@ import ua.pp.appdev.expense.adapters.ExpenseAdapter;
 import ua.pp.appdev.expense.helpers.EditableItemListView;
 import ua.pp.appdev.expense.models.Expense;
 
-import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
 import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class ExpenseListFragment extends Fragment {
@@ -32,8 +33,8 @@ public class ExpenseListFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -60,6 +61,12 @@ public class ExpenseListFragment extends Fragment {
         });
 
         return expenseList;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_add_expense, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
