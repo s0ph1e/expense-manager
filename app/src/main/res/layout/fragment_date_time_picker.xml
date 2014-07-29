@@ -24,8 +24,7 @@
             android:paddingRight="20dp"
             android:drawableStart="@drawable/ic_action_go_to_today"
             android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:text="date" />
+            android:gravity="center_vertical" />
 
         <TextView style="@style/TransparentButtonStyle"
             android:layout_width="wrap_content"
@@ -34,46 +33,53 @@
             android:paddingLeft="20dp"
             android:drawableStart="@drawable/ic_action_time"
             android:drawablePadding="8dp"
-            android:text="time"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical" />
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/layoutDatePicker"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:minHeight="280dp">
 
-        <DatePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:startYear="1970"
-            android:calendarViewShown="false"
-            android:spinnersShown="true"
-            android:layout_alignParentTop="true"
-            android:id="@+id/datePicker">
-        </DatePicker>
+        <RelativeLayout
+            android:id="@+id/layoutDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-    </RelativeLayout>
+            <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:startYear="1970"
+                android:calendarViewShown="true"
+                android:spinnersShown="false"
+                android:layout_alignParentTop="true"
+                android:id="@+id/datePicker"
+                android:layout_marginBottom="10dp">
+            </DatePicker>
 
+        </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/layoutTimePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:visibility="gone">
+        <RelativeLayout
+            android:id="@+id/layoutTimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
 
-        <TimePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:spinnersShown="true"
-            android:layout_alignParentTop="true"
-            android:id="@+id/timePicker">
-        </TimePicker>
+            <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnersShown="true"
+                android:layout_alignParentTop="false"
+                android:id="@+id/timePicker">
+            </TimePicker>
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -61,7 +61,7 @@ public class Expense implements EditableItem{
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor c = db.query(TABLE, null, null, null, null, null, ID_COLUMN + " DESC");
+        Cursor c = db.query(TABLE, null, null, null, null, null, EXPENSE_DATE_COLUMN + " DESC");
 
         if (c.moveToFirst()) {
 
