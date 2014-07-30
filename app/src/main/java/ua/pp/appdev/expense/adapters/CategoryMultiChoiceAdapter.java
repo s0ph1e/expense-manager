@@ -51,7 +51,7 @@ public class CategoryMultiChoiceAdapter extends ArrayAdapter<Category> {
         holder.color.setBackgroundColor(category.color);
         holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
         holder.name.setText(category.name);
-        holder.expensesCount.setText("(123 expenses)");
+        holder.expensesCount.setText("(" + category.getExpensesCount(context) + ")");
         row.setActivated(category.checked);
 
         return row;

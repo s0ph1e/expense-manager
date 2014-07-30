@@ -135,6 +135,10 @@ public class Category implements EditableItem {
         return cat;
     }
 
+    public int getExpensesCount(Context context){
+        return Expense.getCountInCategory(context, id);
+    }
+
     @Override
     public boolean equals(Object o) {
         // Check class of object

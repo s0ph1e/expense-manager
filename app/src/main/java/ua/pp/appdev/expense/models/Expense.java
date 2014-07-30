@@ -111,6 +111,33 @@ public class Expense implements EditableItem{
         return expensesList;
     }
 
+    public static int getCount(Context context){
+        return getCountInCategory(context, 0);
+    }
+
+    public static int getCountInCategory(Context context, long categoryId){
+        int count = 0;
+
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String whereClause = "";
+        String[] whereArgs = null;
+        if(categoryId > 0){
+             whereClause = " where " + CATEGORY_COLUMN + " = ?";
+            whereArgs = new String[]{String.valueOf(categoryId)};
+        }
+
+        Cursor c = db.rawQuery("select count(*)" + " from " + TABLE + whereClause, whereArgs);
+
+        if (c.moveToFirst()) {
+            count = c.getInt(0);
+        }
+        db.close();
+
+        return count;
+    }
+
     public void save(Context context){
 
         DBHelper dbHelper = new DBHelper(context);

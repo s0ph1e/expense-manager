@@ -17,6 +17,7 @@ import java.util.List;
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.adapters.CategoryMultiChoiceAdapter;
 import ua.pp.appdev.expense.models.Category;
+import ua.pp.appdev.expense.models.Expense;
 
 public class CategoryMultiChoiceListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
@@ -47,7 +48,7 @@ public class CategoryMultiChoiceListFragment extends Fragment implements Adapter
         // Set header
         viewAllCategories = inflater.inflate(R.layout.listview_category_multichoice_row, null);
         ((TextView) viewAllCategories.findViewById(R.id.txtHistoryCategoryName)).setText(R.string.all_categories);
-        ((TextView) viewAllCategories.findViewById(R.id.txtHistoryCategoryExpensesCount)).setText("(7)");
+        ((TextView) viewAllCategories.findViewById(R.id.txtHistoryCategoryExpensesCount)).setText("("+ Expense.getCount(getActivity()) +")");
         viewAllCategories.findViewById(R.id.txtHistoryCategoryColor).setVisibility(View.GONE);
         viewAllCategories.setActivated(true);
         categoryList.addHeaderView(viewAllCategories);
