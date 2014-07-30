@@ -1,9 +1,9 @@
 package ua.pp.appdev.expense.activities;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -11,13 +11,14 @@ import android.view.MenuItem;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.ExpenseListFragment;
+import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
 import ua.pp.appdev.expense.models.Expense;
 
 import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
 
 
-public class StartActivity extends Activity
+public class StartActivity extends FragmentActivity
         implements NavigationFragment.OnNavigationItemSelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
 
     private  NavigationFragment navigationFragment;
@@ -48,12 +49,15 @@ public class StartActivity extends Activity
 
     @Override
     public void onNavigationItemSelected(int position) {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
 
         switch (position){
-            case 1:
+            case 0:
                 fragment = new ExpenseListFragment();
+                break;
+            case 1:
+                fragment = new HistoryFragment();
                 break;
         }
 
@@ -72,13 +76,13 @@ public class StartActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if(fragment != null){
             /* Here we have to reload expenses fragment
                 because great changes may happen in save-expense-activity
                 for example - changing or removing categories which causes changing expenses list
              */
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.detach(fragment);
             ft.attach(fragment);
             ft.commit();
