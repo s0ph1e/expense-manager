@@ -1,0 +1,69 @@
+package ua.pp.appdev.expense.adapters;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.List;
+
+import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.models.Category;
+
+public class CategoryMultiChoiceAdapter extends ArrayAdapter<Category> {
+    private Context context;
+    int resource;
+    private List<Category> categories;
+
+    public CategoryMultiChoiceAdapter(Context context, int resource, List<Category> categories) {
+        super(context, resource, categories);
+        this.context = context;
+        this.resource = resource;
+        this.categories = categories;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        CategoryHolder holder = null;
+
+        if (row == null) {
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            row = inflater.inflate(this.resource, parent, false);
+
+            holder = new CategoryHolder();
+            holder.name = (TextView)row.findViewById(R.id.txtHistoryCategoryName);
+            holder.color = (TextView)row.findViewById(R.id.txtHistoryCategoryColor);
+            holder.expensesCount = (TextView)row.findViewById(R.id.txtHistoryCategoryExpensesCount);
+
+            row.setTag(holder);
+        } else {
+            holder = (CategoryHolder)row.getTag();
+        }
+
+        Category category = categories.get(position);
+        String firstLetter = String.valueOf(category.name.charAt(0)).toUpperCase();
+
+        holder.color.setBackgroundColor(category.color);
+        holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
+        holder.name.setText(category.name);
+        holder.expensesCount.setText("(123 expenses)");
+
+        return row;
+    }
+
+
+    public List<Category> getCategories(){
+        return categories;
+    }
+
+
+    static class CategoryHolder {
+        TextView color;
+        TextView name;
+        TextView expensesCount;
+    }
+}

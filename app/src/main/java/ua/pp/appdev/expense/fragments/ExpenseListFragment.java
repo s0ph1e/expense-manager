@@ -72,12 +72,12 @@ public class ExpenseListFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnExpenseItemSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnExpenseItemSelectedListener");
-        }
+//        try {
+//            mListener = (OnExpenseItemSelectedListener) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + " must implement OnExpenseItemSelectedListener");
+//        }
     }
 
     @Override

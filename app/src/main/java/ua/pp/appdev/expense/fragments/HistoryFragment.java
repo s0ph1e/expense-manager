@@ -10,8 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.models.Category;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements CategoryMultiChoiceListFragment.OnCategoryItemSelectedListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -31,8 +32,10 @@ public class HistoryFragment extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_history, container, false);
         FragmentManager fragmentManager = getChildFragmentManager();
+        Fragment categories = new CategoryMultiChoiceListFragment();
         Fragment expenses = new ExpenseListFragment();
         fragmentManager.beginTransaction()
+                .replace(R.id.historyCategoriesContainer, categories)
                 .replace(R.id.historyExpensesContainer, expenses)
                 .commit();
 
@@ -54,6 +57,11 @@ public class HistoryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onCategoryItemSelected(Category category) {
+
     }
 
     public interface OnFragmentInteractionListener {

@@ -30,5 +30,6 @@
     <string name="today">Today</string>
     <string name="expense_note_hint">Note</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all_categories">All categories</string>
 
 </resources>
