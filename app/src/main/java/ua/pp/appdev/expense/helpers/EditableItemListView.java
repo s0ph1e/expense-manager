@@ -120,7 +120,7 @@ public class EditableItemListView extends ListView {
 
             public void editSelected() {
                 SparseBooleanArray checked = getCheckedItemPositions();
-                int checkedCount = checked.size();
+                int checkedCount = getCheckedItemCount();
                 if (checkedCount != 1) {
                     Log.wtf(LOG_TAG, "Got multiple items, but only one can be edited");
                 } else {
