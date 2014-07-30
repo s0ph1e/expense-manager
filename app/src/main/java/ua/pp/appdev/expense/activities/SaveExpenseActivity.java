@@ -83,11 +83,12 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         // Add category list
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        if (categoryListFragment != null) {
-            fragmentTransaction.remove(categoryListFragment);
+        Fragment prev = getFragmentManager().findFragmentByTag("categories");
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
         }
         categoryListFragment = new CategoryListFragment();
-        fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment);
+        fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment, "categories");
         fragmentTransaction.commit();
 
         // Add datepicker dialog on btnPickDate click
