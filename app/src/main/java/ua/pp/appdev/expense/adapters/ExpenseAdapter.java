@@ -55,7 +55,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
 
         holder.category.setBackgroundColor(expense.category.color);
         holder.category.setText(firstLetter.isEmpty() ? "" : firstLetter);
-        holder.date.setText(Helpers.datetimeToString(context, expense.expenseDate));
+        holder.date.setText(Helpers.calendarToDateTimeString(context, expense.expenseDate));
         holder.sumInOriginalCurrency.setText(expense.getSumString());
         holder.sumInBaseCurrency.setText(expense.getSumString());
         if (expense.note.isEmpty() ) {

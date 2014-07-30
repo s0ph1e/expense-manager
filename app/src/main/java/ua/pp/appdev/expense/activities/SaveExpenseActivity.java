@@ -238,7 +238,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         }
 
         // Set datetime
-        btnPickDate.setText(Helpers.datetimeToString(this, expense.expenseDate));
+        btnPickDate.setText(Helpers.calendarToDateTimeString(this, expense.expenseDate));
 
         // Set note
         if(!expense.note.isEmpty()){

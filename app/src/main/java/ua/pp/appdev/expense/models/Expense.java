@@ -145,7 +145,7 @@ public class Expense implements EditableItem{
 
     public String toString(Context context) {
         String str = "{id: " + id
-                + ", date: " + Helpers.datetimeToString(context, expenseDate)
+                + ", date: " + Helpers.calendarToShortDateString(context, expenseDate)
                 + ", category: " + category
                 + ", sum: " + Helpers.sumToString(sum, currency)
                 + ", note: " + note + "}";

@@ -81,6 +81,7 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
 
         // Set current date
         datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        datePicker.getCalendarView().setFirstDayOfWeek(Calendar.getInstance().getFirstDayOfWeek());
         datePicker.init(
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -108,12 +109,12 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
 
         // Set buttons date text & listener
         TextView btnDate = (TextView)view.findViewById(R.id.btnSelectedDate);
-        btnDate.setText(Helpers.dateToString(getActivity(), calendar));
+        btnDate.setText(Helpers.calendarToShortDateString(getActivity(), calendar));
         btnDate.setOnClickListener(this);
 
         // Set button time text & listener
         TextView btnTime = (TextView)view.findViewById(R.id.btnSelectedTime);
-        btnTime.setText(Helpers.timeToString(getActivity(), calendar));
+        btnTime.setText(Helpers.calendarToTimeString(getActivity(), calendar));
         btnTime.setOnClickListener(this);
 
         adb.setView(view);
@@ -174,7 +175,7 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
         calendar.set(Calendar.MONTH, datePicker.getMonth());
         calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
         TextView btnDate = (TextView)view.findViewById(R.id.btnSelectedDate);
-        btnDate.setText(Helpers.dateToString(getActivity(), calendar));
+        btnDate.setText(Helpers.calendarToShortDateString(getActivity(), calendar));
     }
 
     @Override
@@ -182,7 +183,7 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         TextView btnTime = (TextView)view.findViewById(R.id.btnSelectedTime);
-        btnTime.setText(Helpers.timeToString(getActivity(), calendar));
+        btnTime.setText(Helpers.calendarToTimeString(getActivity(), calendar));
     }
 
     public interface OnDateTimeSelectedListener {
