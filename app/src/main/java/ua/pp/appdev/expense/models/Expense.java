@@ -54,14 +54,23 @@ public class Expense implements EditableItem{
         this.note = note;
     }
 
-    public static List<Expense> getAll(Context context) {
+    public static List<Expense> getAll(Context context, String[] categories) {
 
         List<Expense> expensesList = new ArrayList<Expense>();
 
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor c = db.query(TABLE, null, null, null, null, null, EXPENSE_DATE_COLUMN + " DESC");
+        String where = "";
+
+        if(categories != null){
+            where = " where " + CATEGORY_COLUMN  + " in ( " + Helpers.makePlaceholders(categories.length) + " )";
+        }
+
+        Cursor c = db.rawQuery("select * from " + TABLE + where
+                + " order by " + EXPENSE_DATE_COLUMN + " DESC",
+                categories
+        );
 
         if (c.moveToFirst()) {
 

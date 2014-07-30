@@ -6,12 +6,10 @@ import android.text.format.DateUtils;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
-import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Currency;
 
-import static android.text.format.DateFormat.*;
+import static android.text.format.DateFormat.getTimeFormat;
 
 public class Helpers {
 
@@ -62,8 +60,21 @@ public class Helpers {
         return tf.format(calendar.getTime());
     }
 
-
     public static String sumToString(BigDecimal sum, Currency currency){
         return sum.setScale(2, BigDecimal.ROUND_UP) + " " + currency.name;
+    }
+
+    public static String makePlaceholders(int len) {
+        if (len < 1) {
+            // It will lead to an invalid query anyway ..
+            throw new RuntimeException("No placeholders");
+        } else {
+            StringBuilder sb = new StringBuilder(len * 2 - 1);
+            sb.append("?");
+            for (int i = 1; i < len; i++) {
+                sb.append(",?");
+            }
+            return sb.toString();
+        }
     }
 }

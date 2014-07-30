@@ -1,9 +1,9 @@
 package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,14 +27,28 @@ public class ExpenseListFragment extends Fragment {
 
     private OnExpenseItemSelectedListener mListener;
 
+    private String[] categoriesIds = null;
+
     public ExpenseListFragment() {
         // Required empty public constructor
     }
 
+    public static ExpenseListFragment newInstance(String[] categories){
+        ExpenseListFragment fragment = new ExpenseListFragment();
+        Bundle args = new Bundle();
+        args.putStringArray("categories", categories);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        Bundle args = getArguments();
+        if (args != null) {
+            categoriesIds = args.getStringArray("categories");
+        }
     }
 
     @Override
@@ -45,7 +59,7 @@ public class ExpenseListFragment extends Fragment {
         expenseList.setId(R.id.expenseList);
 
         // Get array of categories and set adapter
-        List<Expense> expenses = Expense.getAll(getActivity());
+        List<Expense> expenses = Expense.getAll(getActivity(), categoriesIds);
         expenseAdapter = new ExpenseAdapter(getActivity(), R.layout.listview_expense_row, expenses);
         expenseList.setAdapter(expenseAdapter);
 

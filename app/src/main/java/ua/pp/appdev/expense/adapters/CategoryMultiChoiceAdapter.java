@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
@@ -51,6 +52,7 @@ public class CategoryMultiChoiceAdapter extends ArrayAdapter<Category> {
         holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
         holder.name.setText(category.name);
         holder.expensesCount.setText("(123 expenses)");
+        row.setActivated(category.checked);
 
         return row;
     }
@@ -60,6 +62,16 @@ public class CategoryMultiChoiceAdapter extends ArrayAdapter<Category> {
         return categories;
     }
 
+    public String[] getCheckedCategoriesIds(){
+
+        List<String> list = new ArrayList<String>();
+        for (Category category : categories) {
+            if (category.checked) {
+                list.add(String.valueOf(category.id));
+            }
+        }
+        return list.toArray(new String[list.size()]);
+    }
 
     static class CategoryHolder {
         TextView color;
