@@ -1,11 +1,9 @@
 package ua.pp.appdev.expense.models;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,20 +18,27 @@ public class Currency implements Serializable {
     public static final String ISO_CODE_COLUMN = "iso_code";
     public static final String SHORT_NAME_COLUMN = "short_name";
     public static final String FULL_NAME_COLUMN = "full_name";
-    public static final String RATES_COLUMN = "rates";
+    public static final String RATE_COLUMN = "rate";
+    public static final String UPDATED_TIME = "updatedTime";
 
     public long id;
     public String isoCode;
     public String name;
     public String fullName;
-    public String rates; // TODO: consider storing rates
+    public float rate; // TODO: consider storing rate
+    public long updatedTime;
 
-    private Currency(long id, String isoCode, String name, String fullName, String rates) {
+    public Currency(String isoCode, String name, String fullName, float rate, long updatedTime) {
+        this(0, isoCode, name, fullName, rate, updatedTime);
+    }
+
+    private Currency(long id, String isoCode, String name, String fullName, float rate, long updatedTime) {
         this.id = id;
         this.isoCode = isoCode;
         this.name = name;
         this.fullName = fullName;
-        this.rates = rates;
+        this.rate = rate;
+        this.updatedTime = updatedTime;
     }
 
     public static List<Currency> getAll(Context context){
@@ -52,24 +57,49 @@ public class Currency implements Serializable {
             int isoCodeIndex = c.getColumnIndex(ISO_CODE_COLUMN);
             int nameColIndex = c.getColumnIndex(SHORT_NAME_COLUMN);
             int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
-            int ratesColIndex = c.getColumnIndex(RATES_COLUMN);
+            int rateColIndex = c.getColumnIndex(RATE_COLUMN);
+            int updatedTimeColIndex = c.getColumnIndex(UPDATED_TIME);
 
-            long id;
-            String isoCode, name, fullName, rates;
+            long id, updatedTime;
+            String isoCode, name, fullName;
+            float rate;
 
             do {
                 id = c.getLong(idColIndex);
                 isoCode = c.getString(isoCodeIndex);
                 name = c.getString(nameColIndex);
                 fullName = c.getString(fullNameColIndex);
-                rates = c.getString(ratesColIndex);
+                rate = c.getFloat(rateColIndex);
+                updatedTime = c.getLong(updatedTimeColIndex);
 
-                currenciesList.add(new Currency(id, isoCode, name, fullName, rates));
+                currenciesList.add(new Currency(id, isoCode, name, fullName, rate, updatedTime));
             } while (c.moveToNext());
         }
         db.close();
 
         return currenciesList;
+    }
+
+    public long save(Context context) {
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(ISO_CODE_COLUMN, isoCode);
+        cv.put(FULL_NAME_COLUMN, fullName);
+        cv.put(SHORT_NAME_COLUMN, name);
+        cv.put(RATE_COLUMN, rate);
+        cv.put(UPDATED_TIME, updatedTime);
+
+        long response;
+
+        if (id == 0) {
+            response = db.insert(TABLE, null, cv);
+        } else {
+            response = db.update(TABLE, cv, "id = ?", new String[] {Long.toString(id)});
+        }
+        db.close();
+        return response;
     }
 
     public static Currency getById(Context context, long id){
@@ -87,16 +117,55 @@ public class Currency implements Serializable {
             int isoCodeIndex = c.getColumnIndex(ISO_CODE_COLUMN);
             int nameColIndex = c.getColumnIndex(SHORT_NAME_COLUMN);
             int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
-            int ratesColIndex = c.getColumnIndex(RATES_COLUMN);
+            int rateColIndex = c.getColumnIndex(RATE_COLUMN);
+            int updatedTimeColIndex = c.getColumnIndex(UPDATED_TIME);
 
-            String isoCode, name, fullName, rates;
+            long updatedTime;
+            String isoCode, name, fullName;
+            float rate;
 
             isoCode = c.getString(isoCodeIndex);
             name = c.getString(nameColIndex);
             fullName = c.getString(fullNameColIndex);
-            rates = c.getString(ratesColIndex);
+            rate = c.getFloat(rateColIndex);
+            updatedTime = c.getLong(updatedTimeColIndex);
 
-            currency = new Currency(id, isoCode, name, fullName, rates);
+            currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
+        }
+        db.close();
+
+        return currency;
+    }
+
+    public static Currency getByIso(Context context, String isoCode){
+        Currency currency = null;
+
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor c = db.query(TABLE, null, ISO_CODE_COLUMN + " = ?", new String[] {isoCode}, null, null, null);
+
+        if (c.moveToFirst()) {
+
+            // Get column indexes
+            int idColIndex = c.getColumnIndex(ID_COLUMN);
+            int isoCodeIndex = c.getColumnIndex(ISO_CODE_COLUMN);
+            int nameColIndex = c.getColumnIndex(SHORT_NAME_COLUMN);
+            int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
+            int rateColIndex = c.getColumnIndex(RATE_COLUMN);
+            int updatedTimeColIndex = c.getColumnIndex(UPDATED_TIME);
+
+            long id, updatedTime;
+            String name, fullName;
+            float rate;
+
+            id = c.getLong(idColIndex);
+            name = c.getString(nameColIndex);
+            fullName = c.getString(fullNameColIndex);
+            rate = c.getFloat(rateColIndex);
+            updatedTime = c.getLong(updatedTimeColIndex);
+
+            currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
         }
         db.close();
 

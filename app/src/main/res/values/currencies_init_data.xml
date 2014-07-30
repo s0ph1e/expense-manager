@@ -16,8 +16,8 @@
         <item>Russian ruble</item>
     </array>
     <array name="currency_rates">
-        <item>{USD:1, UAH:11.64, RUB: 35.16}</item>
-        <item>{USD:0.09, UAH:1, RUB: 3.02}</item>
-        <item>{USD:0.03, UAH:0.33, RUB: 1}</item>
+        <item>1</item>
+        <item>11.95</item>
+        <item>35.72784</item>
     </array>
 </resources>

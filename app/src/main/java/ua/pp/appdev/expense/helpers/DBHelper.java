@@ -17,12 +17,13 @@ public class DBHelper extends SQLiteOpenHelper{
 
     final String LOG_TAG = "DBLogs";
 
-    public static final String DB_NAME = "expensesDB";
+    private static final String DB_NAME = "expensesDB";
+    private static final int DB_VERSION = 3;
 
     private Context context;
 
     public DBHelper(Context context){
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
     }
 
@@ -44,7 +45,8 @@ public class DBHelper extends SQLiteOpenHelper{
             + Currency.ISO_CODE_COLUMN + " varchar(3) not null, "
             + Currency.SHORT_NAME_COLUMN + " varchar(8) not null, "
             + Currency.FULL_NAME_COLUMN + " varchar(32) not null, "
-            + Currency.RATES_COLUMN + " text not null);"
+            + Currency.RATE_COLUMN + " float not null, "
+            + Currency.UPDATED_TIME + " timestamp default current_timestamp);"
         );
 
         // Create expenses table
@@ -62,7 +64,23 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        // Replace currency rate column
+        if (oldVersion < 3) {
+                db.execSQL("ALTER TABLE " + Currency.TABLE + " RENAME TO " + Currency.TABLE + "_old;");
+                db.execSQL("create table " + Currency.TABLE + "( "
+                                + Currency.ID_COLUMN + " integer primary key autoincrement, "
+                                + Currency.ISO_CODE_COLUMN + " varchar(3) not null, "
+                                + Currency.SHORT_NAME_COLUMN + " varchar(8) not null, "
+                                + Currency.FULL_NAME_COLUMN + " varchar(32) not null, "
+                                + Currency.RATE_COLUMN + " float not null);"
+                );
+
+                db.execSQL("insert into " + Currency.TABLE + " select * from " + Currency.TABLE + "_old;");
+                db.execSQL("alter table " + Currency.TABLE + " add column " + Currency.UPDATED_TIME + " timestamp default 0;");
+                db.execSQL("DROP TABLE IF EXISTS " +  Currency.TABLE + "_old;");
+        }
 
     }
 
@@ -124,7 +142,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 cv.put(Currency.ISO_CODE_COLUMN, currencyISOCodes.getString(i));
                 cv.put(Currency.SHORT_NAME_COLUMN, currencyNames.getString(i));
                 cv.put(Currency.FULL_NAME_COLUMN, currencyFullNames.getString(i));
-                cv.put(Currency.RATES_COLUMN, currencyRates.getString(i));
+                cv.put(Currency.RATE_COLUMN, currencyRates.getFloat(i, 0));
                 db.insert(Currency.TABLE, null, cv);
             }
         }

@@ -13,6 +13,7 @@ import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
+import ua.pp.appdev.expense.helpers.CurrencyUpdate;
 import ua.pp.appdev.expense.models.Expense;
 
 import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
@@ -35,6 +36,9 @@ public class StartActivity extends FragmentActivity
         if (drawerLayout != null) {
             navigationFragment.setUpDrawer(R.id.navigation_drawer, drawerLayout);
         }
+
+        // Update currencies rates
+        CurrencyUpdate.startUpdate(this);
     }
 
     @Override
