@@ -89,6 +89,14 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements EditableI
         super.remove((Category) item);
     }
 
+    @Override
+    public void add(Category object) {
+        Category cat = (Category) object;
+        if(getPosition(cat) < 0){
+            super.add(object);
+        }
+    }
+
     static class CategoryHolder {
         TextView color;
         RadioButton radio;
