@@ -82,7 +82,7 @@ public class Currency implements Serializable {
 
     public long save(Context context) {
         DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(ISO_CODE_COLUMN, isoCode);
