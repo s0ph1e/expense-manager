@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,13 @@ import ua.pp.appdev.expense.R;
 
 public class HistoryFragment extends Fragment implements CategoryMultiChoiceListFragment.OnCategorySelectedListener {
 
+    private static final String LOG_TAG = "HistoryFragment";
+
+    private static final String FILTER_BUNDLE = "filter";
+
     private OnFragmentInteractionListener mListener;
+
+    private String[] categoriesFilter = null;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -22,17 +29,23 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
+        Log.i(LOG_TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Bundle args = getArguments();
+        if(args != null){
+            categoriesFilter = args.getStringArray(FILTER_BUNDLE);
+        }
+
         View view =  inflater.inflate(R.layout.fragment_history, container, false);
         FragmentManager fragmentManager = getChildFragmentManager();
-        Fragment categories = new CategoryMultiChoiceListFragment();
-        Fragment expenses = new ExpenseListFragment();
+        Fragment categories = CategoryMultiChoiceListFragment.newInstance(categoriesFilter);
+        Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
         fragmentManager.beginTransaction()
                 .replace(R.id.historyCategoriesContainer, categories)
                 .replace(R.id.historyExpensesContainer, expenses)
@@ -60,7 +73,18 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
 
     @Override
     public void onCategorySelected(String[] ids) {
-        Fragment expenses = ExpenseListFragment.newInstance(ids);
+        categoriesFilter = ids;
+        reloadExpensesFragment();
+    }
+
+    @Override
+    public void onAllCategoriesSelected() {
+        categoriesFilter = null;
+        reloadExpensesFragment();
+    }
+
+    private void reloadExpensesFragment(){
+        Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
         FragmentManager fragmentManager = getChildFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.historyExpensesContainer, expenses)
@@ -68,12 +92,12 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     }
 
     @Override
-    public void onAllCategoriesSelected() {
-        Fragment expenses = new ExpenseListFragment();
-        FragmentManager fragmentManager = getChildFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.historyExpensesContainer, expenses)
-                .commit();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(categoriesFilter != null){
+            outState.putStringArray(FILTER_BUNDLE, categoriesFilter);
+        }
     }
 
     public interface OnFragmentInteractionListener {

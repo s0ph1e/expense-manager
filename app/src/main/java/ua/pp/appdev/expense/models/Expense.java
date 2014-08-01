@@ -63,7 +63,7 @@ public class Expense implements EditableItem{
 
         String where = "";
 
-        if(categories != null){
+        if(categories != null && categories.length > 0){
             where = " where " + CATEGORY_COLUMN  + " in ( " + Helpers.makePlaceholders(categories.length) + " )";
         }
 

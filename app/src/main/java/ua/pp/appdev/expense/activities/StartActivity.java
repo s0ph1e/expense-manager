@@ -1,11 +1,11 @@
 package ua.pp.appdev.expense.activities;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 
@@ -21,11 +21,13 @@ import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
 public class StartActivity extends FragmentActivity
         implements NavigationFragment.OnNavigationItemSelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
 
+    private static final String FRAGMENT_TAG = "currentFragment";
     private  NavigationFragment navigationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_start);
 
         navigationFragment = (NavigationFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -57,13 +59,16 @@ public class StartActivity extends FragmentActivity
                 fragment = new ExpenseListFragment();
                 break;
             case 1:
-                fragment = new HistoryFragment();
+                fragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+                if(fragment == null || !(fragment instanceof HistoryFragment)){
+                    fragment = new HistoryFragment();
+                }
                 break;
         }
 
         if(fragment != null) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
+                    .replace(R.id.container, fragment, FRAGMENT_TAG)
                     .commit();
         }
     }

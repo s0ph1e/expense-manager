@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,10 @@ import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class ExpenseListFragment extends Fragment {
 
+    private final String LOG_TAG = "ExpenseListFragment";
+
+    private static final String CATEGORIES_BUNDLE = "categories";
+
     private ExpenseAdapter expenseAdapter;
 
     private OnExpenseItemSelectedListener mListener;
@@ -36,7 +41,7 @@ public class ExpenseListFragment extends Fragment {
     public static ExpenseListFragment newInstance(String[] categories){
         ExpenseListFragment fragment = new ExpenseListFragment();
         Bundle args = new Bundle();
-        args.putStringArray("categories", categories);
+        args.putStringArray(CATEGORIES_BUNDLE, categories);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,15 +50,19 @@ public class ExpenseListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Bundle args = getArguments();
-        if (args != null) {
-            categoriesIds = args.getStringArray("categories");
-        }
+
+        Log.i(LOG_TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(LOG_TAG, "onCreateView");
+
+        Bundle args = getArguments();
+        if (args != null) {
+            categoriesIds = args.getStringArray(CATEGORIES_BUNDLE);
+        }
 
         final ListView expenseList = new EditableItemListView(getActivity());
         expenseList.setId(R.id.expenseList);

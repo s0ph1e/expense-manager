@@ -21,16 +21,24 @@ import ua.pp.appdev.expense.models.Expense;
 
 public class CategoryMultiChoiceListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
+    private static final String SELECTED_CATEGORIES_IDS = "selectedCategoriesIds";
+
     private CategoryMultiChoiceAdapter adapter;
 
     private OnCategorySelectedListener mListener;
 
     private View viewAllCategories;
 
-    private boolean isVisible = true;
-
     public CategoryMultiChoiceListFragment() {
         // Required empty public constructor
+    }
+
+    public static CategoryMultiChoiceListFragment newInstance(String[] categories){
+        CategoryMultiChoiceListFragment fragment = new CategoryMultiChoiceListFragment();
+        Bundle args = new Bundle();
+        args.putStringArray(SELECTED_CATEGORIES_IDS, categories);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -57,6 +65,12 @@ public class CategoryMultiChoiceListFragment extends Fragment implements Adapter
         List<Category> categories = Category.getAll(getActivity());
         adapter = new CategoryMultiChoiceAdapter(getActivity(), R.layout.listview_category_multichoice_row, categories);
         categoryList.setAdapter(adapter);
+
+        // Set selected categories
+        Bundle args = getArguments();
+        if (args != null) {
+            setSelectedCategories(args.getStringArray(SELECTED_CATEGORIES_IDS));
+        }
 
         categoryList.setOnItemClickListener(this);
 
@@ -88,26 +102,57 @@ public class CategoryMultiChoiceListFragment extends Fragment implements Adapter
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if(i == 0){     /** 'All categories' clicked  - deselect categories*/
+        changeItemState(i);
+    }
+
+
+    /**
+     * Change state of item at <tt>position</tt> position
+     * If 'All categories' is selected (position 0) - deselect all categories
+     * if some of categories is selected (position 1 - adapter.getCount()) - deselect 'All categories'
+     * if nothing is selected - set 'All categories' selected
+     * @param position
+     */
+    public void changeItemState(int position){
+        String[] checkedCategoriesIds = null;
+        if(position == 0){     /** 'All categories' clicked  - deselect categories*/
             for(int j = 1; j <= adapter.getCount(); j++){
                 adapter.getItem(j - 1).checked = false;
             }
-            adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
             viewAllCategories.setActivated(true);
-            mListener.onAllCategoriesSelected();
+            //mListener.onAllCategoriesSelected();
         } else {                        /** Category clicked - deselect 'All categories' */
-            Category category = adapter.getItem(i - 1);
+            Category category = adapter.getItem(position - 1);
             category.checked = !category.checked;   // Change category 'checked' status
 
             adapter.notifyDataSetChanged();         // Notify adapter to redraw listview
             viewAllCategories.setActivated(false);  // Deselect 'all categories'
 
-            String[] checkedCategoriesIds = adapter.getCheckedCategoriesIds();    // All selected ids
+            checkedCategoriesIds = adapter.getCheckedCategoriesIds();    // All selected ids
             if(checkedCategoriesIds.length == 0){   // If nothing selected - select 'All categories'
                 viewAllCategories.setActivated(true);
-                mListener.onAllCategoriesSelected();
-            } else {
-                mListener.onCategorySelected(checkedCategoriesIds);
+                //mListener.onAllCategoriesSelected();
+            }
+        }
+        adapter.notifyDataSetChanged();
+        mListener.onCategorySelected(checkedCategoriesIds);
+    }
+
+    /**
+     * Select categories
+     * @param ids - categories ids to select
+     */
+    public void setSelectedCategories(String[] ids){
+        if(ids == null){
+            changeItemState(0);
+        } else {
+            for (String id : ids) {
+                Category cat = Category.getById(getActivity(), Long.valueOf(id));
+                int position = adapter.getPosition(cat);
+                if(position > 0){
+                    changeItemState(position);
+                }
             }
         }
     }
