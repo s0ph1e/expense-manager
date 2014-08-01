@@ -58,9 +58,11 @@ public class CategoryMultiChoiceAdapter extends ArrayAdapter<Category> {
     }
 
     public int getPosition(Category category){
-        for(int i = 0; i < categories.size(); i++){
-            if(categories.get(i).id == category.id)
-                return i + 1;
+        if(category != null) {
+            for (int i = 0; i < categories.size(); i++) {
+                if (categories.get(i).id == category.id)
+                    return i + 1;
+            }
         }
         return -1;
     }
