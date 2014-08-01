@@ -65,7 +65,10 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements EditableI
     }
 
     public void setSelected(int position){
-        selected = (position < getCount()) ? position : selected;
+        if(position < getCount()){
+            selected = position;
+            getItem(position).checked = true;
+        }
         notifyDataSetChanged();
     }
 
