@@ -99,7 +99,7 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
         Bundle args = getArguments();
         if(args != null){
             Category cat = (Category) args.getSerializable(SELECTED_BUNDLE);
-            setCategory(cat);
+            setSelectedCategory(cat);
         }
 
         return categoryList;
@@ -146,7 +146,7 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
         }
     }
 
-    public boolean setCategory(Category category) {
+    public boolean setSelectedCategory(Category category) {
         int categoryPos = categoryListAdapter.getPosition(category);
         if (categoryPos >= 0 && categoryPos < categoryListAdapter.getCount()) {
             categoryListAdapter.setSelected(categoryPos);
@@ -155,6 +155,10 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
             return true;
         }
         return false;
+    }
+
+    public Category getSelectedCategory(){
+        return categoryListAdapter.getSelectedItem();
     }
 
     @Override

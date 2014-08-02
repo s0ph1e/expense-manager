@@ -173,7 +173,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
             errorMessage += "Currency is not set.\r\n";
         }
 
-        if(expense.category == null){
+        if(expense.category == null || categoryListFragment.getSelectedCategory() == null){
             errorMessage += "Category is not set.\r\n";
         }
 
@@ -214,7 +214,6 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_category, menu);
-        Log.e("SAVE_EXPENSE", "onCreateOptionsMenu");
         return true;
     }
 
@@ -254,7 +253,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         // Set category
         if (expense.category != null) {
-            categoryListFragment.setCategory(expense.category);
+            categoryListFragment.setSelectedCategory(expense.category);
         }
 
         // Set datetime

@@ -2,6 +2,7 @@ package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import ua.pp.appdev.expense.models.EditableItem;
 import ua.pp.appdev.expense.models.Expense;
 
 public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableItemAdapter{
+
+    private static final String LOG_TAG = "ExpenseAdapter";
 
     private Context context;
     int resource;
@@ -51,10 +54,16 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
         }
 
         Expense expense = expenses.get(position);
-        String firstLetter = String.valueOf(expense.category.name.charAt(0)).toUpperCase();
+        if(expense.category != null) {
+            String firstLetter = String.valueOf(expense.category.name.charAt(0)).toUpperCase();
 
-        holder.category.setBackgroundColor(expense.category.color);
-        holder.category.setText(firstLetter.isEmpty() ? "" : firstLetter);
+            holder.category.setBackgroundColor(expense.category.color);
+            holder.category.setText(firstLetter.isEmpty() ? "" : firstLetter);
+        } else {
+            holder.category.setBackgroundColor(context.getResources().getColor(android.R.color.black));
+            holder.category.setText("¿");
+            Log.wtf(LOG_TAG, "Null category!");
+        }
         holder.date.setText(Helpers.calendarToDateTimeString(context, expense.expenseDate));
         holder.sumInOriginalCurrency.setText(expense.getSumString());
         holder.sumInBaseCurrency.setText(expense.getSumString());
