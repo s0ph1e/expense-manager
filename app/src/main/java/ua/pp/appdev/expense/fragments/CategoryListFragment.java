@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +27,9 @@ import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class CategoryListFragment extends Fragment implements View.OnTouchListener {
 
-    private OnFragmentInteractionListener mListener;
+    private OnCategorySelectedListener mListener;
+
+    private static final String SELECTED_BUNDLE = "selected";
 
     private CategoryAdapter categoryListAdapter;
 
@@ -40,11 +43,14 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        Log.i("CAT", "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.i("CAT", "onCreateView");
 
         categoryList = new EditableItemListView(getActivity());
         categoryList.setOnTouchListener(this);
@@ -90,6 +96,12 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
             }
         });
 
+        Bundle args = getArguments();
+        if(args != null){
+            Category cat = (Category) args.getSerializable(SELECTED_BUNDLE);
+            setCategory(cat);
+        }
+
         return categoryList;
     }
 
@@ -97,10 +109,10 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnCategorySelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnCategorySelectedListener");
         }
     }
 
@@ -136,7 +148,7 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
 
     public boolean setCategory(Category category) {
         int categoryPos = categoryListAdapter.getPosition(category);
-        if (categoryPos >= 0) {
+        if (categoryPos >= 0 && categoryPos < categoryListAdapter.getCount()) {
             categoryListAdapter.setSelected(categoryPos);
             // This is required for scrolling to selected category is if is outside of the container
             categoryList.setSelection(categoryPos);
@@ -156,17 +168,14 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
         return false;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i("CAT", "onSaveInstanceState");
+        outState.putSerializable(SELECTED_BUNDLE, categoryListAdapter.getSelectedItem());
+    }
+
+    public interface OnCategorySelectedListener {
         public void onCategorySelected(Category category);
     }
 

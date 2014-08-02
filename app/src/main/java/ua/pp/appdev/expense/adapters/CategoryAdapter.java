@@ -72,10 +72,24 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements EditableI
         notifyDataSetChanged();
     }
 
+    public int getSelected(){
+        return selected;
+    }
+
+    public Category getSelectedItem(){
+        if(selected >= 0 && selected < categories.size()){
+            return categories.get(selected);
+        } else {
+            return null;
+        }
+    }
+
     public int getPosition(Category category){
-        for(int i = 0; i < categories.size(); i++){
-            if(categories.get(i).id == category.id)
-                return i;
+        if(category != null) {
+            for (int i = 0; i < categories.size(); i++) {
+                if (categories.get(i).id == category.id)
+                    return i;
+            }
         }
         return -1;
     }
@@ -86,14 +100,16 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements EditableI
 
     @Override
     public void remove(EditableItem item) {
-        super.remove((Category) item);
+        Category cat = (Category) item;
+        if(getPosition(cat) >= 0) {
+            super.remove((Category) item);
+        }
     }
 
     @Override
-    public void add(Category object) {
-        Category cat = (Category) object;
+    public void add(Category cat) {
         if(getPosition(cat) < 0){
-            super.add(object);
+            super.add(cat);
         }
     }
 

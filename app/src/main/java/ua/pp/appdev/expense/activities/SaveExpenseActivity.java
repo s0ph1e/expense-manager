@@ -29,9 +29,15 @@ import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Expense;
 
-public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnFragmentInteractionListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
+public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnCategorySelectedListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
 
     private final String LOG_TAG = "SaveExpenseActivity";
+
+    private static final String EXPENSE_BUNDLE = "currentExpense";
+
+    private final String CATEGORY_FRAGMENT_TAG = "categoriesFragment";
+    private final String DATEPICKER_FRAGMENT_TAG = "datePickerFragment";
+
     private Expense expense;
     private CategoryListFragment categoryListFragment;
 
@@ -46,9 +52,14 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "onCreate");
 
-        // Get expense
-        Intent callingIntent = getIntent();
-        expense = (Expense) callingIntent.getSerializableExtra("item");
+        // Trying to get expense from bundle
+        if(savedInstanceState != null){
+            expense = (Expense) savedInstanceState.getSerializable(EXPENSE_BUNDLE);
+        } else {
+            // If bundle is null, get in from intent
+            Intent callingIntent = getIntent();
+            expense = (Expense) callingIntent.getSerializableExtra("item");
+        }
 
         // If creating action - make new expense
         if(expense == null){
@@ -83,13 +94,20 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
 
         // Add category list
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("categories");
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
+        Fragment prev = getFragmentManager().findFragmentByTag(CATEGORY_FRAGMENT_TAG);
+//        if (prev != null) {
+//            fragmentTransaction.remove(prev);
+//        }
+//        categoryListFragment = new CategoryListFragment();
+//        fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment, "categories");
+//        fragmentTransaction.commit();
+        if(prev == null || !(prev instanceof CategoryListFragment)){
+            categoryListFragment = new CategoryListFragment();
+            fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment, CATEGORY_FRAGMENT_TAG);
+            fragmentTransaction.commit();
+        } else {
+            categoryListFragment = (CategoryListFragment) prev;
         }
-        categoryListFragment = new CategoryListFragment();
-        fragmentTransaction.add(R.id.categoryListContainer, categoryListFragment, "categories");
-        fragmentTransaction.commit();
 
         // Add datepicker dialog on btnPickDate click
         btnPickDate = (Button) findViewById(R.id.btnPickDate);
@@ -116,7 +134,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
                 // in a transaction.  We also want to remove any currently showing
                 // dialog, so make our own transaction and take care of that here.
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("datePicker");
+                Fragment prev = getFragmentManager().findFragmentByTag(DATEPICKER_FRAGMENT_TAG);
                 if (prev != null) {
                     ft.remove(prev);
                 }
@@ -125,7 +143,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
                 // Create and show the dialog.
                 DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
                 newFragment.setArguments(bundle);
-                newFragment.show(ft, "datePicker");
+                newFragment.show(ft, DATEPICKER_FRAGMENT_TAG);
             }
         });
     }
@@ -196,6 +214,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_category, menu);
+        Log.e("SAVE_EXPENSE", "onCreateOptionsMenu");
         return true;
     }
 
@@ -250,6 +269,13 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     @Override
     public void onCategorySelected(Category category) {
         expense.category = category;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable(EXPENSE_BUNDLE, expense);
     }
 
     @Override
