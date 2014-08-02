@@ -65,9 +65,17 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements EditableI
     }
 
     public void setSelected(int position){
-        if(position < getCount()){
+        int categoriesCount = getCount();
+        if(position < categoriesCount){
+            // Set category at position selected
             selected = position;
             getItem(position).checked = true;
+            // Set other categories deselected
+            for(int i = 0; i < categoriesCount; i++){
+                if(i != position){
+                    categories.get(i).checked = false;
+                }
+            }
         }
         notifyDataSetChanged();
     }
@@ -98,11 +106,25 @@ public class CategoryAdapter extends ArrayAdapter<Category> implements EditableI
         return categories;
     }
 
+    /**
+     * When removing item we have to take care about selected item. 3 events may happen:
+     * 1) removed item is above selected (selectedPos > removedPos): move selected top by 1 pos
+     * 2) removed is selected (selectedPos == removedPos): set selected = -1 (nothing selected)
+     * 3) removed item is below selected (selectedPos < removedPos): selected doesn't change
+     *
+     * @param item - EditableItem for removing
+     */
     @Override
     public void remove(EditableItem item) {
         Category cat = (Category) item;
-        if(getPosition(cat) >= 0) {
+        int removePosition = getPosition(cat);
+        if(removePosition >= 0) {
             super.remove((Category) item);
+            if(selected > removePosition){
+                --selected;
+            } else if(selected == removePosition){
+                selected = -1;
+            }
         }
     }
 
