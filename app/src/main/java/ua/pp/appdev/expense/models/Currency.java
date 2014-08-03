@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 import ua.pp.appdev.expense.helpers.DBHelper;
 
 public class Currency implements Serializable {
+
+    private static final String LOG_TAG = "Currency";
 
     public static final String TABLE = "currencies";
     public static final String ID_COLUMN = "id";
@@ -184,5 +187,16 @@ public class Currency implements Serializable {
         }
 
         return false;
+    }
+
+    public String getSymbol() {
+        String currencySymbol = name;
+        try {
+            currencySymbol = java.util.Currency.getInstance(isoCode).getSymbol();
+        } catch (IllegalArgumentException e){
+            Log.e(LOG_TAG, e.getMessage());
+        }
+        return currencySymbol;
+
     }
 }

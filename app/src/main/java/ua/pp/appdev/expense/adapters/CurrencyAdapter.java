@@ -46,7 +46,7 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
         }
 
         TextView text = (TextView)row.findViewById(R.id.txtCurrencyRow);
-        text.setText(currencies.get(position).name);
+        text.setText(currencies.get(position).getSymbol());
 
         return row;
     }
