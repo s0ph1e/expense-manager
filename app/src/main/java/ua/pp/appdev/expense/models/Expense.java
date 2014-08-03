@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -175,8 +176,18 @@ public class Expense implements EditableItem{
         return SaveExpenseActivity.class;
     }
 
-    public String getSumString(){
+    public String getOriginalSumString(){
         return Helpers.sumToString(sum, currency);
+    }
+
+    public BigDecimal convertSumToCurrency(Currency other){
+        return sum
+                .divide(new BigDecimal(currency.rate), 2, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(other.rate));
+    }
+
+    public String getConvertedSumString(Currency other){
+        return Helpers.sumToString(convertSumToCurrency(other), other);
     }
 
     public String toString(Context context) {
