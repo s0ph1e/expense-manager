@@ -2,10 +2,9 @@ package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,15 +18,21 @@ import ua.pp.appdev.expense.adapters.CategoryMultiChoiceAdapter;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Expense;
 
-public class CategoryMultiChoiceListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class CategoryMultiChoiceListFragment extends DialogFragment implements AdapterView.OnItemClickListener{
+
+    private static final String LOG_TAG = "CategoryMultiChoiceListFragment";
 
     private static final String SELECTED_CATEGORIES_IDS = "selectedCategoriesIds";
+
+    private static final String IS_DIALOG_MODE = "isDialogMode";
 
     private CategoryMultiChoiceAdapter adapter;
 
     private OnCategorySelectedListener mListener;
 
     private View viewAllCategories;
+
+    private boolean isDialogMode = false;
 
     public CategoryMultiChoiceListFragment() {
         // Required empty public constructor
@@ -38,18 +43,27 @@ public class CategoryMultiChoiceListFragment extends Fragment implements Adapter
         Bundle args = new Bundle();
         args.putStringArray(SELECTED_CATEGORIES_IDS, categories);
         fragment.setArguments(args);
+        Log.e(LOG_TAG, "newInstance");
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
+        Log.e(LOG_TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.e(LOG_TAG, "onCreateView");
+
+        // Very bad solution, but it allows to avoid twice created fragment on orientation change
+        // TODO: think of reworking this
+        if(savedInstanceState != null) {
+            return null;
+        }
 
         ListView categoryList = new ListView(getActivity());
 
@@ -70,17 +84,12 @@ public class CategoryMultiChoiceListFragment extends Fragment implements Adapter
         Bundle args = getArguments();
         if (args != null) {
             setSelectedCategories(args.getStringArray(SELECTED_CATEGORIES_IDS));
+            isDialogMode = args.getBoolean(IS_DIALOG_MODE);
         }
 
         categoryList.setOnItemClickListener(this);
 
         return categoryList;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.action_add_expense, menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -105,6 +114,10 @@ public class CategoryMultiChoiceListFragment extends Fragment implements Adapter
         changeItemState(i);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     /**
      * Change state of item at <tt>position</tt> position
@@ -159,6 +172,5 @@ public class CategoryMultiChoiceListFragment extends Fragment implements Adapter
 
     public interface OnCategorySelectedListener {
         public void onCategorySelected(String[] ids);
-        public void onAllCategoriesSelected();
     }
 }

@@ -6,49 +6,6 @@
     android:weightSum="1"
     tools:context=".fragments.HistoryFragment">
 
-    <LinearLayout
-        android:layout_width="@dimen/navigation_drawer_width"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:background="#ddd" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Filter"
-            android:gravity="center_horizontal"
-            android:id="@+id/txtHistoryFilter" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:textColor="@android:color/darker_gray"
-            android:text="Select single or multiple categories"
-            android:id="@+id/txtHistorySelectOneOrMultipleCategories" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
-            android:id="@+id/historyCategoriesContainer" >
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/darker_gray" />
-
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
