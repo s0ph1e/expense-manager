@@ -1,6 +1,7 @@
 package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,29 +46,38 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
         Bundle args = new Bundle();
         args.putStringArray(SELECTED_CATEGORIES_IDS, categories);
         fragment.setArguments(args);
-        Log.e(LOG_TAG, "newInstance");
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(LOG_TAG, "onCreate");
+        Log.i(LOG_TAG, "onCreate");
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.setTitle(R.string.filter);
+        return dialog;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.e(LOG_TAG, "onCreateView");
+        Log.i(LOG_TAG, "onCreateView");
 
         // Very bad solution, but it allows to avoid twice created fragment on orientation change
         // TODO: think of reworking this
         if(savedInstanceState != null) {
             return null;
         }
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_category_multichoice, null);
+        ListView categoryList = (ListView) layout.findViewById(R.id.listViewCategoriesMultiChoice);
 
-        ListView categoryList = new ListView(getActivity());
+        // Set scrollbar always shown
+        categoryList.setScrollbarFadingEnabled(false);
 
         // Set header
         viewAllCategories = inflater.inflate(R.layout.listview_category_multichoice_row, null);
@@ -74,6 +86,16 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
         viewAllCategories.findViewById(R.id.txtHistoryCategoryColor).setVisibility(View.GONE);
         viewAllCategories.setActivated(true);
         categoryList.addHeaderView(viewAllCategories);
+
+        Button filterBtn = (Button) layout.findViewById(R.id.btnHistoryCategoriesFilter);
+        if(filterBtn != null){
+            filterBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getDialog().dismiss();
+                }
+            });
+        }
 
         // Get array of categories and set adapter
         List<Category> categories = Category.getAll(getActivity());
@@ -89,7 +111,7 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
 
         categoryList.setOnItemClickListener(this);
 
-        return categoryList;
+        return layout;
     }
 
     @Override
@@ -112,11 +134,6 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         changeItemState(i);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     /**
