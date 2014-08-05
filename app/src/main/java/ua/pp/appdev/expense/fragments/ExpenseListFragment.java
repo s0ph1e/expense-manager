@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -75,6 +77,8 @@ public class ExpenseListFragment extends Fragment {
         expensesList = new EditableItemListView(getActivity());
         expensesList.setId(R.id.expenseList);
 
+        expensesList.setVisibility(View.GONE);
+
         // Load expenses
         new AsyncGetExpenses().execute();
 
@@ -131,6 +135,9 @@ public class ExpenseListFragment extends Fragment {
         protected void onPostExecute(List<Expense> expenses) {
             super.onPostExecute(expenses);
             expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, expenses));
+            Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
+            expensesList.setAnimation(animFadeIn);
+            expensesList.setVisibility(View.VISIBLE);
         }
     }
 }
