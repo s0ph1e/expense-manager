@@ -66,7 +66,6 @@ public class ExpenseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreateView");
-        super.onCreateView(inflater, container, savedInstanceState);
 
         context = getActivity();
 
