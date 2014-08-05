@@ -1,7 +1,9 @@
 package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -34,6 +36,10 @@ public class ExpenseListFragment extends Fragment {
 
     private String[] categoriesIds = null;
 
+    private ListView expensesList;
+
+    private Context context;
+
     public ExpenseListFragment() {
         // Required empty public constructor
     }
@@ -59,20 +65,20 @@ public class ExpenseListFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreateView");
 
+        context = getActivity();
+
         Bundle args = getArguments();
         if (args != null) {
             categoriesIds = args.getStringArray(CATEGORIES_BUNDLE);
         }
 
-        final ListView expenseList = new EditableItemListView(getActivity());
-        expenseList.setId(R.id.expenseList);
+        expensesList = new EditableItemListView(getActivity());
+        expensesList.setId(R.id.expenseList);
 
-        // Get array of categories and set adapter
-        List<Expense> expenses = Expense.getAll(getActivity(), categoriesIds);
-        expenseAdapter = new ExpenseAdapter(getActivity(), R.layout.listview_expense_row, expenses);
-        expenseList.setAdapter(expenseAdapter);
+        // Load expenses
+        new AsyncGetExpenses().execute();
 
-        expenseList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -83,7 +89,7 @@ public class ExpenseListFragment extends Fragment {
             }
         });
 
-        return expenseList;
+        return expensesList;
     }
 
     @Override
@@ -112,4 +118,20 @@ public class ExpenseListFragment extends Fragment {
     public interface OnExpenseItemSelectedListener {
         public void onExpenseItemSelected(Expense e);
     }
+
+
+    class AsyncGetExpenses extends AsyncTask<Void, Void, List<Expense>>{
+
+        @Override
+        protected List<Expense> doInBackground(Void... voids) {
+            return Expense.getAll(context, categoriesIds);
+        }
+
+        @Override
+        protected void onPostExecute(List<Expense> expenses) {
+            super.onPostExecute(expenses);
+            expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, expenses));
+        }
+    }
 }
+

@@ -150,7 +150,7 @@ public class EditableItemListView extends ListView {
     public int getRowHeight(){
         ListAdapter mAdapter = getAdapter();
 
-        if (mAdapter.getCount() > 0) {
+        if (mAdapter != null && mAdapter.getCount() > 0) {
             View mView = mAdapter.getView(0, null, this);
             mView.measure(
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
