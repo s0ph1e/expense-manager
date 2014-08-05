@@ -56,14 +56,15 @@ public class StartActivity extends FragmentActivity
     @Override
     public void onNavigationItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = null;
+        Fragment fragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
 
         switch (position){
             case 0:
-                fragment = new ExpenseListFragment();
+                if(fragment == null || !(fragment instanceof ExpenseListFragment)){
+                    fragment = new ExpenseListFragment();
+                }
                 break;
             case 1:
-                fragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
                 if(fragment == null || !(fragment instanceof HistoryFragment)){
                     fragment = new HistoryFragment();
                 }
