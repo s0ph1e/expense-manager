@@ -66,6 +66,7 @@ public class ExpenseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreateView");
+        super.onCreateView(inflater, container, savedInstanceState);
 
         context = getActivity();
 
@@ -80,7 +81,11 @@ public class ExpenseListFragment extends Fragment {
         expensesList.setVisibility(View.GONE);
 
         // Load expenses
-        new AsyncGetExpenses().execute();
+        //new AsyncGetExpenses().execute();
+        expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, Expense.getAll(context, categoriesIds)));
+        Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
+        expensesList.setAnimation(animFadeIn);
+        expensesList.setVisibility(View.VISIBLE);
 
         expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {

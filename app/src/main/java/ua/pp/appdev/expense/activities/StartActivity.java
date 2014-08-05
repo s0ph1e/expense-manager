@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.MenuItem;
 
 import ua.pp.appdev.expense.R;
@@ -38,7 +39,7 @@ public class StartActivity extends FragmentActivity
         }
 
         // Update currencies rates
-        CurrencyUpdate.startUpdate(this);
+        // CurrencyUpdate.startUpdate(this);
     }
 
     @Override
@@ -55,6 +56,7 @@ public class StartActivity extends FragmentActivity
 
     @Override
     public void onNavigationItemSelected(int position) {
+        Log.i("StartActivity", "onNavigationItemSelected");
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
 
