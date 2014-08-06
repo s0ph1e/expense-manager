@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
@@ -79,12 +80,15 @@ public class ExpenseListFragment extends Fragment {
 
         expensesList.setVisibility(View.GONE);
 
+        expenseAdapter = new ExpenseAdapter(context, R.layout.listview_expense_row, new ArrayList<Expense>());
+
         // Load expenses
-        //new AsyncGetExpenses().execute();
-        expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, Expense.getAll(context, categoriesIds)));
-        Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
-        expensesList.setAnimation(animFadeIn);
-        expensesList.setVisibility(View.VISIBLE);
+        expensesList.setAdapter(expenseAdapter);
+        new AsyncGetExpenses().execute();
+//        expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, Expense.getAll(context, categoriesIds)));
+//        Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
+//        expensesList.setAnimation(animFadeIn);
+//        expensesList.setVisibility(View.VISIBLE);
 
         expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -138,7 +142,9 @@ public class ExpenseListFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Expense> expenses) {
             super.onPostExecute(expenses);
-            expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, expenses));
+            //expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, expenses));
+            expenseAdapter.clear();
+            expenseAdapter.addAll(expenses);
             Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
             expensesList.setAnimation(animFadeIn);
             expensesList.setVisibility(View.VISIBLE);
