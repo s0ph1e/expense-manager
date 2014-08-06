@@ -25,6 +25,7 @@ import ua.pp.appdev.expense.adapters.ExpenseAdapter;
 import ua.pp.appdev.expense.helpers.EditableItemListView;
 import ua.pp.appdev.expense.models.Expense;
 
+import static android.widget.AbsListView.CHOICE_MODE_NONE;
 import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class ExpenseListFragment extends Fragment {
@@ -59,7 +60,6 @@ public class ExpenseListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         Log.i(LOG_TAG, "onCreate");
     }
 
@@ -85,10 +85,6 @@ public class ExpenseListFragment extends Fragment {
         // Load expenses
         expensesList.setAdapter(expenseAdapter);
         new AsyncGetExpenses().execute();
-//        expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, Expense.getAll(context, categoriesIds)));
-//        Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
-//        expensesList.setAnimation(animFadeIn);
-//        expensesList.setVisibility(View.VISIBLE);
 
         expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -122,15 +118,18 @@ public class ExpenseListFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onDestroy() {
+        super.onDestroy();
+        // TODO: think of moving this to other 'onMethod'
+        // This is here to remove CAB when fragment is removed from startActivity after navigation item click
+        // May be it can be placed somewhere else, but I leave it here because it works
+        expensesList.setChoiceMode(CHOICE_MODE_NONE);
+        Log.i(LOG_TAG, "onDestroy");
     }
 
     public interface OnExpenseItemSelectedListener {
         public void onExpenseItemSelected(Expense e);
     }
-
 
     class AsyncGetExpenses extends AsyncTask<Void, Void, List<Expense>>{
 
@@ -142,7 +141,6 @@ public class ExpenseListFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Expense> expenses) {
             super.onPostExecute(expenses);
-            //expensesList.setAdapter(new ExpenseAdapter(context, R.layout.listview_expense_row, expenses));
             expenseAdapter.clear();
             expenseAdapter.addAll(expenses);
             Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
