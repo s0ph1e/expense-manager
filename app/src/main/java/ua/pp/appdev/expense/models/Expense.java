@@ -12,8 +12,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ua.pp.appdev.expense.ExpenseApplication;
 import ua.pp.appdev.expense.activities.SaveExpenseActivity;
 import ua.pp.appdev.expense.helpers.DBHelper;
+import ua.pp.appdev.expense.helpers.DatabaseManager;
 import ua.pp.appdev.expense.helpers.Helpers;
 
 public class Expense implements EditableItem{
@@ -59,8 +61,7 @@ public class Expense implements EditableItem{
 
         List<Expense> expensesList = new ArrayList<Expense>();
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         String where = "";
 
@@ -107,7 +108,7 @@ public class Expense implements EditableItem{
 
             } while (c.moveToNext());
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
 
         return expensesList;
     }
@@ -119,8 +120,7 @@ public class Expense implements EditableItem{
     public static int getCountInCategory(Context context, long categoryId){
         int count = 0;
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         String whereClause = "";
         String[] whereArgs = null;
@@ -134,15 +134,13 @@ public class Expense implements EditableItem{
         if (c.moveToFirst()) {
             count = c.getInt(0);
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
 
         return count;
     }
 
-    public void save(Context context){
-
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+    public void save(Context context) {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         ContentValues cv = new ContentValues();
 
@@ -159,16 +157,15 @@ public class Expense implements EditableItem{
             db.update(TABLE, cv, ID_COLUMN + " = ?", new String[] {String.valueOf(id)});
         }
 
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void remove(Context context){
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
 
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     @Override

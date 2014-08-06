@@ -13,6 +13,7 @@ import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
+import ua.pp.appdev.expense.helpers.CurrencyUpdate;
 import ua.pp.appdev.expense.models.Expense;
 
 
@@ -35,7 +36,7 @@ public class StartActivity extends FragmentActivity
         }
 
         // Update currencies rates
-        // CurrencyUpdate.startUpdate(this);
+        CurrencyUpdate.startUpdate(this);
     }
 
     @Override

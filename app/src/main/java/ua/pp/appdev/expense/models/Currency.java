@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ua.pp.appdev.expense.ExpenseApplication;
 import ua.pp.appdev.expense.helpers.DBHelper;
+import ua.pp.appdev.expense.helpers.DatabaseManager;
 
 public class Currency implements Serializable {
 
@@ -48,8 +50,7 @@ public class Currency implements Serializable {
 
         List<Currency> currenciesList = new ArrayList<Currency>();
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         Cursor c = db.query(TABLE, null, null, null, null, null, null);
 
@@ -78,14 +79,13 @@ public class Currency implements Serializable {
                 currenciesList.add(new Currency(id, isoCode, name, fullName, rate, updatedTime));
             } while (c.moveToNext());
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
 
         return currenciesList;
     }
 
     public long save(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(ISO_CODE_COLUMN, isoCode);
@@ -101,15 +101,14 @@ public class Currency implements Serializable {
         } else {
             response = db.update(TABLE, cv, "id = ?", new String[] {Long.toString(id)});
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return response;
     }
 
     public static Currency getById(Context context, long id){
         Currency currency = null;
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         Cursor c = db.query(TABLE, null, ID_COLUMN + " = ?", new String[] {String.valueOf(id)}, null, null, null);
 
@@ -135,7 +134,7 @@ public class Currency implements Serializable {
 
             currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
 
         return currency;
     }
@@ -143,8 +142,7 @@ public class Currency implements Serializable {
     public static Currency getByIso(Context context, String isoCode){
         Currency currency = null;
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         Cursor c = db.query(TABLE, null, ISO_CODE_COLUMN + " = ?", new String[] {isoCode}, null, null, null);
 
@@ -170,7 +168,7 @@ public class Currency implements Serializable {
 
             currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
 
         return currency;
     }

@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import ua.pp.appdev.expense.ExpenseApplication;
 import ua.pp.appdev.expense.activities.SaveCategoryActivity;
 import ua.pp.appdev.expense.helpers.DBHelper;
+import ua.pp.appdev.expense.helpers.DatabaseManager;
 import ua.pp.appdev.expense.helpers.Helpers;
 
 /**
@@ -46,8 +48,7 @@ public class Category implements EditableItem {
 
         List<Category> catList = new ArrayList<Category>();
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         Cursor c = db.query(TABLE, null, null, null, null, null, null);
 
@@ -66,15 +67,14 @@ public class Category implements EditableItem {
 
             } while (c.moveToNext());
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
 
         return catList;
     }
 
     public void save(Context context){
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         ContentValues cv = new ContentValues();
 
@@ -87,19 +87,18 @@ public class Category implements EditableItem {
             db.update(TABLE, cv, ID_COLUMN + " = ?", new String[] {String.valueOf(id)});
         }
 
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     // TODO: suggest to move expenses to other category
     public void remove(Context context){
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         // Remove expenses in category
         db.delete(Expense.TABLE, Expense.CATEGORY_COLUMN + " = ?", new String[] { String.valueOf(id) });
         // Remove category
         db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
 
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     @Override
@@ -111,8 +110,7 @@ public class Category implements EditableItem {
 
         Category cat = null;
 
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         Cursor c = db.query(TABLE, null, ID_COLUMN + " = ?", new String[] {String.valueOf(id)}, null, null, null);
 
@@ -130,7 +128,7 @@ public class Category implements EditableItem {
             );
 
         }
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
 
         return cat;
     }
