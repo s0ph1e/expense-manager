@@ -10,22 +10,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.activities.SaveExpenseActivity;
+import ua.pp.appdev.expense.adapters.CurrencyAdapter;
 import ua.pp.appdev.expense.adapters.ExpenseAdapter;
 import ua.pp.appdev.expense.helpers.EditableItemListView;
+import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.Expense;
 
 import static android.widget.AbsListView.CHOICE_MODE_NONE;
+import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
 import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class ExpenseListFragment extends Fragment {
@@ -43,6 +49,8 @@ public class ExpenseListFragment extends Fragment {
     private ListView expensesList;
 
     private Context context;
+
+    private Currency baseCurrency;
 
     public ExpenseListFragment() {
         // Required empty public constructor
@@ -102,8 +110,40 @@ public class ExpenseListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.action_add_expense, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.expenses_fragment, menu);
+
+        // Add base currency spinner
+        MenuItem spinnerItem = menu.findItem(R.id.actionSelectCurrency);
+        View spinnerView = spinnerItem.getActionView();
+        if (spinnerView instanceof Spinner) {
+
+            Spinner spinnerCurrency = (Spinner) spinnerView;
+            final CurrencyAdapter adapter = new CurrencyAdapter(getActivity(), R.layout.spinner_currency_row_actionbar);
+            spinnerCurrency.setAdapter(adapter);
+            spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    baseCurrency = adapter.getItem(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                }
+            });
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.actionAddExpense:
+                Intent i = new Intent(getActivity(), SaveExpenseActivity.class);
+                startActivityForResult(i, ADD);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

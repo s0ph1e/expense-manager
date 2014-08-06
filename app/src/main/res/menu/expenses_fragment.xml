@@ -1,8 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".StartActivity" >
-    <item android:id="@+id/action_add_expense"
+    <item android:id="@+id/actionSelectCurrency"
+        android:showAsAction="always"
+        android:title="S"
+        android:orderInCategory="1"
+        android:actionViewClass="android.widget.Spinner" />
+    <item android:id="@+id/actionAddExpense"
         android:icon="@drawable/ic_action_new"
         android:title="@string/add_expense"
+        android:orderInCategory="2"
         android:showAsAction="withText|ifRoom" />
 </menu>
