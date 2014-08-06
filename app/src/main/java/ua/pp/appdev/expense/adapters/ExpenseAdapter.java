@@ -13,6 +13,7 @@ import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.Helpers;
+import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.EditableItem;
 import ua.pp.appdev.expense.models.Expense;
@@ -75,7 +76,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
         holder.sumInOriginalCurrency.setText(expense.getOriginalSumString());
 
         // Show converted sum
-        Currency base = Currency.getById(context, 1);
+        Currency base = SharedPreferencesHelper.getBaseCurrency(context);
         holder.sumInBaseCurrency.setText(expense.getConvertedSumString(base));
 
         // Show note if it exists

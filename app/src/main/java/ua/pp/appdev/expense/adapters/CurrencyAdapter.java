@@ -59,9 +59,11 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
     }
 
     public int getPosition(Currency currency) {
-        for(int i = 0; i < currencies.size(); i++){
-            if(currencies.get(i).equals(currency))
-                return i;
+        if(currency != null) {
+            for (int i = 0; i < currencies.size(); i++) {
+                if (currencies.get(i).equals(currency))
+                    return i;
+            }
         }
         return -1;
     }

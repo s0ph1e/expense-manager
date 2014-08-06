@@ -1,8 +1,8 @@
 package ua.pp.appdev.expense.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +27,7 @@ import ua.pp.appdev.expense.activities.SaveExpenseActivity;
 import ua.pp.appdev.expense.adapters.CurrencyAdapter;
 import ua.pp.appdev.expense.adapters.ExpenseAdapter;
 import ua.pp.appdev.expense.helpers.EditableItemListView;
+import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.Expense;
 
@@ -42,13 +43,13 @@ public class ExpenseListFragment extends Fragment {
 
     private ExpenseAdapter expenseAdapter;
 
-    private OnExpenseItemSelectedListener mListener;
-
     private String[] categoriesIds = null;
 
     private ListView expensesList;
 
     private Context context;
+
+    SharedPreferences sharedPrefs;
 
     private Currency baseCurrency;
 
@@ -75,8 +76,6 @@ public class ExpenseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreateView");
-
-        context = getActivity();
 
         Bundle args = getArguments();
         if (args != null) {
@@ -112,6 +111,7 @@ public class ExpenseListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.expenses_fragment, menu);
+        context = getActivity();
 
         // Add base currency spinner
         MenuItem spinnerItem = menu.findItem(R.id.actionSelectCurrency);
@@ -119,12 +119,22 @@ public class ExpenseListFragment extends Fragment {
         if (spinnerView instanceof Spinner) {
 
             Spinner spinnerCurrency = (Spinner) spinnerView;
-            final CurrencyAdapter adapter = new CurrencyAdapter(getActivity(), R.layout.spinner_currency_row_actionbar);
+            final CurrencyAdapter adapter = new CurrencyAdapter(context, R.layout.spinner_currency_row_actionbar);
             spinnerCurrency.setAdapter(adapter);
+
+            // Set base currency selected
+            Currency baseCurrency = SharedPreferencesHelper.getBaseCurrency(context);
+            int currencyPos = adapter.getPosition(baseCurrency);
+            if (currencyPos > 0) {
+                spinnerCurrency.setSelection(currencyPos);
+            }
+
             spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    baseCurrency = adapter.getItem(position);
+                    Currency selected = adapter.getItem(position);
+                    SharedPreferencesHelper.saveBaseCurrency(context, selected);
+                    expenseAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -144,17 +154,6 @@ public class ExpenseListFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-//        try {
-//            mListener = (OnExpenseItemSelectedListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnExpenseItemSelectedListener");
-//        }
     }
 
     @Override

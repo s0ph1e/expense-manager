@@ -26,7 +26,9 @@ import ua.pp.appdev.expense.fragments.CategoryListFragment;
 import ua.pp.appdev.expense.fragments.DatePickerDialogFragment;
 import ua.pp.appdev.expense.helpers.DecimalDigitsInputFilter;
 import ua.pp.appdev.expense.helpers.Helpers;
+import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Category;
+import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.Expense;
 
 public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnCategorySelectedListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
@@ -242,13 +244,15 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
             etSum.setText(String.valueOf(expense.sum));
         }
 
+        // Get currency: if expense has currency - use it, else - get it from shared prefs
+        Currency currentCurrency = (expense.currency == null)
+                ? SharedPreferencesHelper.getBaseCurrency(this)
+                : expense.currency;
         // Set currency
-        if (expense.currency != null) {
-            final CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
-            int currencyPos = adapter.getPosition(expense.currency);
-            if (currencyPos > 0) {
-                spinnerCurrency.setSelection(currencyPos);
-            }
+        final CurrencyAdapter adapter = new CurrencyAdapter(this, R.layout.spinner_currency_row);
+        int currencyPos = adapter.getPosition(currentCurrency);
+        if (currencyPos > 0) {
+            spinnerCurrency.setSelection(currencyPos);
         }
 
         // Set category
