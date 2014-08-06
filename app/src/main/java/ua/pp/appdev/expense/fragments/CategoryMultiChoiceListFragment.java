@@ -144,6 +144,10 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
      * @param position
      */
     public void changeItemState(int position){
+        changeItemState(position, true);
+    }
+
+    private void changeItemState(int position, boolean executeCallback){
         String[] checkedCategoriesIds = null;
         if(position == 0){     /** 'All categories' clicked  - deselect categories*/
             for(int j = 1; j <= adapter.getCount(); j++){
@@ -162,26 +166,28 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
             checkedCategoriesIds = adapter.getCheckedCategoriesIds();    // All selected ids
             if(checkedCategoriesIds.length == 0){   // If nothing selected - select 'All categories'
                 viewAllCategories.setActivated(true);
-                //mListener.onAllCategoriesSelected();
             }
         }
         adapter.notifyDataSetChanged();
-        mListener.onCategorySelected(checkedCategoriesIds);
+
+        if(executeCallback){
+            mListener.onCategorySelected(checkedCategoriesIds);
+        }
     }
 
     /**
      * Select categories
      * @param ids - categories ids to select
      */
-    public void setSelectedCategories(String[] ids){
+    private void setSelectedCategories(String[] ids){
         if(ids == null){
-            changeItemState(0);
+            changeItemState(0, false);
         } else {
             for (String id : ids) {
                 Category cat = Category.getById(getActivity(), Long.valueOf(id));
                 int position = adapter.getPosition(cat);
                 if(position > 0){
-                    changeItemState(position);
+                    changeItemState(position, false);
                 }
             }
         }

@@ -57,33 +57,29 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
         // If found - add fragment to container, if not - display categories in dialog
         View categoriesContainer = view.findViewById(R.id.historyCategoriesContainer);
 
+        boolean categoriesContainerExists = (categoriesContainer != null);
+
         // Set action bar if no category container
-        setHasOptionsMenu((categoriesContainer == null));
+        setHasOptionsMenu(!categoriesContainerExists);
+
+        FragmentManager fragmentManager = getChildFragmentManager();
+
+        if (categoriesContainerExists) {
+            Fragment categories = CategoryMultiChoiceListFragment.newInstance(categoriesFilter);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.historyCategoriesContainer, categories, CATEGORIES_FRAGMENT_TAG)
+                    .commit();
+        }
 
         // http://stackoverflow.com/questions/8474104/android-fragment-lifecycle-over-orientation-changes
         if (savedInstanceState == null) {
-            FragmentManager fragmentManager = getChildFragmentManager();
-
-            // Remove old categories fragment
-            Fragment prev = fragmentManager.findFragmentByTag(CATEGORIES_FRAGMENT_TAG);
-            if (prev != null) {
-                fragmentManager.beginTransaction()
-                        .remove(prev)
-                        .commit();
-            }
-
-            if (categoriesContainer != null) {
-                CategoryMultiChoiceListFragment categories = CategoryMultiChoiceListFragment.newInstance(categoriesFilter);
-                fragmentManager.beginTransaction()
-                        .add(R.id.historyCategoriesContainer, categories, CATEGORIES_FRAGMENT_TAG)
-                        .commit();
-            }
 
             Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
             fragmentManager.beginTransaction()
                     .replace(R.id.historyExpensesContainer, expenses, EXPENSES_FRAGMENT_TAG)
                     .commit();
         }
+
         return view;
     }
 
