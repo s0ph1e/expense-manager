@@ -14,7 +14,6 @@ import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
-import ua.pp.appdev.expense.helpers.CurrencyUpdate;
 import ua.pp.appdev.expense.models.Expense;
 
 import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
@@ -58,24 +57,25 @@ public class StartActivity extends FragmentActivity
     public void onNavigationItemSelected(int position) {
         Log.i("StartActivity", "onNavigationItemSelected");
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+        Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+        Fragment newFragment = null;
 
         switch (position){
             case 0:
-                if(fragment == null || !(fragment instanceof ExpenseListFragment)){
-                    fragment = new ExpenseListFragment();
+                if(!(oldFragment instanceof ExpenseListFragment)){
+                    newFragment = new ExpenseListFragment();
                 }
                 break;
             case 1:
-                if(fragment == null || !(fragment instanceof HistoryFragment)){
-                    fragment = new HistoryFragment();
+                if(!(oldFragment instanceof HistoryFragment)){
+                    newFragment = new HistoryFragment();
                 }
                 break;
         }
 
-        if(fragment != null) {
+        if(newFragment != null) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment, FRAGMENT_TAG)
+                    .replace(R.id.container, newFragment, FRAGMENT_TAG)
                     .commit();
         }
     }
