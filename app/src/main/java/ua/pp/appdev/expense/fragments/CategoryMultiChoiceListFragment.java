@@ -68,11 +68,6 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
 
         Log.i(LOG_TAG, "onCreateView");
 
-        // Very bad solution, but it allows to avoid twice created fragment on orientation change
-        // TODO: think of reworking this
-        if(savedInstanceState != null) {
-            return null;
-        }
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_category_multichoice, null);
         ListView categoryList = (ListView) layout.findViewById(R.id.listViewCategoriesMultiChoice);
 
