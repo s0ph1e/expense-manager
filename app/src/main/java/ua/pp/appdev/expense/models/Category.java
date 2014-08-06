@@ -67,6 +67,7 @@ public class Category implements EditableItem {
 
             } while (c.moveToNext());
         }
+        c.close();
         DatabaseManager.getInstance().closeDatabase();
 
         return catList;
@@ -128,6 +129,7 @@ public class Category implements EditableItem {
             );
 
         }
+        c.close();
         DatabaseManager.getInstance().closeDatabase();
 
         return cat;

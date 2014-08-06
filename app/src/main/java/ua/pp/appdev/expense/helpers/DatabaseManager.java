@@ -2,6 +2,7 @@ package ua.pp.appdev.expense.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by:
@@ -53,7 +54,11 @@ public class DatabaseManager {
         mOpenCounter--;
         if(mOpenCounter == 0) {
             // Closing database
-            mDatabase.close();
+            try {
+                mDatabase.close();
+            } catch (NullPointerException ex) {
+                Log.e("DatabaseManager", "Exception", ex);
+            }
 
         }
     }

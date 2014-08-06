@@ -134,6 +134,7 @@ public class Currency implements Serializable {
 
             currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
         }
+        c.close();
         DatabaseManager.getInstance().closeDatabase();
 
         return currency;
@@ -168,6 +169,7 @@ public class Currency implements Serializable {
 
             currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
         }
+        c.close();
         DatabaseManager.getInstance().closeDatabase();
 
         return currency;

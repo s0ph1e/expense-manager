@@ -108,6 +108,7 @@ public class Expense implements EditableItem{
 
             } while (c.moveToNext());
         }
+        c.close();
         DatabaseManager.getInstance().closeDatabase();
 
         return expensesList;
@@ -134,6 +135,7 @@ public class Expense implements EditableItem{
         if (c.moveToFirst()) {
             count = c.getInt(0);
         }
+        c.close();
         DatabaseManager.getInstance().closeDatabase();
 
         return count;

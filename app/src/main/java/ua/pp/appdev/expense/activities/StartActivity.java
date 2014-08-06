@@ -34,9 +34,6 @@ public class StartActivity extends FragmentActivity
         if (drawerLayout != null) {
             navigationFragment.setUpDrawer(R.id.navigation_drawer, drawerLayout);
         }
-
-        // Update currencies rates
-        CurrencyUpdate.startUpdate(this);
     }
 
     @Override
