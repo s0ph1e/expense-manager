@@ -68,6 +68,7 @@ public class ExpenseListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getActivity();
         setHasOptionsMenu(true);
         Log.i(LOG_TAG, "onCreate");
     }
@@ -76,7 +77,7 @@ public class ExpenseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreateView");
-
+        
         Bundle args = getArguments();
         if (args != null) {
             categoriesIds = args.getStringArray(CATEGORIES_BUNDLE);
@@ -111,7 +112,6 @@ public class ExpenseListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.expenses_fragment, menu);
-        context = getActivity();
 
         // Add base currency spinner
         MenuItem spinnerItem = menu.findItem(R.id.actionSelectCurrency);
