@@ -76,6 +76,8 @@ public class CategoryPieFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                // Fragment detached from activity
+                if (getActivity() == null) return;
                 updateText();
                 Animation animFadeIn = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_in);
                 descriptionView.setAnimation(animFadeIn);
