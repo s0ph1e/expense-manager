@@ -1,0 +1,125 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CategoryPieFragment"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <com.echo.holographlibrary.PieGraph
+        android:layout_gravity="center"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_margin="15dp"
+        android:id="@+id/categoriesPieGraph"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:id="@+id/overviewDescriptionLayout">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/txtCategoryColor"
+                android:textColor="#ffffffff"
+                android:background="#ccc"
+                android:textSize="30sp"
+                android:singleLine="true"
+                android:layout_margin="3dp"
+                android:gravity="center"
+                android:text="C"
+                android:layout_gravity="center"
+                android:clickable="false" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/txtCategoryName"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:text="Category"
+                android:textSize="18sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtCategoryPercent"
+                android:layout_gravity="center_vertical"
+                android:text="10%"
+                android:textSize="20sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/txtCategoryTotalSumLabel"
+                android:text="Sum"
+                android:clickable="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtCategoryTotalSum"
+                android:textSize="18sp"
+                android:text="$ 20"
+                android:clickable="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/txtCategoryTotalExpensesCountLabel"
+                android:text="Expenses count"
+                android:clickable="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtCategoryTotalExpensesCount"
+                android:textSize="18sp"
+                android:text="6"
+                android:clickable="false" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

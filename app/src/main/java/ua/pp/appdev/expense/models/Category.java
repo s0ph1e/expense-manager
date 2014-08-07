@@ -5,12 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import ua.pp.appdev.expense.ExpenseApplication;
 import ua.pp.appdev.expense.activities.SaveCategoryActivity;
-import ua.pp.appdev.expense.helpers.DBHelper;
 import ua.pp.appdev.expense.helpers.DatabaseManager;
 import ua.pp.appdev.expense.helpers.Helpers;
 
@@ -137,6 +136,15 @@ public class Category implements EditableItem {
 
     public int getExpensesCount(Context context){
         return Expense.getCountInCategory(context, id);
+    }
+
+    /**
+     * Get sum of expenses in category converted to base currency
+     * @param context
+     * @return
+     */
+    public BigDecimal getExpensesSum(Context context){
+        return Expense.getSumInCategories(context, new String[]{String.valueOf(id)});
     }
 
     @Override

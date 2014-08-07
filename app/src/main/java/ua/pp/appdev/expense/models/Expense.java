@@ -6,17 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ua.pp.appdev.expense.ExpenseApplication;
 import ua.pp.appdev.expense.activities.SaveExpenseActivity;
-import ua.pp.appdev.expense.helpers.DBHelper;
 import ua.pp.appdev.expense.helpers.DatabaseManager;
 import ua.pp.appdev.expense.helpers.Helpers;
+import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 
 public class Expense implements EditableItem{
 
@@ -139,6 +139,25 @@ public class Expense implements EditableItem{
         DatabaseManager.getInstance().closeDatabase();
 
         return count;
+    }
+
+    public static BigDecimal getSum(Context context){
+        return getSumInCategories(context, null);
+    }
+
+    public static BigDecimal getSumInCategories(Context context, String[] categoryIds){
+
+        BigDecimal sum = new BigDecimal(BigInteger.ZERO);
+
+        List<Expense> expenses = getAll(context, categoryIds);
+
+        Currency baseCurrency = SharedPreferencesHelper.getBaseCurrency(context);
+
+        for (Expense expense : expenses){
+            sum = sum.add(expense.convertSumToCurrency(baseCurrency));
+        }
+
+        return sum;
     }
 
     public void save(Context context) {

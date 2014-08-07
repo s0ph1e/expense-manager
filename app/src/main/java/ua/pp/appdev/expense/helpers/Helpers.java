@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.format.DateUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -75,6 +76,11 @@ public class Helpers {
         ((java.text.DecimalFormat) currencyFormat).setDecimalFormatSymbols(decimalFormatSymbols);
 
         return currencyFormat.format(sum);
+    }
+
+    public static String percentageString(BigDecimal part, BigDecimal whole){
+        BigDecimal result = part.multiply(new BigDecimal(100)).divide(whole, 2, RoundingMode.HALF_UP);
+        return result.toString() + "%";
     }
 
     public static String makePlaceholders(int len) {
