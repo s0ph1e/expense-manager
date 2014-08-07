@@ -19,6 +19,7 @@ import com.echo.holographlibrary.PieSlice;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
@@ -101,10 +102,12 @@ public class CategoryPieFragment extends Fragment {
         pieGraph.removeSlices();
         PieSlice slice;
 
-        for (Category cat : categories){
+        Iterator it = categories.iterator();
+        while(it.hasNext()) {
+            Category cat = (Category) it.next();
             float sum = cat.getExpensesSum(getActivity()).floatValue();
             if(sum <= 0){
-                categories.remove(cat);
+                it.remove();
                 continue;
             }
             slice = new PieSlice();
