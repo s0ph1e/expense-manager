@@ -2,6 +2,7 @@ package ua.pp.appdev.expense.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -39,7 +40,7 @@ public class StartActivity extends FragmentActivity
     @Override
     public void onNavigationItemSelected(int position) {
         Log.i("StartActivity", "onNavigationItemSelected");
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
         Fragment newFragment = null;
 
@@ -56,11 +57,23 @@ public class StartActivity extends FragmentActivity
                 break;
         }
 
-        if(newFragment != null) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, newFragment, FRAGMENT_TAG)
-                    .commit();
-        }
+        /*
+        Delayed fragment loading to prevent drawer's stuttering
+        http://stackoverflow.com/questions/18871725/how-to-create-smooth-navigation-drawer
+        */
+        final Fragment finalNewFragment = newFragment;
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(finalNewFragment != null) {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, finalNewFragment, FRAGMENT_TAG)
+                            .commit();
+                }
+            }
+        }, 150);
+
     }
 
     @Override
