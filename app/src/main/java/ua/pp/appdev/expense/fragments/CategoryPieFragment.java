@@ -79,13 +79,25 @@ public class CategoryPieFragment extends Fragment {
         categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                categoriesAdapter.setSelected(i);
+                setSelected(i);
             }
         });
 
         pieGraph = (PieGraph) view.findViewById(R.id.categoriesPieGraph);
         pieGraph.setInnerCircleRatio(150);
         pieGraph.setPadding(5);
+        pieGraph.setOnSliceClickedListener(new PieGraph.OnSliceClickedListener() {
+            @Override
+            public void onClick(int i) {
+                setSelected(i);
+            }
+        });
+        pieGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setSelected(-1);
+            }
+        });
         pieGraph.setAnimationListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
@@ -154,7 +166,7 @@ public class CategoryPieFragment extends Fragment {
         List<Category> newCategories = new ArrayList<Category>();
 
         // If none selected  - show all
-        if(!(selected > 0 && selected < categoriesAdapter.getCount())){
+        if(!(selected >= 0 && selected < categories.size())){
             TextView totalSumTxt = (TextView) allCategoriesView.findViewById(R.id.txtOverviewAllCategoriesSum);
             String totalSumString = Helpers.sumToString(Expense.getSum(getActivity()), SharedPreferencesHelper.getBaseCurrency(getActivity()));
             totalSumTxt.setText(totalSumString);
@@ -162,11 +174,21 @@ public class CategoryPieFragment extends Fragment {
             newCategories.addAll(categories);
         } else {    // show selected category
             allCategoriesView.setVisibility(View.GONE);
-            newCategories.add(categoriesAdapter.getItem(selected));
+            newCategories.add(categories.get(selected));
         }
 
         categoriesAdapter.clear();
         categoriesAdapter.addAll(newCategories);
+    }
+
+    public void setSelected(int position){
+        if(position == selected){
+            return;
+        } else if(position > 0 && position < categories.size()){
+            categoriesAdapter.setSelected(position);
+        }
+        selected = position;
+        updateList();
     }
 
     @Override
