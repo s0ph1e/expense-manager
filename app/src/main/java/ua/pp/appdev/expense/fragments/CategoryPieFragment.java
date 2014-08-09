@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.echo.holographlibrary.PieGraph;
@@ -32,9 +33,7 @@ public class CategoryPieFragment extends Fragment {
 
     private PieGraph pieGraph;
 
-    private View view;
-
-    private View descriptionView;
+    private ListView descriptionView;
 
     private List<Category> categories;
 
@@ -63,8 +62,8 @@ public class CategoryPieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
-        descriptionView = view.findViewById(R.id.overviewDescriptionLayout);
+        View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
+        descriptionView = (ListView) view.findViewById(R.id.listviewCategoryOverview);
         pieGraph = (PieGraph) view.findViewById(R.id.categoriesPieGraph);
         pieGraph.setInnerCircleRatio(150);
         pieGraph.setPadding(5);
@@ -76,7 +75,7 @@ public class CategoryPieFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                updateText();
+                //supdateList();
                 Animation animFadeIn = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_in);
                 descriptionView.setAnimation(animFadeIn);
                 descriptionView.setVisibility(View.VISIBLE);
@@ -130,7 +129,7 @@ public class CategoryPieFragment extends Fragment {
         pieGraph.animateToGoalValues();
     }
 
-    public void updateText(){
+    public void updateList(){
         Context context = getActivity();
         String categoryName = "", categoryFirstLetter = "", expensesSumString = "";
         BigDecimal totalSum = Expense.getSum(context);
@@ -152,9 +151,9 @@ public class CategoryPieFragment extends Fragment {
         }
         expensesSumString = Helpers.sumToString(expensesSum, SharedPreferencesHelper.getBaseCurrency(context));
 
-        ((TextView) view.findViewById(R.id.txtCategoryName)).setText(categoryName);
+        ((TextView) descriptionView.findViewById(R.id.txtCategoryName)).setText(categoryName);
 
-        TextView categoryIconView = (TextView) view.findViewById(R.id.txtCategoryColor);
+        TextView categoryIconView = (TextView) descriptionView.findViewById(R.id.txtCategoryColor);
         if(categoryFirstLetter.isEmpty()){
             categoryIconView.setVisibility(View.GONE);
         } else {
@@ -163,9 +162,9 @@ public class CategoryPieFragment extends Fragment {
             categoryIconView.setBackgroundColor(color);
         }
 
-        ((TextView) view.findViewById(R.id.txtCategoryPercent)).setText(Helpers.percentageString(expensesSum, totalSum));
-        ((TextView) view.findViewById(R.id.txtCategoryTotalExpensesCount)).setText(String.valueOf(expensesCount));
-        ((TextView) view.findViewById(R.id.txtCategoryTotalSum)).setText(expensesSumString);
+        //((TextView) descriptionView.findViewById(R.id.txtCategoryPercent)).setText(Helpers.percentageString(expensesSum, totalSum));
+        ((TextView) descriptionView.findViewById(R.id.txtCategoryTotalExpensesCount)).setText(String.valueOf(expensesCount));
+        ((TextView) descriptionView.findViewById(R.id.txtCategoryTotalSum)).setText(expensesSumString);
 
     }
 

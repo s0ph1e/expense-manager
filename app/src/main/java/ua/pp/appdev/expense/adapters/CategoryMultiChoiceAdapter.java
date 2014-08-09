@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,16 +13,10 @@ import java.util.List;
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Category;
 
-public class CategoryMultiChoiceAdapter extends ArrayAdapter<Category> {
-    private Context context;
-    int resource;
-    private List<Category> categories;
+public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
 
     public CategoryMultiChoiceAdapter(Context context, int resource, List<Category> categories) {
         super(context, resource, categories);
-        this.context = context;
-        this.resource = resource;
-        this.categories = categories;
     }
 
     @Override
@@ -55,20 +48,6 @@ public class CategoryMultiChoiceAdapter extends ArrayAdapter<Category> {
         row.setActivated(category.checked);
 
         return row;
-    }
-
-    public int getPosition(Category category){
-        if(category != null) {
-            for (int i = 0; i < categories.size(); i++) {
-                if (categories.get(i).id == category.id)
-                    return i + 1;
-            }
-        }
-        return -1;
-    }
-
-    public List<Category> getCategories(){
-        return categories;
     }
 
     public String[] getCheckedCategoriesIds(){

@@ -13,18 +13,12 @@ import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Category;
-import ua.pp.appdev.expense.models.EditableItem;
 
-/**
- * Created by:
- *    Ilya Antipenko <ilya@antipenko.pp.ua>
- *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
- */
-public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements EditableItemAdapter{
+public class CategoryOverviewAdapter extends CategoryBaseSingleChoiceAdapter{
 
-    private static final String LOG_TAG = "CategoryAdapter";
+    private static final String LOG_TAG = "CategoryOverviewAdapter";
 
-    public CategoryAdapter(Context context, int resource, List<Category> categories) {
+    public CategoryOverviewAdapter(Context context, int resource, List<Category> categories) {
         super(context, resource, categories);
     }
 
@@ -65,35 +59,6 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
         }
 
         return row;
-    }
-
-    /**
-     * When removing item we have to take care about selected item. 3 events may happen:
-     * 1) removed item is above selected (selectedPos > removedPos): move selected top by 1 pos
-     * 2) removed is selected (selectedPos == removedPos): set selected = -1 (nothing selected)
-     * 3) removed item is below selected (selectedPos < removedPos): selected doesn't change
-     *
-     * @param item - EditableItem for removing
-     */
-    @Override
-    public void remove(EditableItem item) {
-        Category cat = (Category) item;
-        int removePosition = getPosition(cat);
-        if(removePosition >= 0) {
-            super.remove((Category) item);
-            if(selected > removePosition){
-                --selected;
-            } else if(selected == removePosition){
-                selected = -1;
-            }
-        }
-    }
-
-    @Override
-    public void add(Category cat) {
-        if(getPosition(cat) < 0){
-            super.add(cat);
-        }
     }
 
     static class CategoryHolder {
