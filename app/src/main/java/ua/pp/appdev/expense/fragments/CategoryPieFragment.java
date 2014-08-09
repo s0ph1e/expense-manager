@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Expense;
 
 public class CategoryPieFragment extends Fragment {
+
+    private static final String LOG_TAG = "CategoryPieFragment";
 
     private PieGraph pieGraph;
 
@@ -59,13 +62,13 @@ public class CategoryPieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.i(LOG_TAG, "onCreateView");
 
         View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
         detailsView = view.findViewById(R.id.overviewDetails);
@@ -161,6 +164,7 @@ public class CategoryPieFragment extends Fragment {
     }
 
     public void updateList(){
+        if(categories == null) return;
 
         View allCategoriesView = detailsView.findViewById(R.id.overviewAllCategories);
         List<Category> newCategories = new ArrayList<Category>();
@@ -228,8 +232,8 @@ public class CategoryPieFragment extends Fragment {
         protected void onPostExecute(List<Category> categories1) {
             super.onPostExecute(categories);
             categories = categories1;
-            updateGraph();
             categoriesAdapter.addAll(categories);
+            updateGraph();
         }
     }
 }
