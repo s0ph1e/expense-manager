@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".fragments.CategoryPieFragment"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    tools:context=".fragments.CategoryPieFragment" >
 
     <com.echo.holographlibrary.PieGraph
         android:layout_gravity="center"
