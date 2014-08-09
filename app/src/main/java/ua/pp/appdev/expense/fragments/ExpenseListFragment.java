@@ -1,8 +1,8 @@
 package ua.pp.appdev.expense.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -49,9 +49,7 @@ public class ExpenseListFragment extends Fragment {
 
     private Context context;
 
-    SharedPreferences sharedPrefs;
-
-    private Currency baseCurrency;
+    private OnExpenseItemSelectedListener mListener;
 
     public ExpenseListFragment() {
         // Required empty public constructor
@@ -135,6 +133,7 @@ public class ExpenseListFragment extends Fragment {
                     Currency selected = adapter.getItem(position);
                     SharedPreferencesHelper.saveBaseCurrency(context, selected);
                     expenseAdapter.notifyDataSetChanged();
+                    mListener.onBaseCurrencySelected();
                 }
 
                 @Override
@@ -157,6 +156,23 @@ public class ExpenseListFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnExpenseItemSelectedListener) getParentFragment();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnExpenseItemSelectedListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         // TODO: think of moving this to other 'onMethod'
@@ -168,6 +184,7 @@ public class ExpenseListFragment extends Fragment {
 
     public interface OnExpenseItemSelectedListener {
         public void onExpenseItemSelected(Expense e);
+        public void onBaseCurrencySelected();
     }
 
     class AsyncGetExpenses extends AsyncTask<Void, Void, List<Expense>>{

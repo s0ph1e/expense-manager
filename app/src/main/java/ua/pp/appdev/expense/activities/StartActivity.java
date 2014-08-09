@@ -11,15 +11,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 
 import ua.pp.appdev.expense.R;
-import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
 import ua.pp.appdev.expense.fragments.OverviewFragment;
-import ua.pp.appdev.expense.models.Expense;
 
 
 public class StartActivity extends FragmentActivity
-        implements NavigationFragment.OnNavigationItemSelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
+        implements NavigationFragment.OnNavigationItemSelectedListener {
 
     private static final String FRAGMENT_TAG = "currentFragment";
     private  NavigationFragment navigationFragment;
@@ -73,11 +71,6 @@ public class StartActivity extends FragmentActivity
                 }
             }
         }, 150);
-
-    }
-
-    @Override
-    public void onExpenseItemSelected(Expense e) {
 
     }
 

@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.models.Expense;
 
-public class OverviewFragment extends Fragment implements CategoryPieFragment.OnCategoryPieSelectedListener {
+public class OverviewFragment extends Fragment implements CategoryPieFragment.OnCategoryPieSelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
 
     private static final String LOG_TAG = "OverviewFragment";
 
@@ -89,5 +90,17 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     public void onCategoryPieSelected(long categoryId) {
         categoriesFilter = categoryId > 0 ? new String[]{String.valueOf(categoryId)} : null;
         reloadExpensesFragment();
+    }
+
+    @Override
+    public void onExpenseItemSelected(Expense e) {
+
+    }
+
+    @Override
+    public void onBaseCurrencySelected() {
+        CategoryPieFragment categoriesFragment = (CategoryPieFragment)
+                getChildFragmentManager().findFragmentById(R.id.overviewCategoriesContainer);
+        categoriesFragment.updateList();
     }
 }

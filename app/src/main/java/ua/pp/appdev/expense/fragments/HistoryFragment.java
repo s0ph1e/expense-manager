@@ -14,8 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.models.Expense;
 
-public class HistoryFragment extends Fragment implements CategoryMultiChoiceListFragment.OnCategorySelectedListener {
+public class HistoryFragment extends Fragment implements CategoryMultiChoiceListFragment.OnCategorySelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
 
     private static final String LOG_TAG = "HistoryFragment";
 
@@ -148,6 +149,16 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.filter_categories, menu);
+    }
+
+    @Override
+    public void onExpenseItemSelected(Expense e) {
+
+    }
+
+    @Override
+    public void onBaseCurrencySelected() {
+
     }
 
     public interface OnFragmentInteractionListener {
