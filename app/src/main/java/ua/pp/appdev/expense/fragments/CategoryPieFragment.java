@@ -2,7 +2,6 @@ package ua.pp.appdev.expense.fragments;
 
 import android.animation.Animator;
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,18 +11,20 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.adapters.CategoryBaseSingleChoiceAdapter;
+import ua.pp.appdev.expense.adapters.CategoryOverviewAdapter;
 import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Category;
@@ -33,7 +34,11 @@ public class CategoryPieFragment extends Fragment {
 
     private PieGraph pieGraph;
 
-    private ListView descriptionView;
+    private ListView categoriesList;
+
+    private View detailsView;
+
+    private CategoryBaseSingleChoiceAdapter categoriesAdapter;
 
     private List<Category> categories;
 
@@ -63,7 +68,21 @@ public class CategoryPieFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
-        descriptionView = (ListView) view.findViewById(R.id.listviewCategoryOverview);
+        detailsView = view.findViewById(R.id.overviewDetails);
+        categoriesList = (ListView) view.findViewById(R.id.listviewCategoryOverview);
+        categoriesAdapter = new CategoryOverviewAdapter(
+                getActivity(),
+                R.layout.listview_category_overview_row,
+                new ArrayList<Category>());
+
+        categoriesList.setAdapter(categoriesAdapter);
+        categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                categoriesAdapter.setSelected(i);
+            }
+        });
+
         pieGraph = (PieGraph) view.findViewById(R.id.categoriesPieGraph);
         pieGraph.setInnerCircleRatio(150);
         pieGraph.setPadding(5);
@@ -75,10 +94,10 @@ public class CategoryPieFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                //supdateList();
+                updateList();
                 Animation animFadeIn = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_in);
-                descriptionView.setAnimation(animFadeIn);
-                descriptionView.setVisibility(View.VISIBLE);
+                detailsView.setAnimation(animFadeIn);
+                detailsView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -130,42 +149,24 @@ public class CategoryPieFragment extends Fragment {
     }
 
     public void updateList(){
-        Context context = getActivity();
-        String categoryName = "", categoryFirstLetter = "", expensesSumString = "";
-        BigDecimal totalSum = Expense.getSum(context);
-        BigDecimal expensesSum = new BigDecimal(BigInteger.ZERO);
-        Category cat;
-        int expensesCount = 0, color = 0;
 
-        if(selected < 0){
-            categoryName = getResources().getString(R.string.all_categories);
-            expensesCount = Expense.getCount(context);
-            expensesSum = Expense.getSum(context);
-        } else if(selected < categories.size()){
-            cat = categories.get(selected);
-            categoryName = cat.name;
-            categoryFirstLetter = String.valueOf(cat.name.charAt(0)).toUpperCase();
-            expensesCount = cat.getExpensesCount(context);
-            expensesSum = cat.getExpensesSum(context);
-            color = cat.color;
-        }
-        expensesSumString = Helpers.sumToString(expensesSum, SharedPreferencesHelper.getBaseCurrency(context));
+        View allCategoriesView = detailsView.findViewById(R.id.overviewAllCategories);
+        List<Category> newCategories = new ArrayList<Category>();
 
-        ((TextView) descriptionView.findViewById(R.id.txtCategoryName)).setText(categoryName);
-
-        TextView categoryIconView = (TextView) descriptionView.findViewById(R.id.txtCategoryColor);
-        if(categoryFirstLetter.isEmpty()){
-            categoryIconView.setVisibility(View.GONE);
-        } else {
-            categoryIconView.setVisibility(View.VISIBLE);
-            categoryIconView.setText(categoryFirstLetter);
-            categoryIconView.setBackgroundColor(color);
+        // If none selected  - show all
+        if(!(selected > 0 && selected < categoriesAdapter.getCount())){
+            TextView totalSumTxt = (TextView) allCategoriesView.findViewById(R.id.txtOverviewAllCategoriesSum);
+            String totalSumString = Helpers.sumToString(Expense.getSum(getActivity()), SharedPreferencesHelper.getBaseCurrency(getActivity()));
+            totalSumTxt.setText(totalSumString);
+            allCategoriesView.setVisibility(View.VISIBLE);
+            newCategories.addAll(categories);
+        } else {    // show selected category
+            allCategoriesView.setVisibility(View.GONE);
+            newCategories.add(categoriesAdapter.getItem(selected));
         }
 
-        //((TextView) descriptionView.findViewById(R.id.txtCategoryPercent)).setText(Helpers.percentageString(expensesSum, totalSum));
-        ((TextView) descriptionView.findViewById(R.id.txtCategoryTotalExpensesCount)).setText(String.valueOf(expensesCount));
-        ((TextView) descriptionView.findViewById(R.id.txtCategoryTotalSum)).setText(expensesSumString);
-
+        categoriesAdapter.clear();
+        categoriesAdapter.addAll(newCategories);
     }
 
     @Override
@@ -202,6 +203,7 @@ public class CategoryPieFragment extends Fragment {
             super.onPostExecute(categories);
             categories = categories1;
             updateGraph();
+            categoriesAdapter.addAll(categories);
         }
     }
 }

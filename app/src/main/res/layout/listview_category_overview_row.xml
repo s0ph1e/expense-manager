@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
+    android:padding="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,7 +10,7 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/txtCategoryColor"
+        android:id="@+id/txtOverviewCategoryColor"
         android:textColor="#ffffffff"
         android:background="#ccc"
         android:textSize="30sp"
@@ -31,18 +32,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtCategoryName"
+            android:id="@+id/txtOverviewCategoryName"
             android:layout_gravity="center_vertical"
             android:text="Category"
-            android:textSize="18sp"
-            android:textAllCaps="true"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:clickable="false" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtCategoryTotalExpensesCount"
+            android:id="@+id/txtOverviewCategoryExpensesCount"
             android:textColor="@android:color/darker_gray"
             android:text="6 expenses"
             android:clickable="false" />
@@ -54,9 +54,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:id="@+id/txtCategoryTotalSum"
+        android:id="@+id/txtOverviewCategorySum"
         android:text="$ 20"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textAllCaps="true"
         android:textStyle="bold"
         android:clickable="false" />

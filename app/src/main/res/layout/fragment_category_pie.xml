@@ -14,12 +14,52 @@
         android:layout_margin="15dp"
         android:id="@+id/categoriesPieGraph"/>
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listviewCategoryOverview"
-        android:choiceMode="singleChoice"
-        android:visibility="visible" />
+        android:id="@+id/overviewDetails"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        >
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:id="@+id/overviewAllCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_bottom">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="All categories"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/txtOverviewAllCategoriesSum"
+                android:textSize="16sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listviewCategoryOverview"
+            android:choiceMode="singleChoice" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

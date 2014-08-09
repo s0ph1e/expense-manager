@@ -6,12 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
+import ua.pp.appdev.expense.helpers.Helpers;
+import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Category;
 
 public class CategoryOverviewAdapter extends CategoryBaseSingleChoiceAdapter{
@@ -32,9 +34,10 @@ public class CategoryOverviewAdapter extends CategoryBaseSingleChoiceAdapter{
             row = inflater.inflate(this.resource, parent, false);
 
             holder = new CategoryHolder();
-            holder.name = (TextView)row.findViewById(R.id.txtCategoryName);
-            holder.color = (TextView)row.findViewById(R.id.txtCategoryColor);
-            holder.radio = (RadioButton)row.findViewById(R.id.categoryRadio);
+            holder.name = (TextView)row.findViewById(R.id.txtOverviewCategoryName);
+            holder.color = (TextView)row.findViewById(R.id.txtOverviewCategoryColor);
+            holder.sum = (TextView)row.findViewById(R.id.txtOverviewCategorySum);
+            holder.expensesCount = (TextView)row.findViewById(R.id.txtOverviewCategoryExpensesCount);
 
             row.setTag(holder);
         } else {
@@ -42,19 +45,23 @@ public class CategoryOverviewAdapter extends CategoryBaseSingleChoiceAdapter{
         }
 
         Category category = categories.get(position);
+
         if(category != null) {
+            int expensesCount = category.getExpensesCount(context);
+            BigDecimal expensesSum = category.getExpensesSum(context);
+
             String firstLetter = String.valueOf(category.name.charAt(0)).toUpperCase();
+            String expensesSumString = Helpers.sumToString(expensesSum, SharedPreferencesHelper.getBaseCurrency(context));
 
             holder.color.setBackgroundColor(category.color);
             holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
             holder.name.setText(category.name);
-            holder.radio.setTag(position);
-            holder.radio.setChecked((selected == -1) ? category.checked : position == selected);
+            holder.sum.setText(expensesSumString);
+            holder.expensesCount.setText("amount of expenses: " + expensesCount);
         } else {
             holder.color.setBackgroundColor(context.getResources().getColor(android.R.color.black));
             holder.color.setText("¿");
             holder.name.setText("NULL CATEGORY");
-            holder.radio.setChecked(false);
             Log.wtf(LOG_TAG, "Null category!");
         }
 
@@ -63,7 +70,8 @@ public class CategoryOverviewAdapter extends CategoryBaseSingleChoiceAdapter{
 
     static class CategoryHolder {
         TextView color;
-        RadioButton radio;
         TextView name;
+        TextView sum;
+        TextView expensesCount;
     }
 }
