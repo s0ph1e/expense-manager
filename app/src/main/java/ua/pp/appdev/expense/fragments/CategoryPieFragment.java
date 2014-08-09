@@ -49,6 +49,8 @@ public class CategoryPieFragment extends Fragment {
 
     private OnCategoryPieSelectedListener mListener;
 
+    AsyncGetCategories asyncGetCategories;
+
     public static CategoryPieFragment newInstance() {
         CategoryPieFragment fragment = new CategoryPieFragment();
         Bundle args = new Bundle();
@@ -126,9 +128,17 @@ public class CategoryPieFragment extends Fragment {
             }
         });
 
-        new AsyncGetCategories().execute();
+        asyncGetCategories = new AsyncGetCategories();
+        asyncGetCategories.execute();
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(LOG_TAG, "onDestroyView");
+        asyncGetCategories.cancel(true);
+        super.onDestroyView();
     }
 
     public void updateGraph(){
@@ -230,7 +240,6 @@ public class CategoryPieFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Category> categories1) {
-            super.onPostExecute(categories);
             categories = categories1;
             categoriesAdapter.addAll(categories);
             updateGraph();

@@ -33,21 +33,13 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "onCreate");
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        Log.i(LOG_TAG, "onCreateView");
         Bundle args = getArguments();
         if(args != null){
             categoriesFilter = args.getStringArray(FILTER_BUNDLE);
         } else if(savedInstanceState != null){
             categoriesFilter = savedInstanceState.getStringArray(FILTER_BUNDLE);
         }
-
-        View view =  inflater.inflate(R.layout.fragment_overview, container, false);
 
         // http://stackoverflow.com/questions/8474104/android-fragment-lifecycle-over-orientation-changes
         if (savedInstanceState == null) {
@@ -59,6 +51,14 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
                     .replace(R.id.overviewExpensesContainer, expenses, EXPENSES_FRAGMENT_TAG)
                     .commit();
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        Log.i(LOG_TAG, "onCreateView");
+        View view =  inflater.inflate(R.layout.fragment_overview, container, false);
 
         return view;
     }

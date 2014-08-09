@@ -73,6 +73,7 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
         }
 
         // http://stackoverflow.com/questions/8474104/android-fragment-lifecycle-over-orientation-changes
+        // TODO: Think about extract to onCreate
         if (savedInstanceState == null) {
 
             Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
