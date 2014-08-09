@@ -184,22 +184,26 @@ public class CategoryPieFragment extends Fragment {
     public void setSelected(int position){
         if(position == selected){
             return;
-        } else if(position > 0 && position < categories.size()){
+        } else if(position >= 0 && position < categories.size()){
             categoriesAdapter.setSelected(position);
+            mListener.onCategoryPieSelected(categories.get(position).id);
+        } else {
+            mListener.onCategoryPieSelected(0);
         }
         selected = position;
         updateList();
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnCategoryPieSelectedListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnCategoryPieSelectedListener");
-//        }
+        try {
+            mListener = (OnCategoryPieSelectedListener) getParentFragment();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnCategoryPieSelectedListener");
+        }
     }
 
     @Override
@@ -210,7 +214,7 @@ public class CategoryPieFragment extends Fragment {
     }
 
     public interface OnCategoryPieSelectedListener {
-        public void onCategoryPieSelected();
+        public void onCategoryPieSelected(long categoryId);
     }
 
     class AsyncGetCategories extends AsyncTask<Void, Void, List<Category>> {

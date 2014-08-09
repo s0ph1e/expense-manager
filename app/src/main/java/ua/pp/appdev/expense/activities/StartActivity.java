@@ -11,10 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 
 import ua.pp.appdev.expense.R;
-import ua.pp.appdev.expense.fragments.CategoryPieFragment;
 import ua.pp.appdev.expense.fragments.ExpenseListFragment;
 import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
+import ua.pp.appdev.expense.fragments.OverviewFragment;
 import ua.pp.appdev.expense.models.Expense;
 
 
@@ -46,8 +46,8 @@ public class StartActivity extends FragmentActivity
 
         switch (position){
             case 0:
-                if(!(oldFragment instanceof CategoryPieFragment)){
-                    newFragment = new CategoryPieFragment();
+                if(!(oldFragment instanceof OverviewFragment)){
+                    newFragment = new OverviewFragment();
                 }
                 break;
             case 1:
