@@ -51,6 +51,8 @@ public class ExpenseListFragment extends Fragment {
 
     private OnExpenseItemSelectedListener mListener;
 
+    private AsyncGetExpenses asyncGetExpenses;
+
     public ExpenseListFragment() {
         // Required empty public constructor
     }
@@ -90,7 +92,8 @@ public class ExpenseListFragment extends Fragment {
 
         // Load expenses
         expensesList.setAdapter(expenseAdapter);
-        new AsyncGetExpenses().execute();
+        asyncGetExpenses = new AsyncGetExpenses();
+        asyncGetExpenses.execute();
 
         expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -104,6 +107,13 @@ public class ExpenseListFragment extends Fragment {
         });
 
         return expensesList;
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(LOG_TAG, "onDestroyView");
+        asyncGetExpenses.cancel(true);
+        super.onDestroyView();
     }
 
     @Override
@@ -196,7 +206,6 @@ public class ExpenseListFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Expense> expenses) {
-            super.onPostExecute(expenses);
             expenseAdapter.clear();
             expenseAdapter.addAll(expenses);
             Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
