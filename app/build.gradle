@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        test {
+            keyAlias 'test_sign'
+            keyPassword 'appdev'
+            storeFile file('keystore/test_sign.jks')
+            storePassword 'appdev'
+        }
+    }
     compileSdkVersion 20
     buildToolsVersion '20.0.0'
     defaultConfig {
@@ -12,12 +20,34 @@ android {
     }
     buildTypes {
         release {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.test
+        }
+
+        debug {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-debug'
         }
     }
-    productFlavors {
-    }
+//    productFlavors {
+//                production {
+//            minSdkVersion 15
+//            applicationId 'ua.pp.appdev.expense'
+//            targetSdkVersion 20
+//            versionCode 1
+//            versionName '1.0'
+//        }
+//        dev {
+//            minSdkVersion 15
+//            applicationId 'ua.pp.appdev.expense.dev'
+//            targetSdkVersion 20
+//            versionCode 1
+//            versionName '1.0-dev'
+//        }
+//    }
 }
 
 repositories {
@@ -28,10 +58,8 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:20.+'
-
-    compile(name:'holocolorpicker-1.4.1-aivus', ext:'aar')
-    compile(name:'HoloGraphLibrary-1.0', ext:'aar')
+    compile(name: 'holocolorpicker-1.4.1-aivus', ext: 'aar')
+    compile(name: 'HoloGraphLibrary-1.0', ext: 'aar')
 }
