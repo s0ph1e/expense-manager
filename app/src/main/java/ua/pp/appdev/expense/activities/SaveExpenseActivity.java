@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,13 +29,11 @@ import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 public class SaveExpenseActivity extends EditActivity implements CategoryListFragment.OnCategorySelectedListener, DatePickerDialogFragment.OnDateTimeSelectedListener {
 
-    private final String LOG_TAG = "SaveExpenseActivity";
-
     private static final String EXPENSE_BUNDLE = "currentExpense";
-
     private final String CATEGORY_FRAGMENT_TAG = "categoriesFragment";
     private final String DATEPICKER_FRAGMENT_TAG = "datePickerFragment";
 
@@ -52,7 +49,7 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(LOG_TAG, "onCreate");
+        Log.i();
 
         // Trying to get expense from bundle
         if(savedInstanceState != null){

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +29,7 @@ import ua.pp.appdev.expense.helpers.EditableItemListView;
 import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 import static android.widget.AbsListView.CHOICE_MODE_NONE;
 import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
@@ -37,20 +37,12 @@ import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class ExpenseListFragment extends Fragment {
 
-    private final String LOG_TAG = "ExpenseListFragment";
-
     private static final String CATEGORIES_BUNDLE = "categories";
-
     private ExpenseAdapter expenseAdapter;
-
     private String[] categoriesIds = null;
-
     private ListView expensesList;
-
     private Context context;
-
     private OnExpenseItemSelectedListener mListener;
-
     private AsyncGetExpenses asyncGetExpenses;
 
     public ExpenseListFragment() {
@@ -70,13 +62,13 @@ public class ExpenseListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         setHasOptionsMenu(true);
-        Log.i(LOG_TAG, "onCreate");
+        Log.i();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i(LOG_TAG, "onCreateView");
+        Log.i();
         
         Bundle args = getArguments();
         if (args != null) {
@@ -111,7 +103,7 @@ public class ExpenseListFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.i(LOG_TAG, "onDestroyView");
+        Log.i();
         asyncGetExpenses.cancel(true);
         super.onDestroyView();
     }
@@ -189,7 +181,7 @@ public class ExpenseListFragment extends Fragment {
         // This is here to remove CAB when fragment is removed from startActivity after navigation item click
         // May be it can be placed somewhere else, but I leave it here because it works
         expensesList.setChoiceMode(CHOICE_MODE_NONE);
-        Log.i(LOG_TAG, "onDestroy");
+        Log.i();
     }
 
     public interface OnExpenseItemSelectedListener {

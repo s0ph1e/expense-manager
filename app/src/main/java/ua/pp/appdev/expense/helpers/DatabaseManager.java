@@ -2,7 +2,8 @@ package ua.pp.appdev.expense.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import ua.pp.appdev.expense.utils.Log;
 
 /**
  * Created by:
@@ -57,7 +58,7 @@ public class DatabaseManager {
             try {
                 mDatabase.close();
             } catch (NullPointerException ex) {
-                Log.e("DatabaseManager", "Exception", ex);
+                Log.e("Exception", ex);
             }
 
         }

@@ -2,7 +2,6 @@ package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,9 @@ import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.EditableItem;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableItemAdapter{
-
-    private static final String LOG_TAG = "ExpenseAdapter";
 
     private Context context;
     int resource;
@@ -66,7 +64,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
         } else {
             holder.category.setBackgroundColor(context.getResources().getColor(android.R.color.black));
             holder.category.setText("¿");
-            Log.wtf(LOG_TAG, "Null category!");
+            Log.wtf("Null category!");
         }
 
         // Show date of expense

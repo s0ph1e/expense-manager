@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -19,10 +18,10 @@ import java.util.GregorianCalendar;
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.helpers.ViewFlipper;
+import ua.pp.appdev.expense.utils.Log;
 
 public class DatePickerDialogFragment extends DialogFragment implements View.OnClickListener, DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener{
 
-    private final String LOG_TAG = "DatePickerDialogFragment";
     private final String PICKER_BUNDLE_STATE = "picker_bundle_state";
     private View view;
 
@@ -97,7 +96,7 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
         timePicker.setOnTimeChangedListener(this);
 
         // Restore saved state (if exist)
-        Log.i(LOG_TAG, "onCreateDialog");
+        Log.i();
         if (savedInstanceState != null) {
             View dateView = this.view.findViewById(R.id.layoutDatePicker);
             View timeView = this.view.findViewById(R.id.layoutTimePicker);
@@ -142,7 +141,7 @@ public class DatePickerDialogFragment extends DialogFragment implements View.OnC
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i(LOG_TAG, "onSaveInstanceState");
+        Log.i();
         View dateView = this.view.findViewById(R.id.layoutDatePicker);
 
         if (dateView.getVisibility() == View.VISIBLE) {

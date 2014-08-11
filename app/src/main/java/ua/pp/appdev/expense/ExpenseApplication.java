@@ -1,12 +1,11 @@
 package ua.pp.appdev.expense;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import ua.pp.appdev.expense.helpers.CurrencyUpdate;
 import ua.pp.appdev.expense.helpers.DBHelper;
 import ua.pp.appdev.expense.helpers.DatabaseManager;
+import ua.pp.appdev.expense.utils.Log;
 
 /**
  * Created by:
@@ -19,7 +18,7 @@ public class ExpenseApplication extends Application {
         DatabaseManager.initializeInstance(new DBHelper(this));
         // Update currencies rates
         CurrencyUpdate.startUpdate(this);
-        Log.i("ExpenseApplication", "onCreate");
+        Log.i();
         super.onCreate();
     }
 }

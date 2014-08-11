@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,22 +19,14 @@ import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.adapters.CategoryMultiChoiceAdapter;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryMultiChoiceListFragment extends DialogFragment implements AdapterView.OnItemClickListener{
 
-    private static final String LOG_TAG = "CategoryMultiChoiceListFragment";
-
     private static final String SELECTED_CATEGORIES_IDS = "selectedCategoriesIds";
-
-    private static final String IS_DIALOG_MODE = "isDialogMode";
-
     private CategoryMultiChoiceAdapter adapter;
-
     private OnCategorySelectedListener mListener;
-
     private View viewAllCategories;
-
-    private boolean isDialogMode = false;
 
     public CategoryMultiChoiceListFragment() {
         // Required empty public constructor
@@ -52,7 +43,7 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(LOG_TAG, "onCreate");
+        Log.i();
     }
 
     @Override
@@ -66,7 +57,7 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i(LOG_TAG, "onCreateView");
+        Log.i();
 
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_category_multichoice, null);
         ListView categoryList = (ListView) layout.findViewById(R.id.listViewCategoriesMultiChoice);
@@ -101,7 +92,6 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
         Bundle args = getArguments();
         if (args != null) {
             setSelectedCategories(args.getStringArray(SELECTED_CATEGORIES_IDS));
-            isDialogMode = args.getBoolean(IS_DIALOG_MODE);
         }
 
         categoryList.setOnItemClickListener(this);

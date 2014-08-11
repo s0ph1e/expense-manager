@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,19 +14,14 @@ import android.view.ViewGroup;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 public class HistoryFragment extends Fragment implements CategoryMultiChoiceListFragment.OnCategorySelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
 
-    private static final String LOG_TAG = "HistoryFragment";
-
     private static final String CATEGORIES_FRAGMENT_TAG = "categoriesFragment";
-
     private static final String EXPENSES_FRAGMENT_TAG = "expensesFragment";
-
     private static final String FILTER_BUNDLE = "filter";
-
     private OnFragmentInteractionListener mListener;
-
     private String[] categoriesFilter = null;
 
     public HistoryFragment() {
@@ -37,14 +31,14 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(LOG_TAG, "onCreate");
+        Log.i();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i(LOG_TAG, "onCreateView");
+        Log.i();
         Bundle args = getArguments();
         if(args != null){
             categoriesFilter = args.getStringArray(FILTER_BUNDLE);
@@ -119,7 +113,7 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i(LOG_TAG, "onSaveInstanceState");
+        Log.i();
         if(categoriesFilter != null){
             outState.putStringArray(FILTER_BUNDLE, categoriesFilter);
         }
@@ -128,7 +122,7 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Log.i(LOG_TAG, "onOptionsItemSelected");
+        Log.i();
         switch (id){
             case R.id.actionbar_filter:
                 FragmentManager fragmentManager = getChildFragmentManager();

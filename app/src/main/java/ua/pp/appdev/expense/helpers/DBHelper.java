@@ -6,16 +6,14 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Currency;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 public class DBHelper extends SQLiteOpenHelper{
-
-    final String LOG_TAG = "DBLogs";
 
     private static final String DB_NAME = "expensesDB";
     private static final int DB_VERSION = 3;
@@ -30,7 +28,7 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.d(LOG_TAG, "--- onCreate database ---");
+        Log.d();
 
         // Create categories table
         db.execSQL("create table " + Category.TABLE + "( "
@@ -86,7 +84,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     private void fillData(SQLiteDatabase db) {
 
-        Log.d(LOG_TAG, "--- fill database ---");
+        Log.d();
         fillCategoriesTable(db);
         fillCurrenciesTable(db);
 
@@ -103,10 +101,10 @@ public class DBHelper extends SQLiteOpenHelper{
 
         // Check categories xml, if it is good, add init data to db
         if(categoryNames.length() != categoryColors.length()){
-            Log.wtf(LOG_TAG, "Invalid categories xml file");
+            Log.wtf("Invalid categories xml file");
         } else {
 
-            Log.d(LOG_TAG, "--- fill categories table ---");
+            Log.d();
 
             for(int i = 0, len = categoryNames.length(); i < len; i++ ){
                 cv.put(Category.NAME_COLUMN, categoryNames.getString(i));
@@ -133,10 +131,10 @@ public class DBHelper extends SQLiteOpenHelper{
         if(currenciesCount != currencyNames.length()
                 || currenciesCount != currencyFullNames.length()
                 || currenciesCount != currencyRates.length()){
-            Log.wtf(LOG_TAG, "Invalid currencies xml file");
+            Log.wtf("Invalid currencies xml file");
         } else {
 
-            Log.d(LOG_TAG, "--- fill currencies table ---");
+            Log.d();
 
             for(int i = 0; i < currenciesCount; i++ ){
                 cv.put(Currency.ISO_CODE_COLUMN, currencyISOCodes.getString(i));

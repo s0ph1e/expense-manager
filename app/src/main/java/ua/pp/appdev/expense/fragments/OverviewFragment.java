@@ -3,7 +3,6 @@ package ua.pp.appdev.expense.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,17 +11,13 @@ import android.view.ViewGroup;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 public class OverviewFragment extends Fragment implements CategoryPieFragment.OnCategoryPieSelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
 
-    private static final String LOG_TAG = "OverviewFragment";
-
     private static final String CATEGORIES_FRAGMENT_TAG = "categoriesFragment";
-
     private static final String EXPENSES_FRAGMENT_TAG = "expensesFragment";
-
     private static final String FILTER_BUNDLE = "filter";
-
     private String[] categoriesFilter = null;
 
     public OverviewFragment() {
@@ -32,7 +27,7 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(LOG_TAG, "onCreate");
+        Log.i();
 
         Bundle args = getArguments();
         if(args != null){
@@ -57,7 +52,7 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i(LOG_TAG, "onCreateView");
+        Log.i();
         View view =  inflater.inflate(R.layout.fragment_overview, container, false);
 
         return view;
@@ -74,7 +69,7 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i(LOG_TAG, "onSaveInstanceState");
+        Log.i();
         if(categoriesFilter != null){
             outState.putStringArray(FILTER_BUNDLE, categoriesFilter);
         }

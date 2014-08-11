@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +29,9 @@ import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Expense;
+import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryPieFragment extends Fragment {
-
-    private static final String LOG_TAG = "CategoryPieFragment";
 
     private PieGraph pieGraph;
 
@@ -70,7 +68,7 @@ public class CategoryPieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i(LOG_TAG, "onCreateView");
+        Log.i();
 
         View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
         detailsView = view.findViewById(R.id.overviewDetails);
@@ -136,7 +134,7 @@ public class CategoryPieFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.i(LOG_TAG, "onDestroyView");
+        Log.i();
         asyncGetCategories.cancel(true);
         super.onDestroyView();
     }

@@ -2,7 +2,6 @@ package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,9 @@ import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Category;
+import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryOverviewAdapter extends CategoryBaseSingleChoiceAdapter{
-
-    private static final String LOG_TAG = "CategoryOverviewAdapter";
 
     public CategoryOverviewAdapter(Context context, int resource, List<Category> categories) {
         super(context, resource, categories);
@@ -62,7 +60,7 @@ public class CategoryOverviewAdapter extends CategoryBaseSingleChoiceAdapter{
             holder.color.setBackgroundColor(context.getResources().getColor(android.R.color.black));
             holder.color.setText("¿");
             holder.name.setText("NULL CATEGORY");
-            Log.wtf(LOG_TAG, "Null category!");
+            Log.wtf("Null category!");
         }
 
         return row;

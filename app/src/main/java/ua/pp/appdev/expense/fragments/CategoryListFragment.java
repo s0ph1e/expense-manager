@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +20,7 @@ import ua.pp.appdev.expense.activities.SaveCategoryActivity;
 import ua.pp.appdev.expense.adapters.CategoryAdapter;
 import ua.pp.appdev.expense.helpers.EditableItemListView;
 import ua.pp.appdev.expense.models.Category;
+import ua.pp.appdev.expense.utils.Log;
 
 import static ua.pp.appdev.expense.helpers.EditableItemListView.ADD;
 import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
@@ -43,14 +43,14 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        Log.i("CAT", "onCreate");
+        Log.i();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i("CAT", "onCreateView");
+        Log.i();
 
         categoryList = new EditableItemListView(getActivity());
         categoryList.setOnTouchListener(this);
@@ -175,7 +175,7 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i("CAT", "onSaveInstanceState");
+        Log.i();
         outState.putSerializable(SELECTED_BUNDLE, categoryListAdapter.getSelectedItem());
     }
 

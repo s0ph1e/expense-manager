@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -20,13 +19,12 @@ import android.widget.ListView;
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.adapters.EditableItemAdapter;
 import ua.pp.appdev.expense.models.EditableItem;
+import ua.pp.appdev.expense.utils.Log;
 
 /**
  * Magic for preventing listviews' resize when keyboard appears
  */
 public class EditableItemListView extends ListView {
-
-    private static final String LOG_TAG = "ItemListView";
 
     public static final int ADD = 0;
     public static final int EDIT = 1;
@@ -120,7 +118,7 @@ public class EditableItemListView extends ListView {
                 SparseBooleanArray checked = getCheckedItemPositions();
                 int checkedCount = getCheckedItemCount();
                 if (checkedCount != 1) {
-                    Log.wtf(LOG_TAG, "Got multiple items, but only one can be edited");
+                    Log.wtf("Got multiple items, but only one can be edited");
                 } else {
                     int key = checked.keyAt(0);
                     EditableItemAdapter adapter = getListViewAdapter();
@@ -138,7 +136,7 @@ public class EditableItemListView extends ListView {
         super.onSizeChanged(w, h, oldw, oldh);
         int minHeight = minRowsCount * getRowHeight();
         if(getHeight() < minHeight){
-            Log.e("", getHeight() + " < " + minHeight);
+            Log.e(getHeight() + " < " + minHeight);
             getLayoutParams().height = minHeight;
             requestLayout();
         } else {
@@ -170,7 +168,7 @@ public class EditableItemListView extends ListView {
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
             totalHeight += mView.getMeasuredHeight();
-            Log.w("HEIGHT" + i, String.valueOf(totalHeight));
+            Log.w(String.valueOf(totalHeight));
         }
         return  totalHeight;
     }

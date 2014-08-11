@@ -1,7 +1,6 @@
 package ua.pp.appdev.expense.helpers;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +16,7 @@ import java.util.Iterator;
 
 import ua.pp.appdev.expense.exceptions.CurrencyUpdateException;
 import ua.pp.appdev.expense.models.Currency;
+import ua.pp.appdev.expense.utils.Log;
 
 /**
  * Created by:
@@ -29,8 +29,6 @@ public class CurrencyUpdate {
     // TODO: Add support for few currency servers
     private final String CURRENCY_RATE_URL = "http://rates.expense.appdev.pp.ua/rates.json";
     private final String CURRENCY_NAME_URL = "http://openexchangerates.org/api/currencies.json";
-
-    private static final String LOG_TAG = "CurrencyUpdate";
 
     private Context context;
 
@@ -56,7 +54,7 @@ public class CurrencyUpdate {
                 try {
                     rate = Float.parseFloat(rateListObject.get(key).toString());
                 } catch (NumberFormatException ex) {
-                    Log.e(LOG_TAG, ex.toString());
+                    Log.e(ex.toString());
                     continue;
                 }
 
@@ -72,10 +70,10 @@ public class CurrencyUpdate {
                 currency.save(context);
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Exception", e);
+            Log.e("Exception", e);
             throw new CurrencyUpdateException(e);
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Exception", e);
+            Log.e("Exception", e);
             throw new CurrencyUpdateException(e);
         }
     }
@@ -84,14 +82,14 @@ public class CurrencyUpdate {
         Thread thread = new Thread(new Runnable(){
             @Override
             public void run() {
-                Log.i(LOG_TAG, "startUpdate - start");
+                Log.i("startUpdate - start");
                 try {
                     CurrencyUpdate updater = new CurrencyUpdate(context);
                     updater.update();
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, e.toString());
+                    Log.e(e.toString());
                 }
-                Log.i(LOG_TAG, "startUpdate - end");
+                Log.i("startUpdate - end");
             }
         });
         thread.start();

@@ -8,12 +8,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
 import ua.pp.appdev.expense.fragments.OverviewFragment;
+import ua.pp.appdev.expense.utils.Log;
 
 
 public class StartActivity extends FragmentActivity
@@ -37,7 +37,7 @@ public class StartActivity extends FragmentActivity
 
     @Override
     public void onNavigationItemSelected(int position) {
-        Log.i("StartActivity", "onNavigationItemSelected");
+        Log.i();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
         Fragment newFragment = null;
