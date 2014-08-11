@@ -32,22 +32,10 @@ android {
             versionNameSuffix '-debug'
         }
     }
-//    productFlavors {
-//                production {
-//            minSdkVersion 15
-//            applicationId 'ua.pp.appdev.expense'
-//            targetSdkVersion 20
-//            versionCode 1
-//            versionName '1.0'
-//        }
-//        dev {
-//            minSdkVersion 15
-//            applicationId 'ua.pp.appdev.expense.dev'
-//            targetSdkVersion 20
-//            versionCode 1
-//            versionName '1.0-dev'
-//        }
-//    }
+    productFlavors {
+        production
+        dev
+    }
 }
 
 repositories {
