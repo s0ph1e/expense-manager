@@ -50,6 +50,12 @@ public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
         return row;
     }
 
+    @Override
+    public int getPosition(Category category) {
+        // +1 because we have header 'all categories'
+        return super.getPosition(category) + 1;
+    }
+
     public String[] getCheckedCategoriesIds(){
 
         List<String> list = new ArrayList<String>();
