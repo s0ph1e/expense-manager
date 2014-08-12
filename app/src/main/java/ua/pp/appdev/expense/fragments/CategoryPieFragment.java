@@ -32,26 +32,21 @@ import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryPieFragment extends Fragment {
 
+    private static final String SELECTED_CATEGORY_POSITION = "selectedCategoryPosition";
+
     private PieGraph pieGraph;
-
-    private ListView categoriesList;
-
     private View detailsView;
-
     private CategoryBaseSingleChoiceAdapter categoriesAdapter;
-
     private List<Category> categories;
 
     private int selected = -1;
+    private boolean needGraphRedraw = true;
 
     private OnCategoryPieSelectedListener mListener;
-
     AsyncGetCategories asyncGetCategories;
 
     public static CategoryPieFragment newInstance() {
         CategoryPieFragment fragment = new CategoryPieFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
     public CategoryPieFragment() {
@@ -69,9 +64,14 @@ public class CategoryPieFragment extends Fragment {
 
         Log.i();
 
+        if(savedInstanceState != null){
+            selected = savedInstanceState.getInt(SELECTED_CATEGORY_POSITION);
+            needGraphRedraw = false;
+        }
+
         View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
         detailsView = view.findViewById(R.id.overviewDetails);
-        categoriesList = (ListView) view.findViewById(R.id.listviewCategoryOverview);
+        ListView categoriesList = (ListView) view.findViewById(R.id.listviewCategoryOverview);
         categoriesAdapter = new CategoryOverviewAdapter(
                 getActivity(),
                 R.layout.listview_category_overview_row,
@@ -150,7 +150,12 @@ public class CategoryPieFragment extends Fragment {
         pieGraph.addSlice(slice);
 
         pieGraph.setInterpolator(new AccelerateDecelerateInterpolator());
-        pieGraph.setDuration(1000);
+        if(needGraphRedraw) {
+            pieGraph.setDuration(1000);
+        } else {
+            pieGraph.setDuration(0);
+            needGraphRedraw = false;
+        }
         pieGraph.animateToGoalValues();
     }
 
@@ -198,6 +203,12 @@ public class CategoryPieFragment extends Fragment {
         selected = position;
         updateText();
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_CATEGORY_POSITION, selected);
     }
 
     @Override
