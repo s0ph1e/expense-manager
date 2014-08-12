@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/overviewDetails"
         android:orientation="vertical"
-        android:visibility="invisible"
-        >
+        android:visibility="gone">
 
         <LinearLayout
             android:orientation="horizontal"

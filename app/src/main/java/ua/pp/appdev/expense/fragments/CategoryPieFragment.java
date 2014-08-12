@@ -1,6 +1,5 @@
 package ua.pp.appdev.expense.fragments;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -101,30 +100,6 @@ public class CategoryPieFragment extends Fragment {
                 setSelected(-1);
             }
         });
-        pieGraph.setAnimationListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                updateList();
-                Animation animFadeIn = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_in);
-                detailsView.setAnimation(animFadeIn);
-                detailsView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
 
         asyncGetCategories = new AsyncGetCategories();
         asyncGetCategories.execute();
@@ -171,8 +146,11 @@ public class CategoryPieFragment extends Fragment {
         pieGraph.animateToGoalValues();
     }
 
-    public void updateList(){
-        if(categories == null) return;
+    public void updateText(){
+        if(categories == null || categories.size() == 0) {
+            detailsView.setVisibility(View.GONE);
+            return;
+        }
 
         View allCategoriesView = detailsView.findViewById(R.id.overviewAllCategories);
         List<Category> newCategories = new ArrayList<Category>();
@@ -191,6 +169,13 @@ public class CategoryPieFragment extends Fragment {
 
         categoriesAdapter.clear();
         categoriesAdapter.addAll(newCategories);
+
+        // Make details view visible if it is invisible
+        if(detailsView.getVisibility() != View.VISIBLE){
+            Animation animFadeIn = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_in);
+            detailsView.setAnimation(animFadeIn);
+            detailsView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setSelected(int position){
@@ -203,7 +188,7 @@ public class CategoryPieFragment extends Fragment {
             mListener.onCategoryPieSelected(0);
         }
         selected = position;
-        updateList();
+        updateText();
 
     }
 
@@ -241,6 +226,7 @@ public class CategoryPieFragment extends Fragment {
             categories = categories1;
             categoriesAdapter.addAll(categories);
             updateGraph();
+            updateText();
         }
     }
 }

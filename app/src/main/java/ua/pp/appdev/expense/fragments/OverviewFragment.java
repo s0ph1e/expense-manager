@@ -96,6 +96,6 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     public void onBaseCurrencySelected() {
         CategoryPieFragment categoriesFragment = (CategoryPieFragment)
                 getChildFragmentManager().findFragmentById(R.id.overviewCategoriesContainer);
-        categoriesFragment.updateList();
+        categoriesFragment.updateText();
     }
 }
