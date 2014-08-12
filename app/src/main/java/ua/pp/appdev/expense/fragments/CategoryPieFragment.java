@@ -117,7 +117,6 @@ public class CategoryPieFragment extends Fragment {
     public void updateGraph(){
         pieGraph.removeSlices();
         PieSlice slice;
-        int slicesCount = 0;
 
         Iterator it = categories.iterator();
         while(it.hasNext()) {
@@ -129,23 +128,16 @@ public class CategoryPieFragment extends Fragment {
             }
             slice = new PieSlice();
             slice.setColor(cat.color);
-            slice.setValue(1);
+            slice.setValue(0);
             slice.setGoalValue(sum);
             slice.setTitle(cat.name);
             pieGraph.addSlice(slice);
-            slicesCount++;
-        }
-
-        if(slicesCount > 1){
-            pieGraph.setPadding(2);
-        } else {
-            pieGraph.setPadding(0);
         }
 
         // Trick to correct animation - add slice with value of total expenses sum
         slice = new PieSlice();
         slice.setValue(Expense.getSum(getActivity()).floatValue());
-        slice.setGoalValue(0.0001f);
+        slice.setGoalValue(0);
         slice.setColor(getResources().getColor(android.R.color.transparent));
         pieGraph.addSlice(slice);
 
