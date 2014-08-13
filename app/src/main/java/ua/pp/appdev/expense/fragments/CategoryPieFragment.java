@@ -38,6 +38,7 @@ public class CategoryPieFragment extends Fragment {
     private View detailsView;
     private CategoryBaseSingleChoiceAdapter categoriesAdapter;
     private List<Category> categories;
+    private static List<Category> cachedCategories;
 
     private int selected = -1;
     private boolean needGraphRedraw = true;
@@ -72,6 +73,22 @@ public class CategoryPieFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
         detailsView = view.findViewById(R.id.overviewDetails);
         ListView categoriesList = (ListView) view.findViewById(R.id.listviewCategoryOverview);
+
+        if (cachedCategories!=null) {
+            categoriesAdapter = new CategoryOverviewAdapter(
+                    getActivity(),
+                    R.layout.listview_category_overview_row,
+                    cachedCategories);
+        } else {
+            categoriesAdapter = new CategoryOverviewAdapter(
+                    getActivity(),
+                    R.layout.listview_category_overview_row,
+                    new ArrayList<Category>());
+
+            asyncGetCategories = new AsyncGetCategories();
+            asyncGetCategories.execute();
+        }
+
         categoriesAdapter = new CategoryOverviewAdapter(
                 getActivity(),
                 R.layout.listview_category_overview_row,
@@ -101,8 +118,6 @@ public class CategoryPieFragment extends Fragment {
             }
         });
 
-        asyncGetCategories = new AsyncGetCategories();
-        asyncGetCategories.execute();
 
         return view;
     }
@@ -110,7 +125,8 @@ public class CategoryPieFragment extends Fragment {
     @Override
     public void onDestroyView() {
         Log.i();
-        asyncGetCategories.cancel(true);
+        if (asyncGetCategories != null)
+            asyncGetCategories.cancel(true);
         super.onDestroyView();
     }
 
@@ -234,6 +250,7 @@ public class CategoryPieFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Category> categories1) {
+            cachedCategories = categories1;
             categories = categories1;
             categoriesAdapter.addAll(categories);
             updateGraph();

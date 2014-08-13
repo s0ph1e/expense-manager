@@ -60,17 +60,22 @@ public class StartActivity extends FragmentActivity
         http://stackoverflow.com/questions/18871725/how-to-create-smooth-navigation-drawer
         */
         final Fragment finalNewFragment = newFragment;
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(finalNewFragment != null) {
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.container, finalNewFragment, FRAGMENT_TAG)
-                            .commit();
-                }
-            }
-        }, 150);
+        if(finalNewFragment != null) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, finalNewFragment, FRAGMENT_TAG)
+                    .commit();
+        }
+//        Handler h = new Handler();
+//        h.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(finalNewFragment != null) {
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.container, finalNewFragment, FRAGMENT_TAG)
+//                            .commit();
+//                }
+//            }
+//        }, 150);
 
     }
 

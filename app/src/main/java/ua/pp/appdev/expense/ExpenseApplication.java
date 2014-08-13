@@ -17,7 +17,7 @@ public class ExpenseApplication extends Application {
     public void onCreate() {
         DatabaseManager.initializeInstance(new DBHelper(this));
         // Update currencies rates
-        CurrencyUpdate.startUpdate(this);
+        // CurrencyUpdate.startUpdate(this);
         Log.i();
         super.onCreate();
     }

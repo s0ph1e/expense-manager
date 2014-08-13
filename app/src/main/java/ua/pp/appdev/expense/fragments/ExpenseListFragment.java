@@ -37,6 +37,7 @@ import static ua.pp.appdev.expense.helpers.EditableItemListView.EDIT;
 
 public class ExpenseListFragment extends Fragment {
 
+    private static List<Expense> cachedExpenses;
     private static final String CATEGORIES_BUNDLE = "categories";
     private ExpenseAdapter expenseAdapter;
     private String[] categoriesIds = null;
@@ -80,12 +81,19 @@ public class ExpenseListFragment extends Fragment {
 
         expensesList.setVisibility(View.GONE);
 
-        expenseAdapter = new ExpenseAdapter(context, R.layout.listview_expense_row, new ArrayList<Expense>());
+        if (cachedExpenses!=null) {
+            expenseAdapter = new ExpenseAdapter(context, R.layout.listview_expense_row, cachedExpenses);
+            //expenseAdapter.addAll(cachedExpenses);
+            expensesList.setVisibility(View.VISIBLE);
+        } else {
+            expenseAdapter = new ExpenseAdapter(context, R.layout.listview_expense_row, new ArrayList<Expense>());
+            asyncGetExpenses = new AsyncGetExpenses();
+            asyncGetExpenses.execute();
+        }
 
         // Load expenses
         expensesList.setAdapter(expenseAdapter);
-        asyncGetExpenses = new AsyncGetExpenses();
-        asyncGetExpenses.execute();
+
 
         expensesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -104,7 +112,8 @@ public class ExpenseListFragment extends Fragment {
     @Override
     public void onDestroyView() {
         Log.i();
-        asyncGetExpenses.cancel(true);
+        if (asyncGetExpenses != null)
+            asyncGetExpenses.cancel(true);
         super.onDestroyView();
     }
 
@@ -198,6 +207,7 @@ public class ExpenseListFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Expense> expenses) {
+            cachedExpenses = expenses;
             expenseAdapter.clear();
             expenseAdapter.addAll(expenses);
             Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
