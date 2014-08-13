@@ -53,10 +53,7 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
                              Bundle savedInstanceState) {
 
         Log.i();
-        View view =  inflater.inflate(R.layout.fragment_overview, container, false);
-        //View view = inflater.inflate(R.layout.image_no_expenses, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
     private void reloadExpensesFragment(){
