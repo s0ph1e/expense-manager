@@ -6,13 +6,14 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.fragments.HistoryFragment;
 import ua.pp.appdev.expense.fragments.NavigationFragment;
+import ua.pp.appdev.expense.fragments.NoExpensesFragment;
 import ua.pp.appdev.expense.fragments.OverviewFragment;
+import ua.pp.appdev.expense.models.Expense;
 import ua.pp.appdev.expense.utils.Log;
 
 
@@ -20,7 +21,14 @@ public class StartActivity extends FragmentActivity
         implements NavigationFragment.OnNavigationItemSelectedListener {
 
     private static final String FRAGMENT_TAG = "currentFragment";
+
+    private static final int NO_EXPENSES_FRAGMENT_POSITION = -1;
+    private static final int OVERVIEW_FRAGMENT_POSITION = 0;
+    private static final int HISTORY_FRAGMENT_POSITION = 1;
+
     private  NavigationFragment navigationFragment;
+
+    private int currentNavigationPosition = OVERVIEW_FRAGMENT_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +46,31 @@ public class StartActivity extends FragmentActivity
     @Override
     public void onNavigationItemSelected(int position) {
         Log.i();
+        currentNavigationPosition = position;
+        loadFragment(position);
+    }
+
+    public void loadFragment(int position){
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
         Fragment newFragment = null;
 
+        if((position == OVERVIEW_FRAGMENT_POSITION || position == HISTORY_FRAGMENT_POSITION)
+                && Expense.getCount(this) == 0){
+            position = NO_EXPENSES_FRAGMENT_POSITION;
+        }
         switch (position){
-            case 0:
+            case NO_EXPENSES_FRAGMENT_POSITION:
+                if(!(oldFragment instanceof NoExpensesFragment)){
+                    newFragment = new NoExpensesFragment();
+                }
+                break;
+            case OVERVIEW_FRAGMENT_POSITION:
                 if(!(oldFragment instanceof OverviewFragment)){
                     newFragment = new OverviewFragment();
                 }
                 break;
-            case 1:
+            case HISTORY_FRAGMENT_POSITION:
                 if(!(oldFragment instanceof HistoryFragment)){
                     newFragment = new HistoryFragment();
                 }
@@ -71,22 +93,22 @@ public class StartActivity extends FragmentActivity
                 }
             }
         }, 150);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(fragment != null){
-            /* Here we have to reload expenses fragment
-                because great changes may happen in save-expense-activity
-                for example - changing or removing categories which causes changing expenses list
-             */
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.detach(fragment);
-            ft.attach(fragment);
-            ft.commit();
-        }
+        loadFragment(currentNavigationPosition);
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+//        if(fragment != null){
+//            /* Here we have to reload expenses fragment
+//                because great changes may happen in save-expense-activity
+//                for example - changing or removing categories which causes changing expenses list
+//             */
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.detach(fragment);
+//            ft.attach(fragment);
+//            ft.commit();
+//        }
     }
 }

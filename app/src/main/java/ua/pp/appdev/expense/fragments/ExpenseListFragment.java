@@ -102,13 +102,6 @@ public class ExpenseListFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        Log.i();
-        asyncGetExpenses.cancel(true);
-        super.onDestroyView();
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.expenses_fragment, menu);
@@ -175,18 +168,20 @@ public class ExpenseListFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // TODO: think of moving this to other 'onMethod'
-        // This is here to remove CAB when fragment is removed from startActivity after navigation item click
-        // May be it can be placed somewhere else, but I leave it here because it works
-        expensesList.setChoiceMode(CHOICE_MODE_NONE);
+    public void onDestroyView() {
         Log.i();
+        asyncGetExpenses.cancel(true);
+        expensesList.setChoiceMode(CHOICE_MODE_NONE);
+        super.onDestroyView();
     }
 
     public interface OnExpenseItemSelectedListener {
         public void onExpenseItemSelected(Expense e);
         public void onBaseCurrencySelected();
+    }
+
+    public int getItemsCount(){
+        return expenseAdapter.getCount();
     }
 
     class AsyncGetExpenses extends AsyncTask<Void, Void, List<Expense>>{
