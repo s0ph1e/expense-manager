@@ -98,9 +98,7 @@ public class ExpenseListFragment extends Fragment {
         expensesList.setOnEditableListViewChangedListener(new EditableItemListView.OnEditableListViewChangedListener() {
             @Override
             public void onEditableListViewChanged() {
-                if(getItemsCount() == 0) {
-                    mListener.onExpenseListCleared();
-                }
+                mListener.onExpenseListChanged();
             }
         });
         return expensesList;
@@ -186,7 +184,7 @@ public class ExpenseListFragment extends Fragment {
 
     public interface OnExpenseListChangedListener {
         public void onBaseCurrencySelected();
-        public void onExpenseListCleared();
+        public void onExpenseListChanged();
     }
 
     class AsyncGetExpenses extends AsyncTask<Void, Void, List<Expense>>{

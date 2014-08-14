@@ -103,7 +103,7 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     }
 
     public interface OnHistoryFragmentChangedListener{
-        public void onHistoryFragmentCleared();
+        public void onHistoryFragmentChanged();
     }
 
     @Override
@@ -144,8 +144,8 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     }
 
     @Override
-    public void onExpenseListCleared() {
-        mListener.onHistoryFragmentCleared();
+    public void onExpenseListChanged() {
+        mListener.onHistoryFragmentChanged();
     }
 
     private void reloadExpensesFragment(){

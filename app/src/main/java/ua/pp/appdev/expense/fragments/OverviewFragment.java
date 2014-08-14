@@ -80,7 +80,7 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     }
 
     public interface OnOverviewFragmentChangedListener{
-        public void onOverviewFragmentCleared();
+        public void onOverviewFragmentChanged();
     }
 
     @Override
@@ -106,8 +106,8 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     }
 
     @Override
-    public void onExpenseListCleared() {
-        mListener.onOverviewFragmentCleared();
+    public void onExpenseListChanged() {
+        mListener.onOverviewFragmentChanged();
     }
 
     private void reloadExpensesFragment(){

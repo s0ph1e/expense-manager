@@ -109,12 +109,12 @@ public class StartActivity extends FragmentActivity
     }
 
     @Override
-    public void onHistoryFragmentCleared() {
+    public void onHistoryFragmentChanged() {
         loadFragment(currentNavigationPosition, true);
     }
 
     @Override
-    public void onOverviewFragmentCleared() {
+    public void onOverviewFragmentChanged() {
         loadFragment(currentNavigationPosition, true);
     }
 }
