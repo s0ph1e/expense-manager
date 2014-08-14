@@ -70,12 +70,17 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
         // Show date of expense
         holder.date.setText(Helpers.calendarToDateTimeString(context, expense.expenseDate));
 
-        // Show original sum
-        holder.sumInOriginalCurrency.setText(expense.getOriginalSumString());
-
-        // Show converted sum
+        // Get base currency
         Currency base = SharedPreferencesHelper.getBaseCurrency(context);
         holder.sumInBaseCurrency.setText(expense.getConvertedSumString(base));
+
+        // Show original sum if it is not in base currency
+        if(!base.equals(expense.currency)) {
+            holder.sumInOriginalCurrency.setVisibility(View.VISIBLE);
+            holder.sumInOriginalCurrency.setText(expense.getOriginalSumString());
+        } else {
+            holder.sumInOriginalCurrency.setVisibility(View.GONE);
+        }
 
         // Show note if it exists
         if (!expense.note.isEmpty() ) {

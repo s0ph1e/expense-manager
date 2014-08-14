@@ -53,13 +53,13 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|center_vertical"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtExpenseSumOriginal"
+            android:id="@+id/txtExpenseSumBase"
             android:singleLine="true"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -68,7 +68,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtExpenseSumBase"
+            android:id="@+id/txtExpenseSumOriginal"
             android:layout_marginTop="5dp"
             android:layout_gravity="right" />
     </LinearLayout>
