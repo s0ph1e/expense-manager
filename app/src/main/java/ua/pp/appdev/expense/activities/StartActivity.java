@@ -52,7 +52,7 @@ public class StartActivity extends FragmentActivity
 
     public void loadFragment(int position){
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+        final Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
         Fragment newFragment = null;
 
         if((position == OVERVIEW_FRAGMENT_POSITION || position == HISTORY_FRAGMENT_POSITION)
@@ -90,6 +90,11 @@ public class StartActivity extends FragmentActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, finalNewFragment, FRAGMENT_TAG)
                             .commit();
+                } else {
+                    fragmentManager.beginTransaction()
+                            .detach(oldFragment)
+                            .attach(oldFragment)
+                            .commit();
                 }
             }
         }, 150);
@@ -99,16 +104,5 @@ public class StartActivity extends FragmentActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         loadFragment(currentNavigationPosition);
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-//        if(fragment != null){
-//            /* Here we have to reload expenses fragment
-//                because great changes may happen in save-expense-activity
-//                for example - changing or removing categories which causes changing expenses list
-//             */
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.detach(fragment);
-//            ft.attach(fragment);
-//            ft.commit();
-//        }
     }
 }
