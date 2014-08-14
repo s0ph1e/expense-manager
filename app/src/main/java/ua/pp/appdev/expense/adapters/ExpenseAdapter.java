@@ -85,6 +85,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
         // Show note if it exists
         if (!expense.note.isEmpty() ) {
             holder.note.setText(expense.note);
+            holder.note.setVisibility(View.VISIBLE);
         } else {
             holder.note.setVisibility(View.GONE);
         }

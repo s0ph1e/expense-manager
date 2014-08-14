@@ -1,15 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="horizontal"
-android:weightSum="1"
-tools:context=".fragments.HistoryFragment">
-
-<FrameLayout
-    android:layout_width="0dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
+    android:orientation="vertical"
+    tools:context=".fragments.HistoryFragment">
+
+    <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:id="@+id/historyExpensesContainer" />
 
 </LinearLayout>
