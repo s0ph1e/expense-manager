@@ -47,10 +47,10 @@ public class StartActivity extends FragmentActivity
     public void onNavigationItemSelected(int position) {
         Log.i();
         currentNavigationPosition = position;
-        loadFragment(position);
+        loadFragment(position, false);
     }
 
-    public void loadFragment(int position){
+    public void loadFragment(int position, final boolean needRedrawOldFragment){
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
         Fragment newFragment = null;
@@ -90,7 +90,7 @@ public class StartActivity extends FragmentActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, finalNewFragment, FRAGMENT_TAG)
                             .commit();
-                } else {
+                } else if(needRedrawOldFragment) {
                     fragmentManager.beginTransaction()
                             .detach(oldFragment)
                             .attach(oldFragment)
@@ -103,6 +103,6 @@ public class StartActivity extends FragmentActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        loadFragment(currentNavigationPosition);
+        loadFragment(currentNavigationPosition, true);
     }
 }
