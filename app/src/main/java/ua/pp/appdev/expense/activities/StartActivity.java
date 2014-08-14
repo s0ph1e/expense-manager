@@ -18,7 +18,9 @@ import ua.pp.appdev.expense.utils.Log;
 
 
 public class StartActivity extends FragmentActivity
-        implements NavigationFragment.OnNavigationItemSelectedListener {
+        implements NavigationFragment.OnNavigationItemSelectedListener,
+        OverviewFragment.OnOverviewFragmentChangedListener,
+        HistoryFragment.OnHistoryFragmentChangedListener{
 
     private static final String FRAGMENT_TAG = "currentFragment";
 
@@ -103,6 +105,16 @@ public class StartActivity extends FragmentActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        loadFragment(currentNavigationPosition, true);
+    }
+
+    @Override
+    public void onHistoryFragmentCleared() {
+        loadFragment(currentNavigationPosition, true);
+    }
+
+    @Override
+    public void onOverviewFragmentCleared() {
         loadFragment(currentNavigationPosition, true);
     }
 }

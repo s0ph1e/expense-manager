@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -40,9 +39,9 @@ public class ExpenseListFragment extends Fragment {
     private static final String CATEGORIES_BUNDLE = "categories";
     private ExpenseAdapter expenseAdapter;
     private String[] categoriesIds = null;
-    private ListView expensesList;
+    private EditableItemListView expensesList;
     private Context context;
-    private OnExpenseItemSelectedListener mListener;
+    private OnExpenseListChangedListener mListener;
     private AsyncGetExpenses asyncGetExpenses;
 
     public ExpenseListFragment() {
@@ -69,7 +68,6 @@ public class ExpenseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i();
-        
         Bundle args = getArguments();
         if (args != null) {
             categoriesIds = args.getStringArray(CATEGORIES_BUNDLE);
@@ -77,7 +75,6 @@ public class ExpenseListFragment extends Fragment {
 
         expensesList = new EditableItemListView(getActivity());
         expensesList.setId(R.id.expenseList);
-
         expensesList.setVisibility(View.GONE);
 
         expenseAdapter = new ExpenseAdapter(context, R.layout.listview_expense_row, new ArrayList<Expense>());
@@ -98,6 +95,14 @@ public class ExpenseListFragment extends Fragment {
             }
         });
 
+        expensesList.setOnEditableListViewChangedListener(new EditableItemListView.OnEditableListViewChangedListener() {
+            @Override
+            public void onEditableListViewChanged() {
+                if(getItemsCount() == 0) {
+                    mListener.onExpenseListCleared();
+                }
+            }
+        });
         return expensesList;
     }
 
@@ -154,10 +159,10 @@ public class ExpenseListFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnExpenseItemSelectedListener) getParentFragment();
+            mListener = (OnExpenseListChangedListener) getParentFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnExpenseItemSelectedListener");
+                    + " must implement OnExpenseListChangedListener");
         }
     }
 
@@ -175,13 +180,13 @@ public class ExpenseListFragment extends Fragment {
         super.onDestroyView();
     }
 
-    public interface OnExpenseItemSelectedListener {
-        public void onExpenseItemSelected(Expense e);
-        public void onBaseCurrencySelected();
-    }
-
     public int getItemsCount(){
         return expenseAdapter.getCount();
+    }
+
+    public interface OnExpenseListChangedListener {
+        public void onBaseCurrencySelected();
+        public void onExpenseListCleared();
     }
 
     class AsyncGetExpenses extends AsyncTask<Void, Void, List<Expense>>{

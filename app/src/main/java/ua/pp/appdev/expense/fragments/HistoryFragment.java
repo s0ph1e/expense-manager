@@ -1,7 +1,6 @@
 package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,15 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.pp.appdev.expense.R;
-import ua.pp.appdev.expense.models.Expense;
 import ua.pp.appdev.expense.utils.Log;
 
-public class HistoryFragment extends Fragment implements CategoryMultiChoiceListFragment.OnCategorySelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
+public class HistoryFragment extends Fragment implements CategoryMultiChoiceListFragment.OnCategorySelectedListener, ExpenseListFragment.OnExpenseListChangedListener {
 
     private static final String CATEGORIES_FRAGMENT_TAG = "categoriesFragment";
     private static final String EXPENSES_FRAGMENT_TAG = "expensesFragment";
     private static final String FILTER_BUNDLE = "filter";
-    private OnFragmentInteractionListener mListener;
+    private OnHistoryFragmentChangedListener mListener;
     private String[] categoriesFilter = null;
 
     public HistoryFragment() {
@@ -37,7 +35,6 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Log.i();
         Bundle args = getArguments();
         if(args != null){
@@ -75,48 +72,13 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
                     .replace(R.id.historyExpensesContainer, expenses, EXPENSES_FRAGMENT_TAG)
                     .commit();
         }
-
         return view;
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onCategorySelected(String[] ids) {
-        categoriesFilter = ids;
-        reloadExpensesFragment();
-    }
-
-    private void reloadExpensesFragment(){
-        Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
-        FragmentManager fragmentManager = getChildFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.historyExpensesContainer, expenses)
-                .commit();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.i();
-        if(categoriesFilter != null){
-            outState.putStringArray(FILTER_BUNDLE, categoriesFilter);
-        }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.filter_categories, menu);
     }
 
     @Override
@@ -140,15 +102,40 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.filter_categories, menu);
+    public interface OnHistoryFragmentChangedListener{
+        public void onHistoryFragmentCleared();
     }
 
     @Override
-    public void onExpenseItemSelected(Expense e) {
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnHistoryFragmentChangedListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHistoryFragmentChangedListener");
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i();
+        if(categoriesFilter != null){
+            outState.putStringArray(FILTER_BUNDLE, categoriesFilter);
+        }
+    }
+
+    @Override
+    public void onCategorySelected(String[] ids) {
+        categoriesFilter = ids;
+        reloadExpensesFragment();
     }
 
     @Override
@@ -156,9 +143,16 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
 
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    @Override
+    public void onExpenseListCleared() {
+        mListener.onHistoryFragmentCleared();
     }
 
+    private void reloadExpensesFragment(){
+        Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
+        FragmentManager fragmentManager = getChildFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.historyExpensesContainer, expenses)
+                .commit();
+    }
 }

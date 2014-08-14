@@ -1,5 +1,6 @@
 package ua.pp.appdev.expense.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,15 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ua.pp.appdev.expense.R;
-import ua.pp.appdev.expense.models.Expense;
 import ua.pp.appdev.expense.utils.Log;
 
-public class OverviewFragment extends Fragment implements CategoryPieFragment.OnCategoryPieSelectedListener, ExpenseListFragment.OnExpenseItemSelectedListener {
+public class OverviewFragment extends Fragment implements CategoryPieFragment.OnCategoryPieSelectedListener, ExpenseListFragment.OnExpenseListChangedListener {
 
     private static final String CATEGORIES_FRAGMENT_TAG = "categoriesFragment";
     private static final String EXPENSES_FRAGMENT_TAG = "expensesFragment";
     private static final String FILTER_BUNDLE = "filter";
     private String[] categoriesFilter = null;
+    private OnOverviewFragmentChangedListener mListener;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -51,17 +52,35 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Log.i();
         return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
-    private void reloadExpensesFragment(){
-        Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
-        FragmentManager fragmentManager = getChildFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.overviewExpensesContainer, expenses)
-                .commit();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.filter_categories, menu);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnOverviewFragmentChangedListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnOverviewFragmentChangedListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnOverviewFragmentChangedListener{
+        public void onOverviewFragmentCleared();
     }
 
     @Override
@@ -74,20 +93,9 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.filter_categories, menu);
-    }
-
-    @Override
     public void onCategoryPieSelected(long categoryId) {
         categoriesFilter = categoryId > 0 ? new String[]{String.valueOf(categoryId)} : null;
         reloadExpensesFragment();
-    }
-
-    @Override
-    public void onExpenseItemSelected(Expense e) {
-
     }
 
     @Override
@@ -95,5 +103,18 @@ public class OverviewFragment extends Fragment implements CategoryPieFragment.On
         CategoryPieFragment categoriesFragment = (CategoryPieFragment)
                 getChildFragmentManager().findFragmentById(R.id.overviewCategoriesContainer);
         categoriesFragment.updateText();
+    }
+
+    @Override
+    public void onExpenseListCleared() {
+        mListener.onOverviewFragmentCleared();
+    }
+
+    private void reloadExpensesFragment(){
+        Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
+        FragmentManager fragmentManager = getChildFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.overviewExpensesContainer, expenses)
+                .commit();
     }
 }

@@ -28,9 +28,8 @@ public class EditableItemListView extends ListView {
 
     public static final int ADD = 0;
     public static final int EDIT = 1;
-
     private int minRowsCount = 2;
-
+    private OnEditableListViewChangedListener mListener;
     protected EditableItemAdapter adapter;
 
     public EditableItemListView(final Context context) {
@@ -112,6 +111,9 @@ public class EditableItemListView extends ListView {
                         adapter.remove(item);
                     }
                 }
+                if(mListener != null) {
+                    mListener.onEditableListViewChanged();
+                }
             }
 
             public void editSelected() {
@@ -186,5 +188,13 @@ public class EditableItemListView extends ListView {
             adapter = ((HeaderViewListAdapter) getAdapter()).getWrappedAdapter();
         }
         return (EditableItemAdapter) adapter;
+    }
+
+    public interface OnEditableListViewChangedListener{
+        public void onEditableListViewChanged();
+    }
+
+    public void setOnEditableListViewChangedListener(OnEditableListViewChangedListener eventListener) {
+        mListener = eventListener;
     }
 }
