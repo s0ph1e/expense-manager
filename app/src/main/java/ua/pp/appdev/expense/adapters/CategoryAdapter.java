@@ -2,17 +2,21 @@ package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.EditableItem;
+import ua.pp.appdev.expense.models.Expense;
 import ua.pp.appdev.expense.utils.Log;
 
 /**
@@ -65,6 +69,43 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
         return row;
     }
 
+    @Override
+    public int getRemoveDialogTitle() {
+        return R.string.remove_categories;
+    }
+
+    @Override
+    public View getRemoveDialogView(SparseBooleanArray checked) {
+        // Inflate view
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.view_dialog_remove_categories, null, false);
+
+        // Get all checked categories
+        List<Category> selectedCategories = new ArrayList<Category>();
+        for (int i = 0, len = getCount(); i < len; i++) {
+            if (checked.get(i)) {
+                Category cat = getItem(i);
+                if(cat != null){
+                    selectedCategories.add(cat);
+                }
+            }
+        }
+        // Check expenses count in selected categories
+        String[] selectedCategoriesIds = new String[selectedCategories.size()];
+        for(int i = 0; i < selectedCategoriesIds.length; i++){
+            selectedCategoriesIds[i] = String.valueOf(selectedCategories.get(i).id);
+        }
+        int expensesCount = Expense.getCountInCategories(context, selectedCategoriesIds);
+
+        // If selected categories contain at least 1 expense - show action spinner
+        if(expensesCount > 0){
+            Spinner expenseActionSpinner = (Spinner) view.findViewById(R.id.spinnerRemoveCategoryExpenses);
+            view.findViewById(R.id.removeCategoryIsNotEmpty).setVisibility(View.VISIBLE);
+        }
+
+        return view;
+    }
+
     /**
      * When removing item we have to take care about selected item. 3 events may happen:
      * 1) removed item is above selected (selectedPos > removedPos): move selected top by 1 pos
@@ -78,7 +119,10 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
         Category cat = (Category) item;
         int removePosition = getPosition(cat);
         if(removePosition >= 0) {
+            // Remove item from adapter & from db
             super.remove((Category) item);
+            item.remove(context);
+
             if(selected > removePosition){
                 --selected;
             } else if(selected == removePosition){

@@ -115,19 +115,23 @@ public class Expense implements EditableItem{
     }
 
     public static int getCount(Context context){
-        return getCountInCategory(context, 0);
+        return getCountInCategories(context, null);
     }
 
     public static int getCountInCategory(Context context, long categoryId){
+        return getCountInCategories(context, new String[]{String.valueOf(categoryId)});
+    }
+
+    public static int getCountInCategories(Context context, String[] categoriesIds){
         int count = 0;
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         String whereClause = "";
         String[] whereArgs = null;
-        if(categoryId > 0){
-             whereClause = " where " + CATEGORY_COLUMN + " = ?";
-            whereArgs = new String[]{String.valueOf(categoryId)};
+        if(categoriesIds != null && categoriesIds.length > 0){
+            whereClause = " where " + CATEGORY_COLUMN + " in ( " + Helpers.makePlaceholders(categoriesIds.length) + " )";
+            whereArgs = categoriesIds;
         }
 
         Cursor c = db.rawQuery("select count(*)" + " from " + TABLE + whereClause, whereArgs);

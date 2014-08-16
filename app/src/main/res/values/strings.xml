@@ -19,8 +19,11 @@
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
-    <string name="remove_item">Remove item</string>
-    <string name="remove_item_message">Are you sure you want to remove selected items?</string>
+    <string name="remove_expenses">Remove expenses</string>
+    <string name="remove_expenses_message">Are you sure you want to remove selected items?</string>
+    <string name="remove_categories">Remove categories</string>
+    <string name="remove_categories_message">Are you sure you want to remove selected categories?</string>
+    <string name="remove_categories_not_empty_message">Selected categories contain expenses. Choose the action for them:</string>
     <string name="category_other_color">Other color</string>
     <string name="choose_color">Choose color</string>
     <string name="add_name">Add name</string>

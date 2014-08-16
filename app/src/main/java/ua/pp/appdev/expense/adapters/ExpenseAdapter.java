@@ -2,6 +2,7 @@ package ua.pp.appdev.expense.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,8 +95,20 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
     }
 
     @Override
+    public int getRemoveDialogTitle() {
+        return R.string.remove_expenses;
+    }
+
+    @Override
+    public View getRemoveDialogView(SparseBooleanArray checked) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        return inflater.inflate(R.layout.view_dialog_remove_expenses, null, false);
+    }
+
+    @Override
     public void remove(EditableItem item) {
         super.remove((Expense) item);
+        item.remove(context);
     }
 
     public int getPosition(Expense expense){

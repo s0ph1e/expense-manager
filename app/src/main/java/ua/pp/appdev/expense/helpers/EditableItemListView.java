@@ -56,9 +56,12 @@ public class EditableItemListView extends ListView {
                         mode.finish();
                         return true;
                     case R.id.actionbar_remove:
+                        EditableItemAdapter adapter = getListViewAdapter();
+                        int title = adapter.getRemoveDialogTitle();
+                        View view = adapter.getRemoveDialogView(getCheckedItemPositions());
                         new AlertDialog.Builder(context)
-                                .setTitle(R.string.remove_item)
-                                .setMessage(R.string.remove_item_message)
+                                .setTitle(title)
+                                .setView(view)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         removeSelected();
@@ -101,13 +104,12 @@ public class EditableItemListView extends ListView {
 
             public void removeSelected() {
                 SparseBooleanArray checked = getCheckedItemPositions();
+                EditableItemAdapter adapter = getListViewAdapter();
                 int len = getCount();
                 // Needed DESC order, otherwise unchecked items may be deleted instead of checked
                 for (int i = len - 1; i >= 0; i--) {
                     if (checked.get(i)) {
-                        EditableItemAdapter adapter = getListViewAdapter();
                         EditableItem item = adapter.getItem(i);
-                        item.remove(context);
                         adapter.remove(item);
                     }
                 }
