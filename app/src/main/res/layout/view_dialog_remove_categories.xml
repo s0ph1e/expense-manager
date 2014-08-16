@@ -7,10 +7,11 @@
     android:padding="20dp">
 
     <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/remove_categories_message"
-    android:id="@+id/txtRemoveCategoriesMessage" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remove_categories_message"
+        android:id="@+id/txtRemoveCategoriesMessage"
+        android:textSize="16sp" />
 
 
     <LinearLayout
@@ -20,17 +21,46 @@
         android:id="@+id/removeCategoryIsNotEmpty"
         android:visibility="gone">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/darker_gray" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/remove_categories_not_empty_message"
-            android:id="@+id/txtRemoveCategoriesNotEmptyMessage" />
+            android:id="@+id/txtRemoveCategoriesNotEmptyMessage"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rgCategoryRemoveExpenseAction">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="remove expenses"
+                android:id="@+id/rbRemoveExpenses" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="move to other category"
+                android:id="@+id/rbMoveExpenses" />
+        </RadioGroup>
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerRemoveCategoryExpenses"
-            android:longClickable="true" />
+            android:longClickable="true"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

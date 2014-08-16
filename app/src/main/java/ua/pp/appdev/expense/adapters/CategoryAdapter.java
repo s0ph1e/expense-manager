@@ -6,7 +6,9 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,6 +27,9 @@ import ua.pp.appdev.expense.utils.Log;
  *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
 public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements EditableItemAdapter{
+
+    private boolean needToMoveExpensesOnRemove = false;
+    private long categoryIdToMoveExpenses = 0;
 
     public CategoryAdapter(Context context, int resource, List<Category> categories) {
         super(context, resource, categories);
@@ -90,6 +95,7 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
                 }
             }
         }
+
         // Check expenses count in selected categories
         String[] selectedCategoriesIds = new String[selectedCategories.size()];
         for(int i = 0; i < selectedCategoriesIds.length; i++){
@@ -99,7 +105,43 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
 
         // If selected categories contain at least 1 expense - show action spinner
         if(expensesCount > 0){
-            Spinner expenseActionSpinner = (Spinner) view.findViewById(R.id.spinnerRemoveCategoryExpenses);
+            // Set categories spinner
+            final Spinner expenseActionSpinner = (Spinner) view.findViewById(R.id.spinnerRemoveCategoryExpenses);
+            expenseActionSpinner.setAdapter(new CategorySpinnerAdapter(context, R.layout.spinner_category_row, Category.getAll(context)));
+            expenseActionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    Category cat = (Category) adapterView.getAdapter().getItem(i);
+                    categoryIdToMoveExpenses = cat.id;
+                    Log.e("moveTo = " + categoryIdToMoveExpenses);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            // Set radiobuttons
+            RadioGroup rgAction = (RadioGroup) view.findViewById(R.id.rgCategoryRemoveExpenseAction);
+            rgAction.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    switch (i){
+                        case R.id.rbRemoveExpenses:
+                            needToMoveExpensesOnRemove = false;
+                            Log.e("moveTo = " + categoryIdToMoveExpenses);
+                            expenseActionSpinner.setVisibility(View.GONE);
+                            break;
+                        case R.id.rbMoveExpenses:
+                            needToMoveExpensesOnRemove = true;
+                            Log.e("moveTo = " + categoryIdToMoveExpenses);
+                            expenseActionSpinner.setVisibility(View.VISIBLE);
+                            break;
+                    }
+                }
+            });
+
             view.findViewById(R.id.removeCategoryIsNotEmpty).setVisibility(View.VISIBLE);
         }
 
