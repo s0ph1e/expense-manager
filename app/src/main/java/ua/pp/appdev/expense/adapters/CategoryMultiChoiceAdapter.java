@@ -12,6 +12,7 @@ import java.util.List;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Category;
+import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
 
@@ -39,13 +40,21 @@ public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
         }
 
         Category category = categories.get(position);
-        String firstLetter = String.valueOf(category.name.charAt(0)).toUpperCase();
+        if(category != null) {
+            String firstLetter = String.valueOf(category.name.charAt(0)).toUpperCase();
 
-        holder.color.setBackgroundColor(category.color);
-        holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
-        holder.name.setText(category.name);
-        holder.expensesCount.setText("(" + category.getExpensesCount(context) + ")");
-        row.setActivated(category.checked);
+            holder.color.setBackgroundColor(category.color);
+            holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
+            holder.name.setText(category.name);
+            holder.expensesCount.setText("(" + category.getExpensesCount(context) + ")");
+            row.setActivated(category.checked);
+        } else {
+            holder.color.setBackgroundColor(context.getResources().getColor(android.R.color.black));
+            holder.color.setText("¿");
+            holder.name.setText("NULL CATEGORY");
+            holder.expensesCount.setText("(?)");
+            Log.wtf("Null category!");
+        }
 
         return row;
     }

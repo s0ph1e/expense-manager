@@ -3,27 +3,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="50dp"
     android:weightSum="1"
     android:baselineAligned="true"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:paddingRight="10dp"
-    android:paddingLeft="10dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="5dp"
     android:descendantFocusability="blocksDescendants"
     android:background="@drawable/list_selector">
 
-    <TextView
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/txtExpenseCategory"
-        android:textColor="#ffffffff"
+    <View
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:id="@+id/vExpenseCategoryColor"
         android:background="#ccc"
-        android:textSize="30sp"
-        android:singleLine="true"
+        android:gravity="center"
         android:layout_marginRight="10dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_gravity="center" />
+        android:layout_marginEnd="10dp"
+        android:clickable="false" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -45,10 +41,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/txtExpenseCategoryName"
+            android:clickable="false"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:maxLines="3"
             android:ellipsize="end"
-            android:id="@+id/txtExpenseNote" />
+            android:id="@+id/txtExpenseNote"
+            android:textStyle="italic"/>
     </LinearLayout>
 
     <LinearLayout
@@ -56,7 +60,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="5dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,14 +72,14 @@
             android:singleLine="true"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_gravity="right" />
+            android:layout_gravity="end" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtExpenseSumOriginal"
             android:layout_marginTop="5dp"
-            android:layout_gravity="right" />
+            android:layout_gravity="end" />
     </LinearLayout>
 
 </LinearLayout>

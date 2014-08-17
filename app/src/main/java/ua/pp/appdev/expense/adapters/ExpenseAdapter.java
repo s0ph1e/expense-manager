@@ -43,7 +43,8 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
             row = inflater.inflate(this.resource, parent, false);
 
             holder = new ExpenseHolder();
-            holder.category = (TextView)row.findViewById(R.id.txtExpenseCategory);
+            holder.color = row.findViewById(R.id.vExpenseCategoryColor);
+            holder.category = (TextView)row.findViewById(R.id.txtExpenseCategoryName);
             holder.date = (TextView) row.findViewById(R.id.txtExpenseDate);
             holder.note = (TextView) row.findViewById(R.id.txtExpenseNote);
             holder.sumInOriginalCurrency = (TextView) row.findViewById(R.id.txtExpenseSumOriginal);
@@ -58,12 +59,10 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
 
         // Show category is it is not null (if null - black rectangle with question mark)
         if(expense.category != null) {
-            String firstLetter = String.valueOf(expense.category.name.charAt(0)).toUpperCase();
-
-            holder.category.setBackgroundColor(expense.category.color);
-            holder.category.setText(firstLetter.isEmpty() ? "" : firstLetter);
+            holder.color.setBackgroundColor(expense.category.color);
+            holder.category.setText(expense.category.name);
         } else {
-            holder.category.setBackgroundColor(context.getResources().getColor(android.R.color.black));
+            holder.color.setBackgroundColor(context.getResources().getColor(android.R.color.black));
             holder.category.setText("¿");
             Log.wtf("Null category!");
         }
@@ -125,6 +124,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> implements EditableIte
 
     static class ExpenseHolder{
 
+        View color;
         TextView category;
         TextView date;
         TextView note;
