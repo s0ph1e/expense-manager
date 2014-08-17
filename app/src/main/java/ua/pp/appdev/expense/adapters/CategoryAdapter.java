@@ -113,7 +113,9 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
 
             // Set categories spinner
             final Spinner expenseActionSpinner = (Spinner) view.findViewById(R.id.spinnerRemoveCategoryExpenses);
-            expenseActionSpinner.setAdapter(new CategorySpinnerAdapter(context, R.layout.spinner_category_row, Category.getAll(context)));
+            List<Category> categoriesToMoveExpenses = Category.getAllExcept(context, selectedCategoriesIds);
+            CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(context, R.layout.spinner_category_row, categoriesToMoveExpenses);
+            expenseActionSpinner.setAdapter(adapter);
             expenseActionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -148,7 +150,6 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
                     Log.i("need to move = " + needToMoveExpensesOnRemove + " catId = " + categoryIdToMoveExpenses);
                 }
             });
-
             view.findViewById(R.id.removeCategoryIsNotEmpty).setVisibility(View.VISIBLE);
         }
 

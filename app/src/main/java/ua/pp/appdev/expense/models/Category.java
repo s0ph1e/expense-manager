@@ -44,13 +44,22 @@ public class Category implements EditableItem {
     public Category(){}
 
     public static List<Category> getAll(Context context) {
+        return getAllExcept(context, null);
+    }
+
+    public static List<Category> getAllExcept(Context context, String[] exceptCategoriesIds){
 
         List<Category> catList = new ArrayList<Category>();
-
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        Cursor c = db.query(TABLE, null, null, null, null, null, null);
+        String whereClause = "";
+        String[] whereArgs = null;
+        if(exceptCategoriesIds != null && exceptCategoriesIds.length > 0){
+            whereClause = " where " + ID_COLUMN + " not in ( " + Helpers.makePlaceholders(exceptCategoriesIds.length) + " )";
+            whereArgs = exceptCategoriesIds;
+        }
 
+        Cursor c = db.rawQuery("select *" + " from " + TABLE + whereClause, whereArgs);
         if (c.moveToFirst()) {
 
             // Get column indexes
@@ -68,7 +77,6 @@ public class Category implements EditableItem {
         }
         c.close();
         DatabaseManager.getInstance().closeDatabase();
-
         return catList;
     }
 
