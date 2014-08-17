@@ -132,6 +132,11 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
 
             // Set radiobuttons
             RadioGroup rgAction = (RadioGroup) view.findViewById(R.id.rgCategoryRemoveExpenseAction);
+            // Hide move radiobutton if no available categories to move expenses
+            if(categoriesToMoveExpenses == null || categoriesToMoveExpenses.size() == 0){
+                rgAction.findViewById(R.id.rbMoveExpenses).setVisibility(View.GONE);
+            }
+            // Change expenses action listener
             rgAction.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -150,6 +155,7 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
                     Log.i("need to move = " + needToMoveExpensesOnRemove + " catId = " + categoryIdToMoveExpenses);
                 }
             });
+            // Set view with additional actions visible
             view.findViewById(R.id.removeCategoryIsNotEmpty).setVisibility(View.VISIBLE);
         }
 
