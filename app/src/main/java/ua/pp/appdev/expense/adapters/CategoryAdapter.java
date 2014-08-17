@@ -169,8 +169,15 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
         Category cat = (Category) item;
         int removePosition = getPosition(cat);
         if(removePosition >= 0) {
-            // Remove item from adapter & from db
+            // Remove item from adapter
             super.remove((Category) item);
+            // Move or remove expenses from category
+            if(needToMoveExpensesOnRemove){
+                ((Category) item).moveExpensesTo(context, categoryIdToMoveExpenses);
+            } else {
+                ((Category) item).removeExpenses();
+            }
+            // Remove category from db
             item.remove(context);
 
             if(selected > removePosition){
