@@ -6,6 +6,8 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -103,8 +105,12 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
         }
         int expensesCount = Expense.getCountInCategories(context, selectedCategoriesIds);
 
-        // If selected categories contain at least 1 expense - show action spinner
+        // If selected categories contain at least 1 expense - show actions for expenses
         if(expensesCount > 0){
+            // Get animations for spinner fadein and fadeout
+            final Animation animFadeIn = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_in);
+            final Animation animFadeOut = AnimationUtils.loadAnimation(context.getApplicationContext(), android.R.anim.fade_out);
+
             // Set categories spinner
             final Spinner expenseActionSpinner = (Spinner) view.findViewById(R.id.spinnerRemoveCategoryExpenses);
             expenseActionSpinner.setAdapter(new CategorySpinnerAdapter(context, R.layout.spinner_category_row, Category.getAll(context)));
@@ -113,7 +119,7 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     Category cat = (Category) adapterView.getAdapter().getItem(i);
                     categoryIdToMoveExpenses = cat.id;
-                    Log.e("moveTo = " + categoryIdToMoveExpenses);
+                    Log.i("need to move = " + needToMoveExpensesOnRemove + " catId = " + categoryIdToMoveExpenses);
                 }
 
                 @Override
@@ -130,15 +136,16 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
                     switch (i){
                         case R.id.rbRemoveExpenses:
                             needToMoveExpensesOnRemove = false;
-                            Log.e("moveTo = " + categoryIdToMoveExpenses);
+                            expenseActionSpinner.setAnimation(animFadeOut);
                             expenseActionSpinner.setVisibility(View.GONE);
                             break;
                         case R.id.rbMoveExpenses:
                             needToMoveExpensesOnRemove = true;
-                            Log.e("moveTo = " + categoryIdToMoveExpenses);
+                            expenseActionSpinner.setAnimation(animFadeIn);
                             expenseActionSpinner.setVisibility(View.VISIBLE);
                             break;
                     }
+                    Log.i("need to move = " + needToMoveExpensesOnRemove + " catId = " + categoryIdToMoveExpenses);
                 }
             });
 
