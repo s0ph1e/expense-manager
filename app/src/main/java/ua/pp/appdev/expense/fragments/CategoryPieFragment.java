@@ -67,6 +67,8 @@ public class CategoryPieFragment extends Fragment {
         if(savedInstanceState != null){
             selected = savedInstanceState.getInt(SELECTED_CATEGORY_POSITION);
             needGraphRedraw = false;
+        } else {
+            needGraphRedraw = true;
         }
 
         View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
