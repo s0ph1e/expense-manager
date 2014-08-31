@@ -8,7 +8,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/overviewCategoriesContainer" />
+        android:id="@+id/overviewCategoriesPieContainer" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/overviewCategoriesListContainer" />
 
     <FrameLayout
         android:layout_width="match_parent"

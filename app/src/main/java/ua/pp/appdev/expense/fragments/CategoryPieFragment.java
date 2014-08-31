@@ -1,31 +1,20 @@
 package ua.pp.appdev.expense.fragments;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import ua.pp.appdev.expense.R;
-import ua.pp.appdev.expense.adapters.CategoryBaseSingleChoiceAdapter;
-import ua.pp.appdev.expense.adapters.CategoryOverviewAdapter;
-import ua.pp.appdev.expense.helpers.Helpers;
-import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
 import ua.pp.appdev.expense.models.Category;
 import ua.pp.appdev.expense.models.Expense;
 import ua.pp.appdev.expense.utils.Log;
@@ -35,18 +24,16 @@ public class CategoryPieFragment extends Fragment {
     private static final String SELECTED_CATEGORY_POSITION = "selectedCategoryPosition";
 
     private PieGraph pieGraph;
-    private View detailsView;
-    private CategoryBaseSingleChoiceAdapter categoriesAdapter;
     private List<Category> categories;
 
     private int selected = -1;
     private boolean needGraphRedraw = true;
 
     private OnCategoryPieSelectedListener mListener;
-    AsyncGetCategories asyncGetCategories;
 
-    public static CategoryPieFragment newInstance() {
+    public static CategoryPieFragment newInstance(List<Category> categories) {
         CategoryPieFragment fragment = new CategoryPieFragment();
+        fragment.categories = categories;
         return fragment;
     }
     public CategoryPieFragment() {
@@ -72,22 +59,6 @@ public class CategoryPieFragment extends Fragment {
         }
 
         View view =  inflater.inflate(R.layout.fragment_category_pie, container, false);
-        detailsView = view.findViewById(R.id.overviewDetails);
-        ListView categoriesList = (ListView) view.findViewById(R.id.listviewCategoryOverview);
-        categoriesAdapter = new CategoryOverviewAdapter(
-                getActivity(),
-                R.layout.listview_category_overview_row,
-                new ArrayList<Category>());
-
-        categoriesList.setAdapter(categoriesAdapter);
-        categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(categoriesAdapter.getCount() > 1) {
-                    setSelected(i);
-                }
-            }
-        });
 
         pieGraph = (PieGraph) view.findViewById(R.id.categoriesPieGraph);
         pieGraph.setInnerCircleRatio(150);
@@ -105,17 +76,9 @@ public class CategoryPieFragment extends Fragment {
             }
         });
 
-        asyncGetCategories = new AsyncGetCategories();
-        asyncGetCategories.execute();
+        updateGraph();
 
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.i();
-        asyncGetCategories.cancel(true);
-        super.onDestroyView();
     }
 
     public void updateGraph(){
@@ -155,50 +118,21 @@ public class CategoryPieFragment extends Fragment {
         pieGraph.animateToGoalValues();
     }
 
-    public void updateText(){
-        if(categories == null || categories.size() == 0) {
-            detailsView.setVisibility(View.GONE);
-            return;
-        }
-
-        View allCategoriesView = detailsView.findViewById(R.id.overviewAllCategories);
-        List<Category> newCategories = new ArrayList<Category>();
-
-        // If none selected  - show all
-        if(!(selected >= 0 && selected < categories.size())){
-            TextView totalSumTxt = (TextView) allCategoriesView.findViewById(R.id.txtOverviewAllCategoriesSum);
-            String totalSumString = Helpers.sumToString(Expense.getSum(getActivity()), SharedPreferencesHelper.getBaseCurrency(getActivity()));
-            totalSumTxt.setText(totalSumString);
-            allCategoriesView.setVisibility(View.VISIBLE);
-            newCategories.addAll(categories);
-        } else {    // show selected category
-            allCategoriesView.setVisibility(View.GONE);
-            newCategories.add(categories.get(selected));
-        }
-
-        categoriesAdapter.clear();
-        categoriesAdapter.addAll(newCategories);
-
-        // Make details view visible if it is invisible
-        if(detailsView.getVisibility() != View.VISIBLE){
-            Animation animFadeIn = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_in);
-            detailsView.setAnimation(animFadeIn);
-            detailsView.setVisibility(View.VISIBLE);
-        }
-    }
-
     public void setSelected(int position){
         if(position == selected){
             return;
         } else if(position >= 0 && position < categories.size()){
-            categoriesAdapter.setSelected(position);
             mListener.onCategoryPieSelected(categories.get(position).id);
         } else {
             mListener.onCategoryPieSelected(0);
         }
         selected = position;
-        updateText();
+    }
 
+    public void setSelectedById(long categoryId) {
+        Category cat = Category.getById(getActivity(), categoryId);
+        int position = categories.indexOf(cat);
+        selected = position;
     }
 
     @Override
@@ -229,19 +163,4 @@ public class CategoryPieFragment extends Fragment {
         public void onCategoryPieSelected(long categoryId);
     }
 
-    class AsyncGetCategories extends AsyncTask<Void, Void, List<Category>> {
-
-        @Override
-        protected List<Category> doInBackground(Void... voids) {
-            return Category.getAll(getActivity());
-        }
-
-        @Override
-        protected void onPostExecute(List<Category> categories1) {
-            categories = categories1;
-            categoriesAdapter.addAll(categories);
-            updateGraph();
-            updateText();
-        }
-    }
 }
