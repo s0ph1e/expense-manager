@@ -11,7 +11,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.models.Category;
@@ -86,7 +86,8 @@ public class OverviewFragment extends Fragment
     @Override
     public void onDestroyView() {
         Log.i();
-        asyncGetCategories.cancel(true);
+        if (asyncGetCategories != null)
+            asyncGetCategories.cancel(true);
         super.onDestroyView();
     }
 
@@ -141,15 +142,15 @@ public class OverviewFragment extends Fragment
                 .commit();
     }
 
-    class AsyncGetCategories extends AsyncTask<Void, Void, List<Category>> {
+    class AsyncGetCategories extends AsyncTask<Void, Void, ArrayList<Category>> {
 
         @Override
-        protected List<Category> doInBackground(Void... voids) {
-            return Category.getAll(getActivity());
+        protected ArrayList<Category> doInBackground(Void... voids) {
+            return new ArrayList<Category>(Category.getAll(getActivity()));
         }
 
         @Override
-        protected void onPostExecute(List<Category> categories) {
+        protected void onPostExecute(ArrayList<Category> categories) {
             FragmentManager fragmentManager = getChildFragmentManager();
             Fragment pieCategories = CategoryPieFragment.newInstance(categories);
             Fragment detailsCategories = CategoryOverviewFragment.newInstance(categories);

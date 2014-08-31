@@ -11,6 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import ua.pp.appdev.expense.utils.Log;
 public class CategoryPieFragment extends Fragment {
 
     private static final String SELECTED_CATEGORY_POSITION = "selectedCategoryPosition";
+    private static final String CATEGORIES = "categories";
 
     private PieGraph pieGraph;
     private List<Category> categories;
@@ -31,9 +33,11 @@ public class CategoryPieFragment extends Fragment {
 
     private OnCategoryPieSelectedListener mListener;
 
-    public static CategoryPieFragment newInstance(List<Category> categories) {
+    public static CategoryPieFragment newInstance(ArrayList<Category> categories) {
         CategoryPieFragment fragment = new CategoryPieFragment();
-        fragment.categories = categories;
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(CATEGORIES, categories);
+        fragment.setArguments(args);
         return fragment;
     }
     public CategoryPieFragment() {
@@ -50,6 +54,10 @@ public class CategoryPieFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         Log.i();
+        Bundle args = getArguments();
+        if (args != null) {
+            categories = args.getParcelableArrayList(CATEGORIES);
+        }
 
         if(savedInstanceState != null){
             selected = savedInstanceState.getInt(SELECTED_CATEGORY_POSITION);

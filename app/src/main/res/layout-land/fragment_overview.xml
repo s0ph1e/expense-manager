@@ -10,16 +10,11 @@
         android:layout_height="match_parent"
         android:id="@+id/overviewCategoriesPieContainer" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:background="@android:color/darker_gray" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:orientation="vertical">
 
         <FrameLayout

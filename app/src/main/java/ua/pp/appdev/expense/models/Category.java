@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import ua.pp.appdev.expense.utils.Log;
  *    Ilya Antipenko <ilya@antipenko.pp.ua>
  *    Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
-public class Category implements EditableItem {
+public class Category implements EditableItem, Parcelable {
 
     public static final String TABLE = "categories";
     public static final String ID_COLUMN = "id";
@@ -190,5 +192,36 @@ public class Category implements EditableItem {
     @Override
     public String toString() {
         return "{id: " + id + ", name: " + name + ", color: " + Helpers.colorToString(color) + "}";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(name);
+        parcel.writeInt(color);
+        parcel.writeByte((byte) (checked ? 1 : 0));
+    }
+
+    public static final Parcelable.Creator<Category> CREATOR
+            = new Parcelable.Creator<Category>() {
+        public Category createFromParcel(Parcel in) {
+            return new Category(in);
+        }
+
+        public Category[] newArray(int size) {
+            return new Category[size];
+        }
+    };
+
+    private Category(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        color = in.readInt();
+        checked = in.readByte() != 0;
     }
 }

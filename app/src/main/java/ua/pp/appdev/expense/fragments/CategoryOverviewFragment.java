@@ -26,6 +26,7 @@ import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryOverviewFragment extends Fragment {
     private static final String SELECTED_CATEGORY_POSITION = "selectedCategoryPosition";
+    private static final String CATEGORIES = "categories";
 
     private OnCategoryOverviewSelectedListener mListener;
 
@@ -34,9 +35,11 @@ public class CategoryOverviewFragment extends Fragment {
     private CategoryBaseSingleChoiceAdapter categoriesAdapter;
     private int selected = -1;
 
-    public static CategoryOverviewFragment newInstance(List<Category> categories) {
+    public static CategoryOverviewFragment newInstance(ArrayList<Category> categories) {
         CategoryOverviewFragment fragment = new CategoryOverviewFragment();
-        fragment.categories = categories;
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(CATEGORIES, categories);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -53,6 +56,11 @@ public class CategoryOverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i();
+
+        Bundle args = getArguments();
+        if (args != null) {
+            categories = args.getParcelableArrayList(CATEGORIES);
+        }
 
         if(savedInstanceState != null){
             selected = savedInstanceState.getInt(SELECTED_CATEGORY_POSITION);

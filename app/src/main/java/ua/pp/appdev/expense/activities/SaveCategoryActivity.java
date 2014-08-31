@@ -131,7 +131,7 @@ public class SaveCategoryActivity extends EditActivity implements ColorPickerDia
 
         // Send saved category back
         Intent intent = new Intent();
-        intent.putExtra("item", category);
+        intent.putExtra("item", (java.io.Serializable) category);
         setResult(RESULT_OK, intent);
 
         finish();
