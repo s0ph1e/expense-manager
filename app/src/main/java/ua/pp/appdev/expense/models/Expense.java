@@ -157,8 +157,20 @@ public class Expense implements EditableItem{
 
         Currency baseCurrency = SharedPreferencesHelper.getBaseCurrency(context);
 
+        // Check if all expenses are in base currency
+        boolean allExpensesInBaseCurrency = true;
         for (Expense expense : expenses){
-            sum = sum.add(expense.convertSumToCurrency(baseCurrency));
+            if (!expense.currency.equals(baseCurrency)){
+                allExpensesInBaseCurrency = false;
+                break;
+            }
+        }
+
+        // Get total sum
+        for (Expense expense : expenses){
+            sum = allExpensesInBaseCurrency
+                    ? sum.add(expense.sum)
+                    : sum.add(expense.convertSumToCurrency(baseCurrency));
         }
 
         return sum;
@@ -203,9 +215,13 @@ public class Expense implements EditableItem{
     }
 
     public BigDecimal convertSumToCurrency(Currency other){
-        return sum
-                .divide(new BigDecimal(currency.rate), 2, RoundingMode.HALF_UP)
-                .multiply(new BigDecimal(other.rate));
+        if(currency.equals(other)){
+            return sum;
+        } else {
+            return sum
+                    .divide(new BigDecimal(currency.rate), 2, RoundingMode.HALF_UP)
+                    .multiply(new BigDecimal(other.rate));
+        }
     }
 
     public String getConvertedSumString(Currency other){
