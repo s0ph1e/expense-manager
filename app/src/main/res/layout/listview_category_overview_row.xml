@@ -36,8 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txtOverviewCategoryName"
             android:layout_gravity="center_vertical"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:textSize="18sp"
             android:clickable="false" />
 
         <TextView
@@ -45,6 +44,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txtOverviewCategoryExpensesCount"
             android:textColor="@android:color/darker_gray"
+            android:visibility="gone"
             android:clickable="false" />
 
     </LinearLayout>
