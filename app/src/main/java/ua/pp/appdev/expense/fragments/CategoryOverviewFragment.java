@@ -84,6 +84,7 @@ public class CategoryOverviewFragment extends Fragment {
             }
         });
 
+        updateText();
         return view;
     }
 
