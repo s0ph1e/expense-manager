@@ -23,7 +23,7 @@ import ua.pp.appdev.expense.utils.Log;
 public class CategoryPieFragment extends Fragment {
 
     private static final String SELECTED_CATEGORY_POSITION = "selectedCategoryPosition";
-    private static final String CATEGORIES = "categories";
+    private static final String CATEGORIES_BUNDLE = "categories";
 
     private PieGraph pieGraph;
     private List<Category> categories;
@@ -36,7 +36,7 @@ public class CategoryPieFragment extends Fragment {
     public static CategoryPieFragment newInstance(ArrayList<Category> categories) {
         CategoryPieFragment fragment = new CategoryPieFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(CATEGORIES, categories);
+        args.putParcelableArrayList(CATEGORIES_BUNDLE, categories);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,9 +54,10 @@ public class CategoryPieFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         Log.i();
+
         Bundle args = getArguments();
         if (args != null) {
-            categories = args.getParcelableArrayList(CATEGORIES);
+            categories = args.getParcelableArrayList(CATEGORIES_BUNDLE);
         }
 
         if(savedInstanceState != null){

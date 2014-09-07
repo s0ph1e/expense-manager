@@ -26,7 +26,8 @@ import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryOverviewFragment extends Fragment {
     private static final String SELECTED_CATEGORY_POSITION = "selectedCategoryPosition";
-    private static final String CATEGORIES = "categories";
+    private static final String CATEGORIES_BUNDLE = "categories";
+    private static final String SELECTED_CATEGORY_ID_BUNDLE = "selectedCategoryId";
 
     private OnCategoryOverviewSelectedListener mListener;
 
@@ -35,10 +36,11 @@ public class CategoryOverviewFragment extends Fragment {
     private CategoryBaseSingleChoiceAdapter categoriesAdapter;
     private int selected = -1;
 
-    public static CategoryOverviewFragment newInstance(ArrayList<Category> categories) {
+    public static CategoryOverviewFragment newInstance(ArrayList<Category> categories, long selectedCategoryId) {
         CategoryOverviewFragment fragment = new CategoryOverviewFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(CATEGORIES, categories);
+        args.putParcelableArrayList(CATEGORIES_BUNDLE, categories);
+        args.putLong(SELECTED_CATEGORY_ID_BUNDLE, selectedCategoryId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,10 +58,12 @@ public class CategoryOverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i();
+        long selectedCategoryId = -1;
 
         Bundle args = getArguments();
         if (args != null) {
-            categories = args.getParcelableArrayList(CATEGORIES);
+            categories = args.getParcelableArrayList(CATEGORIES_BUNDLE);
+            selectedCategoryId = args.getLong(SELECTED_CATEGORY_ID_BUNDLE);
         }
 
         if(savedInstanceState != null){
@@ -78,13 +82,12 @@ public class CategoryOverviewFragment extends Fragment {
         categoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(categoriesAdapter.getCount() > 1) {
+                if (categoriesAdapter.getCount() > 1) {
                     setSelected(i);
                 }
             }
         });
-
-        updateText();
+        setSelectedById(selectedCategoryId);
         return view;
     }
 

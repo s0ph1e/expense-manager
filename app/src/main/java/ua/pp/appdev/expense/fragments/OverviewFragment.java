@@ -25,8 +25,8 @@ public class OverviewFragment extends Fragment
     private static final String CATEGORIES_PIE_FRAGMENT_TAG = "categoriesPieFragment";
     private static final String CATEGORIES_DETAILS_FRAGMENT_TAG = "categoriesDetailsFragment";
     private static final String EXPENSES_FRAGMENT_TAG = "expensesFragment";
-    private static final String FILTER_BUNDLE = "filter";
-    private String[] categoriesFilter = null;
+    private static final String SELECTED_CATEGORY_ID_BUNDLE = "selectedCategoryId";
+    private long selectedCategoryId;
     private OnOverviewFragmentChangedListener mListener;
     private AsyncGetCategories asyncGetCategories;
 
@@ -41,9 +41,9 @@ public class OverviewFragment extends Fragment
 
         Bundle args = getArguments();
         if(args != null){
-            categoriesFilter = args.getStringArray(FILTER_BUNDLE);
+            selectedCategoryId = savedInstanceState.getLong(SELECTED_CATEGORY_ID_BUNDLE);
         } else if(savedInstanceState != null){
-            categoriesFilter = savedInstanceState.getStringArray(FILTER_BUNDLE);
+            selectedCategoryId = savedInstanceState.getLong(SELECTED_CATEGORY_ID_BUNDLE);
         }
     }
 
@@ -100,9 +100,7 @@ public class OverviewFragment extends Fragment
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.i();
-        if(categoriesFilter != null){
-            outState.putStringArray(FILTER_BUNDLE, categoriesFilter);
-        }
+        outState.putLong(SELECTED_CATEGORY_ID_BUNDLE, selectedCategoryId);
     }
 
     @Override
@@ -135,7 +133,8 @@ public class OverviewFragment extends Fragment
     }
 
     private void reloadExpensesFragment(long categoryId){
-        categoriesFilter = categoryId > 0 ? new String[]{String.valueOf(categoryId)} : null;
+        selectedCategoryId = categoryId;
+        String[] categoriesFilter = selectedCategoryId > 0 ? new String[]{String.valueOf(selectedCategoryId)} : null;
         Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
         FragmentManager fragmentManager = getChildFragmentManager();
         fragmentManager.beginTransaction()
@@ -152,10 +151,11 @@ public class OverviewFragment extends Fragment
 
         @Override
         protected void onPostExecute(ArrayList<Category> categories) {
+            String[] categoriesFilter = selectedCategoryId > 0 ? new String[]{String.valueOf(selectedCategoryId)} : null;
             FragmentManager fragmentManager = getChildFragmentManager();
-            Fragment pieCategories = CategoryPieFragment.newInstance(categories);
-            Fragment detailsCategories = CategoryOverviewFragment.newInstance(categories);
-            Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
+            CategoryPieFragment pieCategories = CategoryPieFragment.newInstance(categories);
+            CategoryOverviewFragment detailsCategories = CategoryOverviewFragment.newInstance(categories, selectedCategoryId);
+            ExpenseListFragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
             fragmentManager.beginTransaction()
                     .replace(R.id.overviewCategoriesPieContainer, pieCategories, CATEGORIES_PIE_FRAGMENT_TAG)
                     .replace(R.id.overviewCategoriesListContainer, detailsCategories, CATEGORIES_DETAILS_FRAGMENT_TAG)
