@@ -45,18 +45,19 @@ public class OverviewFragment extends Fragment
         } else if(savedInstanceState != null){
             categoriesFilter = savedInstanceState.getStringArray(FILTER_BUNDLE);
         }
-
-        // http://stackoverflow.com/questions/8474104/android-fragment-lifecycle-over-orientation-changes
-        if (savedInstanceState == null) {
-            asyncGetCategories = new AsyncGetCategories();
-            asyncGetCategories.execute();
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i();
+
+        // http://stackoverflow.com/questions/8474104/android-fragment-lifecycle-over-orientation-changes
+        if (savedInstanceState == null) {
+            asyncGetCategories = new AsyncGetCategories();
+            asyncGetCategories.execute();
+        }
+
         return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
