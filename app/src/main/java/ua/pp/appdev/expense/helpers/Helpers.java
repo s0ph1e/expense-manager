@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -81,6 +82,12 @@ public class Helpers {
     public static String percentageString(BigDecimal part, BigDecimal whole){
         BigDecimal result = part.multiply(new BigDecimal(100)).divide(whole, 2, RoundingMode.HALF_UP);
         return result.toString() + "%";
+    }
+
+    public static String decimalToString(BigDecimal decimal) {
+        DecimalFormat df = new DecimalFormat("#");
+        df.setMaximumFractionDigits(2);
+        return df.format(decimal);
     }
 
     public static String makePlaceholders(int len) {

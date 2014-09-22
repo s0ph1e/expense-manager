@@ -238,10 +238,9 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
     }
 
     public void updateView(){
-
         // Set expense
         if(expense.sum.compareTo(BigDecimal.ZERO) > 0) {
-            etSum.setText(String.valueOf(expense.sum));
+            etSum.setText(Helpers.decimalToString(expense.sum));
         }
 
         // Get currency: if expense has currency - use it, else - get it from shared prefs
