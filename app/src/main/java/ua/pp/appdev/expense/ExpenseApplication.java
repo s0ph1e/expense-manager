@@ -13,6 +13,9 @@ import ua.pp.appdev.expense.utils.Log;
  * Sophia Nepochataya <sophia@nepochataya.pp.ua>
  */
 public class ExpenseApplication extends Application {
+
+    public static final double maxExpenseSum = 1000000000;
+
     @Override
     public void onCreate() {
         DatabaseManager.initializeInstance(new DBHelper(this));

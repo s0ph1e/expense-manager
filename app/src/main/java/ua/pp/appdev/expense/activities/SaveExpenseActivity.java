@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
+import ua.pp.appdev.expense.ExpenseApplication;
 import ua.pp.appdev.expense.R;
 import ua.pp.appdev.expense.adapters.CurrencyAdapter;
 import ua.pp.appdev.expense.fragments.CategoryListFragment;
@@ -165,6 +166,8 @@ public class SaveExpenseActivity extends EditActivity implements CategoryListFra
             expense.sum = new BigDecimal(sum);
             if(expense.sum.compareTo(BigDecimal.ZERO) <= 0){
                 errorMessage += "Expense sum can't negative.\r\n";
+            } else if (expense.sum.compareTo(BigDecimal.valueOf(ExpenseApplication.maxExpenseSum)) > 0) {
+                errorMessage += "Expense sum is too large.\r\n";
             }
         }
 
