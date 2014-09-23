@@ -26,7 +26,9 @@ public class OverviewFragment extends Fragment
     private static final String CATEGORIES_DETAILS_FRAGMENT_TAG = "categoriesDetailsFragment";
     private static final String EXPENSES_FRAGMENT_TAG = "expensesFragment";
     private static final String SELECTED_CATEGORY_ID_BUNDLE = "selectedCategoryId";
+    private static final String CATEGORIES_BUNDLE = "categories";
     private long selectedCategoryId;
+    private ArrayList<Category> categories;
     private OnOverviewFragmentChangedListener mListener;
     private AsyncGetCategories asyncGetCategories;
 
@@ -41,7 +43,7 @@ public class OverviewFragment extends Fragment
 
         Bundle args = getArguments();
         if(args != null){
-            selectedCategoryId = savedInstanceState.getLong(SELECTED_CATEGORY_ID_BUNDLE);
+            selectedCategoryId = args.getLong(SELECTED_CATEGORY_ID_BUNDLE);
         } else if(savedInstanceState != null){
             selectedCategoryId = savedInstanceState.getLong(SELECTED_CATEGORY_ID_BUNDLE);
         }
@@ -56,6 +58,11 @@ public class OverviewFragment extends Fragment
         if (savedInstanceState == null) {
             asyncGetCategories = new AsyncGetCategories();
             asyncGetCategories.execute();
+        } else {
+            selectedCategoryId = savedInstanceState.getLong(SELECTED_CATEGORY_ID_BUNDLE);
+            categories = savedInstanceState.getParcelableArrayList(CATEGORIES_BUNDLE);
+            reloadCategoriesFragment();
+            reloadExpensesFragment();
         }
 
         return inflater.inflate(R.layout.fragment_overview, container, false);
@@ -101,6 +108,7 @@ public class OverviewFragment extends Fragment
         super.onSaveInstanceState(outState);
         Log.i();
         outState.putLong(SELECTED_CATEGORY_ID_BUNDLE, selectedCategoryId);
+        outState.putParcelableArrayList(CATEGORIES_BUNDLE, categories);
     }
 
     @Override
@@ -108,7 +116,8 @@ public class OverviewFragment extends Fragment
         CategoryOverviewFragment categoriesFragment = (CategoryOverviewFragment)
                 getChildFragmentManager().findFragmentById(R.id.overviewCategoriesListContainer);
         categoriesFragment.setSelectedById(categoryId);
-        reloadExpensesFragment(categoryId);
+        selectedCategoryId = categoryId;
+        reloadExpensesFragment();
     }
 
 
@@ -117,7 +126,8 @@ public class OverviewFragment extends Fragment
         CategoryPieFragment pieFragment = (CategoryPieFragment)
                 getChildFragmentManager().findFragmentById(R.id.overviewCategoriesPieContainer);
         pieFragment.setSelectedById(categoryId);
-        reloadExpensesFragment(categoryId);
+        selectedCategoryId = categoryId;
+        reloadExpensesFragment();
     }
 
     @Override
@@ -132,35 +142,44 @@ public class OverviewFragment extends Fragment
         mListener.onOverviewFragmentChanged();
     }
 
-    private void reloadExpensesFragment(long categoryId){
-        selectedCategoryId = categoryId;
-        String[] categoriesFilter = selectedCategoryId > 0 ? new String[]{String.valueOf(selectedCategoryId)} : null;
-        Fragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
+    private void reloadPieFragment(){
         FragmentManager fragmentManager = getChildFragmentManager();
+        CategoryPieFragment pieCategories = CategoryPieFragment.newInstance(categories);
         fragmentManager.beginTransaction()
-                .replace(R.id.overviewExpensesContainer, expenses)
+                .replace(R.id.overviewCategoriesPieContainer, pieCategories, CATEGORIES_PIE_FRAGMENT_TAG)
                 .commit();
     }
 
-    class AsyncGetCategories extends AsyncTask<Void, Void, ArrayList<Category>> {
+    private void reloadCategoriesFragment(){
+        FragmentManager fragmentManager = getChildFragmentManager();
+        CategoryOverviewFragment detailsCategories = CategoryOverviewFragment.newInstance(categories, selectedCategoryId);
+        fragmentManager.beginTransaction()
+                .replace(R.id.overviewCategoriesListContainer, detailsCategories, CATEGORIES_DETAILS_FRAGMENT_TAG)
+                .commit();
+    }
+
+    private void reloadExpensesFragment(){
+        String[] categoriesFilter = selectedCategoryId > 0 ? new String[]{String.valueOf(selectedCategoryId)} : null;
+        FragmentManager fragmentManager = getChildFragmentManager();
+        ExpenseListFragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
+        fragmentManager.beginTransaction()
+                .replace(R.id.overviewExpensesContainer, expenses, EXPENSES_FRAGMENT_TAG)
+                .commit();
+    }
+
+    class AsyncGetCategories extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected ArrayList<Category> doInBackground(Void... voids) {
-            return new ArrayList<Category>(Category.getAll(getActivity()));
+        protected Void doInBackground(Void... voids) {
+            categories = new ArrayList<Category>(Category.getAll(getActivity()));
+            return null;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Category> categories) {
-            String[] categoriesFilter = selectedCategoryId > 0 ? new String[]{String.valueOf(selectedCategoryId)} : null;
-            FragmentManager fragmentManager = getChildFragmentManager();
-            CategoryPieFragment pieCategories = CategoryPieFragment.newInstance(categories);
-            CategoryOverviewFragment detailsCategories = CategoryOverviewFragment.newInstance(categories, selectedCategoryId);
-            ExpenseListFragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.overviewCategoriesPieContainer, pieCategories, CATEGORIES_PIE_FRAGMENT_TAG)
-                    .replace(R.id.overviewCategoriesListContainer, detailsCategories, CATEGORIES_DETAILS_FRAGMENT_TAG)
-                    .replace(R.id.overviewExpensesContainer, expenses, EXPENSES_FRAGMENT_TAG)
-                    .commit();
+        protected void onPostExecute(Void aVoid) {
+            reloadPieFragment();
+            reloadCategoriesFragment();
+            reloadExpensesFragment();
         }
     }
 }
