@@ -6,12 +6,16 @@
         android:fragment="ua.pp.appdev.expense.activities.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
-    <header
-        android:fragment="ua.pp.appdev.expense.activities.SettingsActivity$NotificationPreferenceFragment"
-        android:title="@string/pref_header_notifications" />
+    <!--<header-->
+        <!--android:fragment="ua.pp.appdev.expense.activities.SettingsActivity$CurrenciesPreferenceFragment"-->
+        <!--android:title="Currencies" />-->
 
-    <header
-        android:fragment="ua.pp.appdev.expense.activities.SettingsActivity$DataSyncPreferenceFragment"
-        android:title="@string/pref_header_data_sync" />
+    <!--<header-->
+        <!--android:fragment="ua.pp.appdev.expense.activities.SettingsActivity$DataBackupPreferenceFragment"-->
+        <!--android:title="Data backup" />-->
+
+    <!--<header-->
+        <!--android:fragment="ua.pp.appdev.expense.activities.SettingsActivity$OtherPreferenceFragment"-->
+        <!--android:title="Others" />-->
 
 </preference-headers>
