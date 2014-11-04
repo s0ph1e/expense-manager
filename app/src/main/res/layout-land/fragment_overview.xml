@@ -6,7 +6,7 @@
     tools:context=".fragments.OverviewFragment">
 
     <FrameLayout
-        android:layout_width="200dp"
+        android:layout_width="230dp"
         android:layout_height="match_parent"
         android:id="@+id/overviewCategoriesPieContainer" />
 

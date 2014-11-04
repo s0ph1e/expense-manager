@@ -6,9 +6,9 @@
 
     <com.echo.holographlibrary.PieGraph
         android:layout_gravity="center"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_margin="15dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:layout_margin="5dp"
         android:id="@+id/categoriesPieGraph"/>
 
 </FrameLayout>
