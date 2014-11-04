@@ -22,6 +22,11 @@ public class SharedPreferencesHelper {
      */
     private static final long BASE_CURRENCY_DEFAULT_ID = 1;
 
+    /**
+     * Cashed current currency
+     */
+    private static Currency currentCurrency = null;
+
 
     /**
      * Saves base currency id to shared preferences
@@ -33,6 +38,7 @@ public class SharedPreferencesHelper {
                 .getSharedPreferences(CURRENCY_PREFERENCES, Context.MODE_PRIVATE);
 
         long currencyId = (currency == null) ? BASE_CURRENCY_DEFAULT_ID : currency.id;
+        currentCurrency = Currency.getById(context, currencyId);
 
         currencyPrefs.edit()
                 .putLong(BASE_CURRENCY_ID_KEY, currencyId)
@@ -45,11 +51,14 @@ public class SharedPreferencesHelper {
      * @return Currency
      */
     public static Currency getBaseCurrency(Context context){
-        SharedPreferences currencyPrefs = context.getApplicationContext()
-                .getSharedPreferences(CURRENCY_PREFERENCES, Context.MODE_PRIVATE);
+        if(currentCurrency == null) {
+            SharedPreferences currencyPrefs = context.getApplicationContext()
+                    .getSharedPreferences(CURRENCY_PREFERENCES, Context.MODE_PRIVATE);
 
-        long currencyId = currencyPrefs.getLong(BASE_CURRENCY_ID_KEY, BASE_CURRENCY_DEFAULT_ID);
+            long currencyId = currencyPrefs.getLong(BASE_CURRENCY_ID_KEY, BASE_CURRENCY_DEFAULT_ID);
+            currentCurrency = Currency.getById(context, currencyId);
+        }
 
-        return Currency.getById(context, currencyId);
+        return currentCurrency;
     }
 }
