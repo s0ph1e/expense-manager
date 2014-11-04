@@ -114,19 +114,12 @@ public class CategoryPieFragment extends Fragment {
         pieGraph.setTotalValue(Expense.getSum(getActivity()).floatValue());
 
         pieGraph.setInterpolator(new AccelerateDecelerateInterpolator());
-        if(needGraphRedraw) {
-            pieGraph.setDuration(1000);
-        } else {
-            pieGraph.setDuration(0);
-            needGraphRedraw = false;
-        }
+        pieGraph.setDuration(0);
         pieGraph.animateToGoalValues();
     }
 
     public void setSelected(int position){
-        if(position == selected){
-            return;
-        } else if(position >= 0 && position < categories.size()){
+        if(position >= 0 && position < categories.size()){
             mListener.onCategoryPieSelected(categories.get(position).id);
         } else {
             mListener.onCategoryPieSelected(0);
