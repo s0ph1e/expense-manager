@@ -71,7 +71,8 @@ public class CategoryPieFragment extends Fragment {
 
         pieGraph = (PieGraph) view.findViewById(R.id.categoriesPieGraph);
         pieGraph.setInnerCircleRatio(150);
-        pieGraph.setPadding(5);
+        pieGraph.setDrawLabels(true);
+        pieGraph.setLabelRadius(20);
         pieGraph.setOnSliceClickedListener(new PieGraph.OnSliceClickedListener() {
             @Override
             public void onClick(int i) {
@@ -110,12 +111,7 @@ public class CategoryPieFragment extends Fragment {
             pieGraph.addSlice(slice);
         }
 
-        // Trick to correct animation - add slice with value of total expenses sum
-        slice = new PieSlice();
-        slice.setValue(Expense.getSum(getActivity()).floatValue());
-        slice.setGoalValue(0);
-        slice.setColor(getResources().getColor(android.R.color.transparent));
-        pieGraph.addSlice(slice);
+        pieGraph.setTotalValue(Expense.getSum(getActivity()).floatValue());
 
         pieGraph.setInterpolator(new AccelerateDecelerateInterpolator());
         if(needGraphRedraw) {

@@ -49,5 +49,5 @@ dependencies {
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:20.+'
     compile(name: 'holocolorpicker-1.4.1-aivus', ext: 'aar')
-    compile(name: 'HoloGraphLibrary-1.0.1', ext: 'aar')
+    compile(name: 'HoloGraphLibrary-1.0.2', ext: 'aar')
 }
