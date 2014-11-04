@@ -56,11 +56,14 @@ public class OverviewFragment extends Fragment
 
         // http://stackoverflow.com/questions/8474104/android-fragment-lifecycle-over-orientation-changes
         if (savedInstanceState == null) {
+            if (asyncGetCategories != null)
+                asyncGetCategories.cancel(true);
             asyncGetCategories = new AsyncGetCategories();
             asyncGetCategories.execute();
         } else {
             selectedCategoryId = savedInstanceState.getLong(SELECTED_CATEGORY_ID_BUNDLE);
             categories = savedInstanceState.getParcelableArrayList(CATEGORIES_BUNDLE);
+            reloadPieFragment();
             reloadCategoriesFragment();
             reloadExpensesFragment();
         }
@@ -105,6 +108,10 @@ public class OverviewFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        FragmentManager manager = getChildFragmentManager();
+        manager.beginTransaction().remove(manager.findFragmentByTag(EXPENSES_FRAGMENT_TAG)).commitAllowingStateLoss();
+        manager.beginTransaction().remove(manager.findFragmentByTag(CATEGORIES_DETAILS_FRAGMENT_TAG)).commitAllowingStateLoss();
+        manager.beginTransaction().remove(manager.findFragmentByTag(CATEGORIES_PIE_FRAGMENT_TAG)).commitAllowingStateLoss();
         super.onSaveInstanceState(outState);
         Log.i();
         outState.putLong(SELECTED_CATEGORY_ID_BUNDLE, selectedCategoryId);
