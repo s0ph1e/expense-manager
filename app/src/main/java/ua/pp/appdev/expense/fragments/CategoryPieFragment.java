@@ -72,7 +72,7 @@ public class CategoryPieFragment extends Fragment {
         pieGraph = (PieGraph) view.findViewById(R.id.categoriesPieGraph);
         pieGraph.setInnerCircleRatio(150);
         pieGraph.setDrawLabels(true);
-        pieGraph.setLabelRadius(20);
+        pieGraph.setLabelRadius(25);
         pieGraph.setOnSliceClickedListener(new PieGraph.OnSliceClickedListener() {
             @Override
             public void onClick(int i) {
