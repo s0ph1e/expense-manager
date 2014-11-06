@@ -99,9 +99,9 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
         }
 
         // Check expenses count in selected categories
-        String[] selectedCategoriesIds = new String[selectedCategories.size()];
+        long[] selectedCategoriesIds = new long[selectedCategories.size()];
         for(int i = 0; i < selectedCategoriesIds.length; i++){
-            selectedCategoriesIds[i] = String.valueOf(selectedCategories.get(i).id);
+            selectedCategoriesIds[i] = selectedCategories.get(i).id;
         }
         int expensesCount = Expense.getCountInCategories(context, selectedCategoriesIds);
 

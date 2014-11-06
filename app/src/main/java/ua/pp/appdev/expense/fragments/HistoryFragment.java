@@ -20,7 +20,7 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     private static final String EXPENSES_FRAGMENT_TAG = "expensesFragment";
     private static final String FILTER_BUNDLE = "filter";
     private OnHistoryFragmentChangedListener mListener;
-    private String[] categoriesFilter = null;
+    private long[] categoriesFilter = null;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -38,9 +38,9 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
         Log.i();
         Bundle args = getArguments();
         if(args != null){
-            categoriesFilter = args.getStringArray(FILTER_BUNDLE);
+            categoriesFilter = args.getLongArray(FILTER_BUNDLE);
         } else if(savedInstanceState != null){
-            categoriesFilter = savedInstanceState.getStringArray(FILTER_BUNDLE);
+            categoriesFilter = savedInstanceState.getLongArray(FILTER_BUNDLE);
         }
 
         View view =  inflater.inflate(R.layout.fragment_history, container, false);
@@ -127,13 +127,13 @@ public class HistoryFragment extends Fragment implements CategoryMultiChoiceList
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.i();
-        if(categoriesFilter != null){
-            outState.putStringArray(FILTER_BUNDLE, categoriesFilter);
+        if(categoriesFilter != null && categoriesFilter.length != 0){
+            outState.putLongArray(FILTER_BUNDLE, categoriesFilter);
         }
     }
 
     @Override
-    public void onCategorySelected(String[] ids) {
+    public void onCategorySelected(long[] ids) {
         categoriesFilter = ids;
         reloadExpensesFragment();
     }

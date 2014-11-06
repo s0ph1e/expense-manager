@@ -81,7 +81,7 @@ public class Category implements EditableItem, Parcelable {
     }
 
     // TODO: do the same with Predicates
-    public static List<Category> getAllExcept(Context context, String[] exceptCategoriesIds){
+    public static List<Category> getAllExcept(Context context, long[] exceptCategoriesIds){
 
         if (exceptCategoriesIds == null || exceptCategoriesIds.length == 0) {
             return getAll(context);
@@ -90,15 +90,10 @@ public class Category implements EditableItem, Parcelable {
         List<Category> allCategories = getAll(context);
         List<Category> filtered = new ArrayList<Category>();
 
-        long[] forbiddenIds = new long[exceptCategoriesIds.length];
-        for(int i = 0; i < exceptCategoriesIds.length; i++) {
-            forbiddenIds[i] = Long.valueOf(exceptCategoriesIds[i]);
-        }
-
         for(Category cat : allCategories) {
             boolean inResult = true;
-            for (long forbiddenId : forbiddenIds) {
-                if (cat.id == forbiddenId) {
+            for (long exceptId : exceptCategoriesIds) {
+                if (cat.id == exceptId) {
                     inResult = false;
                     break;
                 }
@@ -187,7 +182,7 @@ public class Category implements EditableItem, Parcelable {
      * @return
      */
     public BigDecimal getExpensesSum(Context context){
-        return Expense.getSumInCategories(context, new String[]{String.valueOf(id)});
+        return Expense.getSumInCategories(context, new long[]{id});
     }
 
     @Override

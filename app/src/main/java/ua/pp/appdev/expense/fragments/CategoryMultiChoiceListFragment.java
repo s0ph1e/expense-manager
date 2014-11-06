@@ -32,10 +32,10 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
         // Required empty public constructor
     }
 
-    public static CategoryMultiChoiceListFragment newInstance(String[] categories){
+    public static CategoryMultiChoiceListFragment newInstance(long[] categories){
         CategoryMultiChoiceListFragment fragment = new CategoryMultiChoiceListFragment();
         Bundle args = new Bundle();
-        args.putStringArray(SELECTED_CATEGORIES_IDS, categories);
+        args.putLongArray(SELECTED_CATEGORIES_IDS, categories);
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,7 +91,7 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
         // Set selected categories
         Bundle args = getArguments();
         if (args != null) {
-            setSelectedCategories(args.getStringArray(SELECTED_CATEGORIES_IDS));
+            setSelectedCategories(args.getLongArray(SELECTED_CATEGORIES_IDS));
         }
 
         categoryList.setOnItemClickListener(this);
@@ -133,7 +133,7 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
     }
 
     private void changeItemState(int position, boolean executeCallback){
-        String[] checkedCategoriesIds = null;
+        long[] checkedCategoriesIds = null;
         if(position == 0){     /** 'All categories' clicked  - deselect categories*/
             for(int j = 1; j <= adapter.getCount(); j++){
                 adapter.getItem(j - 1).checked = false;
@@ -164,12 +164,12 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
      * Select categories
      * @param ids - categories ids to select
      */
-    private void setSelectedCategories(String[] ids){
-        if(ids == null){
+    private void setSelectedCategories(long[] ids){
+        if(ids == null || ids.length == 0){
             changeItemState(0, false);
         } else {
-            for (String id : ids) {
-                Category cat = Category.getById(getActivity(), Long.valueOf(id));
+            for (long id : ids) {
+                Category cat = Category.getById(getActivity(), id);
                 int position = adapter.getPosition(cat);
                 if(position > 0){
                     changeItemState(position, false);
@@ -179,6 +179,6 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
     }
 
     public interface OnCategorySelectedListener {
-        public void onCategorySelected(String[] ids);
+        public void onCategorySelected(long[] ids);
     }
 }

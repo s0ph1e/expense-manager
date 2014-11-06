@@ -38,7 +38,7 @@ public class ExpenseListFragment extends Fragment {
 
     private static final String CATEGORIES_BUNDLE = "categories";
     private ExpenseAdapter expenseAdapter;
-    private String[] categoriesIds = null;
+    private long[] categoriesIds = null;
     private EditableItemListView expensesList;
     private Context context;
     private OnExpenseListChangedListener mListener;
@@ -48,10 +48,10 @@ public class ExpenseListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ExpenseListFragment newInstance(String[] categories){
+    public static ExpenseListFragment newInstance(long[] categories){
         ExpenseListFragment fragment = new ExpenseListFragment();
         Bundle args = new Bundle();
-        args.putStringArray(CATEGORIES_BUNDLE, categories);
+        args.putLongArray(CATEGORIES_BUNDLE, categories);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +70,7 @@ public class ExpenseListFragment extends Fragment {
         Log.i();
         Bundle args = getArguments();
         if (args != null) {
-            categoriesIds = args.getStringArray(CATEGORIES_BUNDLE);
+            categoriesIds = args.getLongArray(CATEGORIES_BUNDLE);
         }
 
         expensesList = new EditableItemListView(getActivity());

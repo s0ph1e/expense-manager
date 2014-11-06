@@ -166,7 +166,7 @@ public class OverviewFragment extends Fragment
     }
 
     private void reloadExpensesFragment(){
-        String[] categoriesFilter = selectedCategoryId > 0 ? new String[]{String.valueOf(selectedCategoryId)} : null;
+        long[] categoriesFilter = selectedCategoryId > 0 ? new long[]{selectedCategoryId} : null;
         FragmentManager fragmentManager = getChildFragmentManager();
         ExpenseListFragment expenses = ExpenseListFragment.newInstance(categoriesFilter);
         fragmentManager.beginTransaction()

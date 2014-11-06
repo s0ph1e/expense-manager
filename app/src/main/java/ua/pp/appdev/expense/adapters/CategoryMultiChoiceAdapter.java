@@ -65,15 +65,21 @@ public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
         return super.getPosition(category) + 1;
     }
 
-    public String[] getCheckedCategoriesIds(){
+    public long[] getCheckedCategoriesIds(){
 
-        List<String> list = new ArrayList<String>();
+        List<Long> list = new ArrayList<Long>();
         for (Category category : categories) {
             if (category.checked) {
-                list.add(String.valueOf(category.id));
+                list.add(category.id);
             }
         }
-        return list.toArray(new String[list.size()]);
+
+        long[] checkedArray = new long[list.size()];
+        for (int i = 0; i < checkedArray.length; i++) {
+            checkedArray[i] = list.get(i);
+        }
+
+        return checkedArray;
     }
 
     static class CategoryHolder {

@@ -115,7 +115,7 @@ public class Expense implements EditableItem{
         return  expenses;
     }
 
-    public static List<Expense> getAllInCategories(Context context, String[] categories) {
+    public static List<Expense> getAllInCategories(Context context, long[] categories) {
 
         if (categories == null || categories.length == 0) {
             return getAll(context);
@@ -124,14 +124,9 @@ public class Expense implements EditableItem{
         List<Expense> allExpenses = getAll(context);
         List<Expense> filtered = new ArrayList<Expense>();
 
-        long[] categoryIds = new long[categories.length];
-        for(int i = 0; i < categories.length; i++) {
-            categoryIds[i] = Long.valueOf(categories[i]);
-        }
-
         for(Expense exp : allExpenses) {
             boolean inResult = false;
-            for (long categoryId : categoryIds) {
+            for (long categoryId : categories) {
                 if (exp.category.id == categoryId) {
                     inResult = true;
                     break;
@@ -148,48 +143,35 @@ public class Expense implements EditableItem{
     }
 
     public static int getCount(Context context){
-        return expenses.size();
+        return getAll(context).size();
     }
 
     public static int getCountInCategory(Context context, long categoryId){
-        return getCountInCategories(context, new String[]{String.valueOf(categoryId)});
+        return getCountInCategories(context, new long[]{categoryId});
     }
 
-    public static int getCountInCategories(Context context, String[] categoriesIds){
+    public static int getCountInCategories(Context context, long[] categoryIds){
+
+        if (categoryIds == null || categoryIds.length == 0) {
+            return getCount(context);
+        }
+
+        List<Expense> allExpenses = getAll(context);
         int count = 0;
 
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-
-        String whereClause = "";
-        String[] whereArgs = null;
-        if(categoriesIds != null && categoriesIds.length > 0){
-            whereClause = " where " + CATEGORY_COLUMN + " in ( " + Helpers.makePlaceholders(categoriesIds.length) + " )";
-            whereArgs = categoriesIds;
+        for(Expense exp : allExpenses) {
+            for(long categoryId : categoryIds) {
+                if(exp.category.id == categoryId) {
+                    count++;
+                    break;
+                }
+            }
         }
-
-        Cursor c = db.rawQuery("select count(*)" + " from " + TABLE + whereClause, whereArgs);
-
-        if (c.moveToFirst()) {
-            count = c.getInt(0);
-        }
-        c.close();
-        DatabaseManager.getInstance().closeDatabase();
 
         return count;
     }
 
-    public static BigDecimal getSum(Context context){
-        return getSumInCategories(context, null);
-    }
-
-    public static BigDecimal getSumInCategories(Context context, String[] categoryIds){
-
-        BigDecimal sum = new BigDecimal(BigInteger.ZERO);
-
-        List<Expense> expenses = getAllInCategories(context, categoryIds);
-
-        Currency baseCurrency = SharedPreferencesHelper.getBaseCurrency(context);
-
+    public static boolean allInSameCurrency(Context context, List<Expense> expenses, Currency baseCurrency) {
         // Check if all expenses are in base currency
         boolean allExpensesInBaseCurrency = true;
         for (Expense expense : expenses){
@@ -198,6 +180,22 @@ public class Expense implements EditableItem{
                 break;
             }
         }
+
+        return allExpensesInBaseCurrency;
+    }
+
+    public static BigDecimal getSum(Context context){
+        return getSumInCategories(context, null);
+    }
+
+    public static BigDecimal getSumInCategories(Context context, long[] categoryIds){
+
+        BigDecimal sum = new BigDecimal(BigInteger.ZERO);
+
+        List<Expense> expenses = getAllInCategories(context, categoryIds);
+
+        Currency baseCurrency = SharedPreferencesHelper.getBaseCurrency(context);
+        boolean allExpensesInBaseCurrency = allInSameCurrency(context, expenses, baseCurrency);
 
         // Get total sum
         for (Expense expense : expenses){
