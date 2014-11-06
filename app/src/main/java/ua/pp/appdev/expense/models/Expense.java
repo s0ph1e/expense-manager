@@ -222,7 +222,8 @@ public class Expense implements EditableItem{
             id = db.insert(TABLE, null, cv);
 
             // Update cached data
-            expenses.add(this);
+            // TODO: sort by date
+            expenses.add(0, this);
         } else {        // existing category
             db.update(TABLE, cv, ID_COLUMN + " = ?", new String[] {String.valueOf(id)});
 
