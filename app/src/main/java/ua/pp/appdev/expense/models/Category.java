@@ -77,7 +77,7 @@ public class Category implements EditableItem, Parcelable {
         if(categories == null) {
             categories = fetchAll();
         }
-        return categories;
+        return new ArrayList<Category>(categories);
     }
 
     // TODO: do the same with Predicates
@@ -118,8 +118,19 @@ public class Category implements EditableItem, Parcelable {
 
         if(id == 0){    // new category
             id = db.insert(TABLE, null, cv);
+
+            // Update cached data
+            categories.add(this);
         } else {        // existing category
             db.update(TABLE, cv, ID_COLUMN + " = ?", new String[] {String.valueOf(id)});
+
+            // Update cached data
+            if(categories.contains(this)) {
+                int currentPosition = categories.indexOf(this);
+                categories.remove(currentPosition);
+                categories.add(currentPosition, this);
+            }
+
         }
 
         DatabaseManager.getInstance().closeDatabase();
@@ -129,6 +140,9 @@ public class Category implements EditableItem, Parcelable {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
         DatabaseManager.getInstance().closeDatabase();
+
+        // Update cached data
+        categories.remove(this);
     }
 
     public void removeExpenses(){
@@ -190,9 +204,7 @@ public class Category implements EditableItem, Parcelable {
         // Check class of object
         if (o instanceof Category) {
             Category other = (Category) o;
-            if (other.id == this.id
-                    && other.color == this.color
-                    && other.name.equals(this.name)) {
+            if (other.id == this.id) {
                 return true;
             }
         }

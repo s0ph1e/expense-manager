@@ -127,7 +127,7 @@ public class Expense implements EditableItem{
         for(Expense exp : allExpenses) {
             boolean inResult = false;
             for (long categoryId : categories) {
-                if (exp.category.id == categoryId) {
+                if (exp.category != null && exp.category.id == categoryId) {
                     inResult = true;
                     break;
                 }
