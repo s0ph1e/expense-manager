@@ -10,10 +10,6 @@
         android:id="@+id/overviewAllCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
         android:background="@drawable/border_bottom">
 
         <TextView
@@ -24,6 +20,7 @@
             android:text="All categories"
             android:textAllCaps="true"
             android:textSize="16sp"
+            android:paddingLeft="5dp"
             android:textStyle="bold"
             android:clickable="false" />
 
@@ -33,6 +30,7 @@
             android:layout_gravity="center_vertical"
             android:id="@+id/txtOverviewAllCategoriesSum"
             android:textSize="16sp"
+            android:paddingRight="5dp"
             android:textAllCaps="true"
             android:textStyle="bold"
             android:clickable="false" />
