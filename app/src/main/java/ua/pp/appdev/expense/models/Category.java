@@ -14,7 +14,6 @@ import java.util.List;
 import ua.pp.appdev.expense.activities.SaveCategoryActivity;
 import ua.pp.appdev.expense.helpers.DatabaseManager;
 import ua.pp.appdev.expense.helpers.Helpers;
-import ua.pp.appdev.expense.utils.Log;
 
 /**
  * Created by:
@@ -140,24 +139,11 @@ public class Category implements EditableItem, Parcelable {
     }
 
     public void removeExpenses(){
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-        db.delete(Expense.TABLE, Expense.CATEGORY_COLUMN + " = ?", new String[] { String.valueOf(id) });
-        DatabaseManager.getInstance().closeDatabase();
+        Expense.removeExpenses(id);
     }
 
-    public void moveExpensesTo(Context context, long otherCategoryId){
-        // Check if specified category exists
-        if(Category.getById(context, otherCategoryId) == null){
-            Log.e("Category " + otherCategoryId + " doesn't exist!");
-            return;
-        }
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-
-        ContentValues cv = new ContentValues();
-        cv.put(Expense.CATEGORY_COLUMN, otherCategoryId);
-
-        db.update(Expense.TABLE, cv, Expense.CATEGORY_COLUMN + " = ?", new String[] { String.valueOf(id) });
-        DatabaseManager.getInstance().closeDatabase();
+    public void moveExpenses(Context context, long otherCategoryId){
+        Expense.moveExpenses(context, id, otherCategoryId);
     }
 
     @Override

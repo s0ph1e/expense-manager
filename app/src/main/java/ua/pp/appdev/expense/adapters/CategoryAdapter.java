@@ -179,7 +179,7 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
             super.remove((Category) item);
             // Move or remove expenses from category
             if(needToMoveExpensesOnRemove){
-                ((Category) item).moveExpensesTo(context, categoryIdToMoveExpenses);
+                ((Category) item).moveExpenses(context, categoryIdToMoveExpenses);
             } else {
                 ((Category) item).removeExpenses();
             }

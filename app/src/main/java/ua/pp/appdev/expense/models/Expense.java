@@ -17,6 +17,7 @@ import ua.pp.appdev.expense.activities.SaveExpenseActivity;
 import ua.pp.appdev.expense.helpers.DatabaseManager;
 import ua.pp.appdev.expense.helpers.Helpers;
 import ua.pp.appdev.expense.helpers.SharedPreferencesHelper;
+import ua.pp.appdev.expense.utils.Log;
 
 public class Expense implements EditableItem{
 
@@ -245,6 +246,42 @@ public class Expense implements EditableItem{
 
         // Update cached data
         expenses.remove(this);
+    }
+
+    public static void removeExpenses(long categoryId) {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        db.delete(TABLE, CATEGORY_COLUMN + " = ?", new String[] { String.valueOf(categoryId) });
+        DatabaseManager.getInstance().closeDatabase();
+
+        // Update cached data
+        for (Expense exp : expenses) {
+            if (exp.category != null && exp.category.id == categoryId) {
+                expenses.remove(exp);
+            }
+        }
+    }
+
+    public static void moveExpenses(Context context, long fromCategoryId, long toCategoryId) {
+        // Check if TO-category exists
+        Category toCategory = Category.getById(context, toCategoryId);
+        if(toCategory == null){
+            Log.e("Category " + toCategoryId + " doesn't exist!");
+            return;
+        }
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(CATEGORY_COLUMN, toCategoryId);
+
+        db.update(TABLE, cv, CATEGORY_COLUMN + " = ?", new String[] { String.valueOf(fromCategoryId) });
+        DatabaseManager.getInstance().closeDatabase();
+
+        // Update cached data
+        for (Expense exp : expenses) {
+            if (exp.category != null && exp.category.id == fromCategoryId) {
+                exp.category = toCategory;
+            }
+        }
     }
 
     @Override
