@@ -16,8 +16,11 @@ import ua.pp.appdev.expense.utils.Log;
 
 public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
 
+    public boolean[] checked;
+
     public CategoryMultiChoiceAdapter(Context context, int resource, List<Category> categories) {
         super(context, resource, categories);
+        checked = new boolean[categories.size()];
     }
 
     @Override
@@ -33,7 +36,6 @@ public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
             holder.name = (TextView)row.findViewById(R.id.txtHistoryCategoryName);
             holder.color = (TextView)row.findViewById(R.id.txtHistoryCategoryColor);
             holder.expensesCount = (TextView)row.findViewById(R.id.txtHistoryCategoryExpensesCount);
-
             row.setTag(holder);
         } else {
             holder = (CategoryHolder)row.getTag();
@@ -47,7 +49,7 @@ public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
             holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
             holder.name.setText(category.name);
             holder.expensesCount.setText("(" + category.getExpensesCount(context) + ")");
-            row.setActivated(category.checked);
+            row.setActivated(checked[position]);
         } else {
             holder.color.setBackgroundColor(context.getResources().getColor(android.R.color.black));
             holder.color.setText("¿");
@@ -68,9 +70,9 @@ public class CategoryMultiChoiceAdapter extends CategoryBaseAdapter {
     public long[] getCheckedCategoriesIds(){
 
         List<Long> list = new ArrayList<Long>();
-        for (Category category : categories) {
-            if (category.checked) {
-                list.add(category.id);
+        for (int i = 0; i < categories.size(); i++) {
+            if (checked[i]) {
+                list.add(categories.get(i).id);
             }
         }
 

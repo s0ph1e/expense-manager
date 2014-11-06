@@ -134,16 +134,16 @@ public class CategoryMultiChoiceListFragment extends DialogFragment implements A
 
     private void changeItemState(int position, boolean executeCallback){
         long[] checkedCategoriesIds = null;
-        if(position == 0){     /** 'All categories' clicked  - deselect categories*/
+        position--; // Because header was on 0 position
+        if(position < 0){     /** 'All categories' clicked  - deselect categories*/
             for(int j = 1; j <= adapter.getCount(); j++){
-                adapter.getItem(j - 1).checked = false;
+                adapter.checked = new boolean[adapter.getCount()];
             }
             //adapter.notifyDataSetChanged();
             viewAllCategories.setActivated(true);
             //mListener.onAllCategoriesSelected();
         } else {                        /** Category clicked - deselect 'All categories' */
-            Category category = adapter.getItem(position - 1);
-            category.checked = !category.checked;   // Change category 'checked' status
+            adapter.checked[position] = !adapter.checked[position];
 
             adapter.notifyDataSetChanged();         // Notify adapter to redraw listview
             viewAllCategories.setActivated(false);  // Deselect 'all categories'

@@ -64,7 +64,7 @@ public class CategoryAdapter extends CategoryBaseSingleChoiceAdapter implements 
             holder.color.setText(firstLetter.isEmpty() ? "" : firstLetter);
             holder.name.setText(category.name);
             holder.radio.setTag(position);
-            holder.radio.setChecked((selected == -1) ? category.checked : position == selected);
+            holder.radio.setChecked(position == selected);
         } else {
             holder.color.setBackgroundColor(context.getResources().getColor(android.R.color.black));
             holder.color.setText("¿");

@@ -19,13 +19,6 @@ public class CategoryBaseSingleChoiceAdapter extends CategoryBaseAdapter {
         if(position < categoriesCount){
             // Set category at position selected
             selected = position;
-            getItem(position).checked = true;
-            // Set other categories deselected
-            for(int i = 0; i < categoriesCount; i++){
-                if(i != position){
-                    categories.get(i).checked = false;
-                }
-            }
         }
         notifyDataSetChanged();
     }

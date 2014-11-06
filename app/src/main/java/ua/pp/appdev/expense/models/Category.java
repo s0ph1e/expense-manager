@@ -31,19 +31,13 @@ public class Category implements EditableItem, Parcelable {
     public long id = 0;
     public String name = "";
     public int color = 0;
-    public boolean checked = false;
 
     private static List<Category> categories = null;
 
-    public Category(long id, String name, int color, boolean checked) {
+    public Category(long id, String name, int color) {
         this.id = id;
         this.name = name;
         this.color = color;
-        this.checked = checked;
-    }
-
-    public Category(long id, String name, int color) {
-        this(id, name, color, false);
     }
 
     public Category(){}
@@ -227,7 +221,6 @@ public class Category implements EditableItem, Parcelable {
         parcel.writeLong(id);
         parcel.writeString(name);
         parcel.writeInt(color);
-        parcel.writeByte((byte) (checked ? 1 : 0));
     }
 
     public static final Parcelable.Creator<Category> CREATOR
@@ -245,6 +238,5 @@ public class Category implements EditableItem, Parcelable {
         id = in.readLong();
         name = in.readString();
         color = in.readInt();
-        checked = in.readByte() != 0;
     }
 }
