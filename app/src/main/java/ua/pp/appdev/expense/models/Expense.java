@@ -307,6 +307,18 @@ public class Expense implements EditableItem{
         return Helpers.sumToString(convertSumToCurrency(other), other);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Expense) {
+            Expense other = (Expense) o;
+            if (other.id == this.id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public String toString(Context context) {
         String str = "{id: " + id
                 + ", date: " + Helpers.calendarToShortDateString(context, expenseDate)
