@@ -112,7 +112,7 @@ public class Expense implements EditableItem{
         if (expenses == null) {
             expenses = fetchAll(context);
         }
-        return  expenses;
+        return  new ArrayList<Expense>(expenses);
     }
 
     public static List<Expense> getAllInCategories(Context context, long[] categories) {
@@ -137,7 +137,6 @@ public class Expense implements EditableItem{
                 filtered.add(exp);
             }
         }
-
 
         return filtered;
     }
@@ -221,8 +220,18 @@ public class Expense implements EditableItem{
 
         if(id == 0){    // new category
             id = db.insert(TABLE, null, cv);
+
+            // Update cached data
+            expenses.add(this);
         } else {        // existing category
             db.update(TABLE, cv, ID_COLUMN + " = ?", new String[] {String.valueOf(id)});
+
+            // Update cached data
+            if(expenses.contains(this)) {
+                int currentPosition = expenses.indexOf(this);
+                expenses.remove(currentPosition);
+                expenses.add(currentPosition, this);
+            }
         }
 
         DatabaseManager.getInstance().closeDatabase();
@@ -230,10 +239,11 @@ public class Expense implements EditableItem{
 
     public void remove(Context context){
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-
         db.delete(TABLE, ID_COLUMN + " = ?", new String[] { String.valueOf(id) });
-
         DatabaseManager.getInstance().closeDatabase();
+
+        // Update cached data
+        expenses.remove(this);
     }
 
     @Override
