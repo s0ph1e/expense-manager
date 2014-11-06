@@ -29,6 +29,8 @@ public class Currency implements Serializable {
     public float rate; // TODO: consider storing rate
     public long updatedTime;
 
+    private static List<Currency> currencies = null;
+
     public Currency(String isoCode, String name, String fullName, float rate, long updatedTime) {
         this(0, isoCode, name, fullName, rate, updatedTime);
     }
@@ -42,8 +44,7 @@ public class Currency implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public static List<Currency> getAll(Context context){
-
+    private static List<Currency> fetchAll(Context context) {
         List<Currency> currenciesList = new ArrayList<Currency>();
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
@@ -80,6 +81,13 @@ public class Currency implements Serializable {
         return currenciesList;
     }
 
+    public static List<Currency> getAll(Context context){
+        if(currencies == null) {
+            currencies = fetchAll(context);
+        }
+        return new ArrayList<Currency>(currencies);
+    }
+
     public long save(Context context) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
@@ -94,79 +102,47 @@ public class Currency implements Serializable {
 
         if (id == 0) {
             response = db.insert(TABLE, null, cv);
+
+            // Update cached data
+            currencies.add(this);
         } else {
             response = db.update(TABLE, cv, "id = ?", new String[] {Long.toString(id)});
+
+            // Update cached data
+            if(currencies.contains(this)) {
+                int currentPosition = currencies.indexOf(this);
+                currencies.remove(currentPosition);
+                currencies.add(currentPosition, this);
+            }
         }
         DatabaseManager.getInstance().closeDatabase();
         return response;
     }
 
     public static Currency getById(Context context, long id){
+        List<Currency> allCurrencies = getAll(context);
         Currency currency = null;
 
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-
-        Cursor c = db.query(TABLE, null, ID_COLUMN + " = ?", new String[] {String.valueOf(id)}, null, null, null);
-
-        if (c.moveToFirst()) {
-
-            // Get column indexes
-            int idColIndex = c.getColumnIndex(ID_COLUMN);
-            int isoCodeIndex = c.getColumnIndex(ISO_CODE_COLUMN);
-            int nameColIndex = c.getColumnIndex(SHORT_NAME_COLUMN);
-            int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
-            int rateColIndex = c.getColumnIndex(RATE_COLUMN);
-            int updatedTimeColIndex = c.getColumnIndex(UPDATED_TIME);
-
-            long updatedTime;
-            String isoCode, name, fullName;
-            float rate;
-
-            isoCode = c.getString(isoCodeIndex);
-            name = c.getString(nameColIndex);
-            fullName = c.getString(fullNameColIndex);
-            rate = c.getFloat(rateColIndex);
-            updatedTime = c.getLong(updatedTimeColIndex);
-
-            currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
+        for (Currency currentCurrency : allCurrencies) {
+            if (currentCurrency.id == id) {
+                currency = currentCurrency;
+                break;
+            }
         }
-        c.close();
-        DatabaseManager.getInstance().closeDatabase();
 
         return currency;
     }
 
     public static Currency getByIso(Context context, String isoCode){
         Currency currency = null;
+        List<Currency> allCurrencies = getAll(context);
 
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-
-        Cursor c = db.query(TABLE, null, ISO_CODE_COLUMN + " = ?", new String[] {isoCode}, null, null, null);
-
-        if (c.moveToFirst()) {
-
-            // Get column indexes
-            int idColIndex = c.getColumnIndex(ID_COLUMN);
-            int isoCodeIndex = c.getColumnIndex(ISO_CODE_COLUMN);
-            int nameColIndex = c.getColumnIndex(SHORT_NAME_COLUMN);
-            int fullNameColIndex = c.getColumnIndex(FULL_NAME_COLUMN);
-            int rateColIndex = c.getColumnIndex(RATE_COLUMN);
-            int updatedTimeColIndex = c.getColumnIndex(UPDATED_TIME);
-
-            long id, updatedTime;
-            String name, fullName;
-            float rate;
-
-            id = c.getLong(idColIndex);
-            name = c.getString(nameColIndex);
-            fullName = c.getString(fullNameColIndex);
-            rate = c.getFloat(rateColIndex);
-            updatedTime = c.getLong(updatedTimeColIndex);
-
-            currency = new Currency(id, isoCode, name, fullName, rate, updatedTime);
+        for (Currency currentCurrency : allCurrencies) {
+            if (currentCurrency.isoCode.equals(isoCode)) {
+                currency = currentCurrency;
+                break;
+            }
         }
-        c.close();
-        DatabaseManager.getInstance().closeDatabase();
 
         return currency;
     }
