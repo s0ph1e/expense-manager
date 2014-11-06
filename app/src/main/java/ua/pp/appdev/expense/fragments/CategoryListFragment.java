@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -163,12 +162,7 @@ public class CategoryListFragment extends Fragment implements View.OnTouchListen
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (((EditableItemListView)categoryList).getTotalHeight() > ((FrameLayout)categoryList.getParent()).getHeight()/* && (getLastVisiblePosition())< getCount() - 1*/) {
-            view.getParent().requestDisallowInterceptTouchEvent(true);
-        } else {
-            view.getParent().requestDisallowInterceptTouchEvent(false);
-        }
-
+        view.getParent().requestDisallowInterceptTouchEvent(true);
         return false;
     }
 
