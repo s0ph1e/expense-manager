@@ -33,6 +33,8 @@ public class Category implements EditableItem, Parcelable {
     public int color = 0;
     public boolean checked = false;
 
+    private static List<Category> categories = null;
+
     public Category(long id, String name, int color, boolean checked) {
         this.id = id;
         this.name = name;
@@ -46,23 +48,11 @@ public class Category implements EditableItem, Parcelable {
 
     public Category(){}
 
-    public static List<Category> getAll(Context context) {
-        return getAllExcept(context, null);
-    }
-
-    public static List<Category> getAllExcept(Context context, String[] exceptCategoriesIds){
-
+    private static List<Category> fetchAll() {
         List<Category> catList = new ArrayList<Category>();
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        String whereClause = "";
-        String[] whereArgs = null;
-        if(exceptCategoriesIds != null && exceptCategoriesIds.length > 0){
-            whereClause = " where " + ID_COLUMN + " not in ( " + Helpers.makePlaceholders(exceptCategoriesIds.length) + " )";
-            whereArgs = exceptCategoriesIds;
-        }
-
-        Cursor c = db.rawQuery("select *" + " from " + TABLE + whereClause, whereArgs);
+        Cursor c = db.rawQuery("select *" + " from " + TABLE, new String[]{});
         if (c.moveToFirst()) {
 
             // Get column indexes
@@ -81,6 +71,45 @@ public class Category implements EditableItem, Parcelable {
         c.close();
         DatabaseManager.getInstance().closeDatabase();
         return catList;
+    }
+
+    public static List<Category> getAll(Context context) {
+        if(categories == null) {
+            categories = fetchAll();
+        }
+        return categories;
+    }
+
+    // TODO: do the same with Predicates
+    public static List<Category> getAllExcept(Context context, String[] exceptCategoriesIds){
+
+        if (exceptCategoriesIds == null || exceptCategoriesIds.length == 0) {
+            return getAll(context);
+        }
+
+        List<Category> allCategories = getAll(context);
+        List<Category> filtered = new ArrayList<Category>();
+
+        long[] forbiddenIds = new long[exceptCategoriesIds.length];
+        for(int i = 0; i < exceptCategoriesIds.length; i++) {
+            forbiddenIds[i] = Long.valueOf(exceptCategoriesIds[i]);
+        }
+
+        for(Category cat : allCategories) {
+            boolean inResult = true;
+            for (long forbiddenId : forbiddenIds) {
+                if (cat.id == forbiddenId) {
+                    inResult = false;
+                    break;
+                }
+            }
+
+            if (inResult) {
+                filtered.add(cat);
+            }
+        }
+
+        return filtered;
     }
 
     public void save(Context context){
@@ -135,28 +164,15 @@ public class Category implements EditableItem, Parcelable {
 
     public static Category getById(Context context, long id){
 
+        List<Category> allCategories = getAll(context);
         Category cat = null;
 
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-
-        Cursor c = db.query(TABLE, null, ID_COLUMN + " = ?", new String[] {String.valueOf(id)}, null, null, null);
-
-        if (c.moveToFirst()) {
-
-            // Get column indexes
-            int idColIndex = c.getColumnIndex(ID_COLUMN);
-            int nameColIndex = c.getColumnIndex(NAME_COLUMN);
-            int colorColIndex = c.getColumnIndex(COLOR_COLUMN);
-
-            cat =  new Category(
-                    c.getLong(idColIndex),
-                    c.getString(nameColIndex),
-                    c.getInt(colorColIndex)
-            );
-
+        for (Category currentCat : allCategories) {
+            if (currentCat.id == id) {
+                cat = currentCat;
+                break;
+            }
         }
-        c.close();
-        DatabaseManager.getInstance().closeDatabase();
 
         return cat;
     }

@@ -37,6 +37,8 @@ public class Expense implements EditableItem{
     public Currency currency;
     public String note;
 
+    private static List<Expense> expenses = null;
+
     public Expense(){
         id = 0;
         createDate = GregorianCalendar.getInstance();
@@ -57,21 +59,13 @@ public class Expense implements EditableItem{
         this.note = note;
     }
 
-    public static List<Expense> getAll(Context context, String[] categories) {
-
+    private static List<Expense> fetchAll(Context context) {
         List<Expense> expensesList = new ArrayList<Expense>();
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
-        String where = "";
-
-        if(categories != null && categories.length > 0){
-            where = " where " + CATEGORY_COLUMN  + " in ( " + Helpers.makePlaceholders(categories.length) + " )";
-        }
-
-        Cursor c = db.rawQuery("select * from " + TABLE + where
-                + " order by " + EXPENSE_DATE_COLUMN + " DESC",
-                categories
+        Cursor c = db.rawQuery("select * from " + TABLE
+                        + " order by " + EXPENSE_DATE_COLUMN + " DESC", new String[]{}
         );
 
         if (c.moveToFirst()) {
@@ -114,8 +108,47 @@ public class Expense implements EditableItem{
         return expensesList;
     }
 
+    public static List<Expense> getAll(Context context) {
+        if (expenses == null) {
+            expenses = fetchAll(context);
+        }
+        return  expenses;
+    }
+
+    public static List<Expense> getAllInCategories(Context context, String[] categories) {
+
+        if (categories == null || categories.length == 0) {
+            return getAll(context);
+        }
+
+        List<Expense> allExpenses = getAll(context);
+        List<Expense> filtered = new ArrayList<Expense>();
+
+        long[] categoryIds = new long[categories.length];
+        for(int i = 0; i < categories.length; i++) {
+            categoryIds[i] = Long.valueOf(categories[i]);
+        }
+
+        for(Expense exp : allExpenses) {
+            boolean inResult = false;
+            for (long categoryId : categoryIds) {
+                if (exp.category.id == categoryId) {
+                    inResult = true;
+                    break;
+                }
+            }
+
+            if (inResult) {
+                filtered.add(exp);
+            }
+        }
+
+
+        return filtered;
+    }
+
     public static int getCount(Context context){
-        return getCountInCategories(context, null);
+        return expenses.size();
     }
 
     public static int getCountInCategory(Context context, long categoryId){
@@ -153,7 +186,7 @@ public class Expense implements EditableItem{
 
         BigDecimal sum = new BigDecimal(BigInteger.ZERO);
 
-        List<Expense> expenses = getAll(context, categoryIds);
+        List<Expense> expenses = getAllInCategories(context, categoryIds);
 
         Currency baseCurrency = SharedPreferencesHelper.getBaseCurrency(context);
 

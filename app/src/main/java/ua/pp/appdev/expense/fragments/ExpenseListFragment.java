@@ -191,7 +191,7 @@ public class ExpenseListFragment extends Fragment {
 
         @Override
         protected List<Expense> doInBackground(Void... voids) {
-            return Expense.getAll(context, categoriesIds);
+            return Expense.getAllInCategories(context, categoriesIds);
         }
 
         @Override
